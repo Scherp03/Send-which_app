@@ -14,4 +14,4 @@ const orderSchema = new mongoose.Schema({
 // Add here the methods, like calculate price
 
 // Export the models
-module.exports = { sandwichSchema, orderSchema };
+module.exports = orderSchema;
