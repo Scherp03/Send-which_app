@@ -60,4 +60,4 @@ userSchema.virtual("Hash").get(function() {
     return `${this.name} ${this.email}`; // To be greatly improved
 })
 
-module.exports = mongoose.model("User0", userSchema);
+module.exports = userSchema;
