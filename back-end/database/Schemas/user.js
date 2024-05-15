@@ -61,3 +61,4 @@ userSchema.virtual("Hash").get(function() {
 })
 
 module.exports = userSchema;
+added error
