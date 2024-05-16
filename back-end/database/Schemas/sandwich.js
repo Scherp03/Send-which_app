@@ -1,4 +1,4 @@
-const mongoose = require("mongoose")
+import mongoose from 'mongoose'
 
 // Orders is the class with a list of orders
 const sandwichSchema = new mongoose.Schema({
@@ -18,4 +18,4 @@ sandwichSchema.statics.findByBreadInsensitive = function(queryBread) {
 }
 
 // Export the models
-module.exports = sandwichSchema;
+export default sandwichSchema;

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose")
+import mongoose from 'mongoose'
 
 // Schema for the user
 const userSchema = new mongoose.Schema({
@@ -60,4 +60,4 @@ userSchema.virtual("Hash").get(function() {
     return `${this.name} ${this.email}`; // To be greatly improved
 })
 
-module.exports = mongoose.model("User0", userSchema);
+export default mongoose.model("User0", userSchema);
