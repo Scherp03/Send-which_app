@@ -1,4 +1,4 @@
-const mongoose = require("mongoose")
+import mongoose from 'mongoose'
 
 // Schema for the user
 const userSchema = new mongoose.Schema({
@@ -60,5 +60,9 @@ userSchema.virtual("Hash").get(function() {
     return `${this.name} ${this.email}`; // To be greatly improved
 })
 
+<<<<<<< HEAD:back-end/database/Schemas/user.js
 module.exports = userSchema;
 added error
+=======
+export default mongoose.model("User0", userSchema);
+>>>>>>> 2d17dcd3e95d8bf7fd4336dedbecb8aa6dd8f2b9:back-end/database/schemas/user.js

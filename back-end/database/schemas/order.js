@@ -1,4 +1,4 @@
-const mongoose = require("mongoose")
+import mongoose from 'mongoose'
 
 // Order schema
 const orderSchema = new mongoose.Schema({
@@ -14,4 +14,4 @@ const orderSchema = new mongoose.Schema({
 // Add here the methods, like calculate price
 
 // Export the models
-module.exports = orderSchema;
+export default orderSchema;
