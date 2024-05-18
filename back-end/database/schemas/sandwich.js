@@ -18,4 +18,6 @@ sandwichSchema.statics.findByBreadInsensitive = function(queryBread) {
 }
 
 // Export the models
-export default sandwichSchema;
+const Sandwich = mongoose.model("Sandwich", sandwichSchema);
+export default Sandwich;
+

@@ -2,10 +2,9 @@ import mongoose from 'mongoose'
 
 // Order schema
 const orderSchema = new mongoose.Schema({
-    orderID: String,
     userID: String,
     slotID: String,
-    content: [sandwichSchema],
+    content: [mongoose.Schema.Types.ObjectId],
     total: Number,
     status: String,
     date: Date
@@ -14,4 +13,5 @@ const orderSchema = new mongoose.Schema({
 // Add here the methods, like calculate price
 
 // Export the models
-export default orderSchema;
+const Order = mongoose.model('Order', orderSchema);
+export default Order;

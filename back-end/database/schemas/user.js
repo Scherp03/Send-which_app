@@ -2,11 +2,21 @@ import mongoose from 'mongoose'
 
 // Schema for the user
 const userSchema = new mongoose.Schema({
-    hash:   String,
-    name :  {
+    // Actual name
+    firstName :  { 
         type: String,
         required: true,
     },
+    lastName:   { 
+        type: String,
+        required: true,
+    },
+    // Username chosen by user
+    userName:  { 
+        type: String,
+        required: true,
+        lowercase: true
+    }, // Removed: "unique: true",
     email:  {
         type: String,
         required: true,
@@ -20,14 +30,13 @@ const userSchema = new mongoose.Schema({
     password:   {
         type: String,
         required: true,
-        validate: [
-            function(password) {
-                return password.length >= 6;
-            },
-            "Password should be at least 6 characters long"
-        ]
+        // validate: [
+        //     function(password) {
+        //         return password.length >= 6;
+        //     },
+        //     "Password should be at least 6 characters long"
+        // ]
     },
-    credentials:    String,
     notificationMail: String
 })
 
@@ -35,10 +44,7 @@ const userSchema = new mongoose.Schema({
 // ==== METHODS ==== //
 
 
-// Create hash
-userSchema.methods.getHash = function() {
-  // TODO!
-}
+
 // Search for a user by name (case insensitive)
 userSchema.statics.findByNameInsensitive = function(queryName) {
     return this.find({ name: new RegExp(queryName, 'i') });
@@ -55,14 +61,6 @@ userSchema.virtual("fullCredentials").get(function() {
     return `${this.name} ${this.email}`;
 })
 
-// Hash
-userSchema.virtual("Hash").get(function() {
-    return `${this.name} ${this.email}`; // To be greatly improved
-})
-
-<<<<<<< HEAD:back-end/database/Schemas/user.js
-module.exports = userSchema;
-added error
-=======
-export default mongoose.model("User0", userSchema);
->>>>>>> 2d17dcd3e95d8bf7fd4336dedbecb8aa6dd8f2b9:back-end/database/schemas/user.js
+// Export the model
+const User =  mongoose.model('User', userSchema);
+export default User;
