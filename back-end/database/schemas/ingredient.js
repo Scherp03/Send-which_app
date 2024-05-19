@@ -2,9 +2,10 @@ import mongoose, { mongo } from 'mongoose'
 
 // Ingredient schema
 const ingredientSchema = new mongoose.Schema({
-    userID: mongoose.Schema.Types.ObjectId,
-    slotID: mongoose.Schema.Types.ObjectId,
-    name: String,
+    name: {
+        type: String,
+        min: 3,
+    },
     description: String,
     price: Number,
     quantity: Number,

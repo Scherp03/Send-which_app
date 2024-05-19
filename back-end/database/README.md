@@ -12,6 +12,10 @@ Create a list for:
 * ingredients,
 * time slots
 
+In the end I added hash to make much quicker adding a sandwich to the list just comparing a string
+Added a pseudo univocous hash for ingredients; it takes the first 3 letters of the name and the last 3 of the _Id.
+It is extremely unlikely to have a conflict, especially if ingredients begin with different names.  
+
 ## Things to do
 
 Create the following methods:
