@@ -9,7 +9,6 @@ export const authUser = async(req, res, next) => {
         if (await bcrypt.compare(req.body.password, user.password)) {
             const accessToken = jwt.sign({
                 username: req.body.username,
-                title: req.body.title
             }, process.env.ACCESS_TOKEN_SECRET);
             res.status(200).json({success: true, accessToken: accessToken});
         } else {

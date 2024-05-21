@@ -10,10 +10,11 @@ const PORT =  3000;
 const app = express();
 
 import authRouter from './routes/auth.js';
+import userRouter from './routes/user.js';
 
 
 app.use(bodyParser.json());
-app.use('/users', );
+app.use('/user', userRouter);
 app.use('/login', authRouter);
 
 
