@@ -9,10 +9,12 @@ const PORT =  3000;
 /* Routes */
 const app = express();
 
-// Example: import userRouter from './routes/user.js'
+import authRouter from './routes/auth.js';
 
 
 app.use(bodyParser.json());
+app.use('/users', );
+app.use('/login', authRouter);
 
 
 /* Quick check if it's working */
