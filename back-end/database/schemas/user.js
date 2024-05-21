@@ -22,11 +22,12 @@ const userSchema = new mongoose.Schema({
         required: true,
         lowercase: true
     },
-    created:    {
-        type: Date,
-        default: () => Date.now(),
-        immutable: true,
-    },
+    // should be the same as timestamps below!!!
+    // created:    {
+    //     type: Date,
+    //     default: () => Date.now(),
+    //     immutable: true,
+    // },
     password:   {
         type: String,
         required: true,
@@ -38,12 +39,14 @@ const userSchema = new mongoose.Schema({
         // ]
     },
     notificationMail: String
-})
+    },
+    {
+        timestamps: true
+    }
+)
 
 
 // ==== METHODS ==== //
-
-
 
 // Search for a user by name (case insensitive)
 userSchema.statics.findByNameInsensitive = function(queryName) {
