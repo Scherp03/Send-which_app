@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
         required: true,
     },
     // Username chosen by user
-    userName:  { 
+    username:  { 
         type: String,
         required: true,
         lowercase: true
