@@ -32,8 +32,44 @@ export const createUser = async(req, res, next) => {
 };
 
 export const getVerifiedUser = async(req, res, next) => {
+    if(!req.loggedUserId) return res.status(400).json({success: false, message: `Not logged`});
     try {
         const user = await UserModel.findOne({username: req.loggedUserId});
+        res.status(200).json(user);
+    } catch (err) {
+        console.log(err.message);
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    }
+};
+
+export const updateUser = async(req, res, next) => {
+    if(!req.loggedUserId) return res.status(400).json({success: false, message: `Not logged`});
+    try {
+        const user = await UserModel.findOneAndUpdate({username: req.loggedUserId});
+        if(!user) {
+            return res.status(404).json({message: `Something went wrong`});
+        }
+        const updatedProduct = await ProductModel.findById(id);
+        res.status(200).json(updatedProduct);
+    } catch (err) {
+        console.log(err.message);
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    }
+};
+
+export const deleteUser = async(req, res, next) => {
+    if(!req.loggedUserId) return res.status(400).json({success: false, message: `Not logged`});
+    try {
+        const user = await UserModel.findOneAndDelete({username: req.loggedUserId});
+        if(!user) {
+            return res.status(404).json({message: `Something went wrong`});
+        }
         res.status(200).json(user);
     } catch (err) {
         console.log(err.message);
