@@ -10,8 +10,8 @@ router.post('/', createUser);
 
 // router.get('/', getUser);
 
-router.patch('/', updateUser);
+router.patch('/', tokenChecker, updateUser);
 
-router.delete('/', deleteUser);
+router.delete('/', tokenChecker, deleteUser);
 
 export default router;
