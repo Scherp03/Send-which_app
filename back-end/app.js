@@ -15,7 +15,7 @@ import userRouter from './routes/user.js';
 
 app.use(bodyParser.json());
 app.use('/user', userRouter);
-app.use('/login', authRouter);
+app.use('/auth', authRouter);
 
 
 /* Quick check if it's working */
