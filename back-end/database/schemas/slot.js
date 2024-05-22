@@ -11,6 +11,14 @@ const slotSchema = new mongoose.Schema({
     capacity:{
         type: Number,
         default: 5
+    },
+    start: {
+        type: Date,
+        required: true
+    },
+    end: {
+        type: Date,
+        required: true
     }
 })  
 
