@@ -31,19 +31,24 @@ const userSchema = new mongoose.Schema({
     password:   {
         type: String,
         required: true,
-        // validate: [
-        //     function(password) {
-        //         return password.length >= 6;
-        //     },
-        //     "Password should be at least 6 characters long"
-        // ]
+        validate: [
+            function(password) {
+                return password.length >= 6;
+            },
+            "Password should be at least 6 characters long"
+        ]
     },
-    notificationMail: String
+    userType: { 
+        type: String, 
+        required: true,
+        enum: ['User', 'Admin', 'Owner'] 
+    },
+    notificationMail: String,
     },
     {
         timestamps: true
     }
-)
+);
 
 
 // ==== METHODS ==== //
