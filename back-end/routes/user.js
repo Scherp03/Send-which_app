@@ -8,10 +8,10 @@ const router = express.Router();
 
 router.post('/', createUser);
 
-router.get('/', tokenChecker, getUser);
+router.get('/:id', tokenChecker, getUser);
 
-router.patch('/', tokenChecker, updateUser);
+router.patch('/:id', tokenChecker, updateUser);
 
-router.delete('/', tokenChecker, deleteUser);
+router.delete('/:id', tokenChecker, deleteUser);
 
 export default router;

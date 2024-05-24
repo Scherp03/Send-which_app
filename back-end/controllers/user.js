@@ -3,9 +3,8 @@ import bcrypt from 'bcryptjs';
 
 export const createUser = async(req, res, next) => {
     try {
-        if(!req.body.firstName || !req.body.lastName || !req.body.username || !req.body.email || 
-            !req.body.password || !req.body.userType) {
-                return res.status(400).json({success: false, message: `Missing some parameters`});
+        if(!req.body.firstName || !req.body.lastName || !req.body.username || !req.body.email || !req.body.password) {
+            return res.status(400).json({success: false, message: `Missing some parameters`});
         }
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         const newUser = new UserModel({
@@ -14,7 +13,7 @@ export const createUser = async(req, res, next) => {
             username: req.body.username,
             email: req.body.email,
             password: hashedPassword,
-            userType: req.body.userType
+            userType: "User"
         });
         // Check the user existance
         const userUsername = await UserModel.findOne({username: newUser.username});
@@ -41,9 +40,11 @@ export const createUser = async(req, res, next) => {
 };
 
 export const getUser = async(req, res, next) => {
-    if(!req.loggedUserId) return res.status(400).json({success: false, message: `Not logged`});
+    if(!req.loggedUser) return res.status(400).json({success: false, message: `Not logged`});
     try {
-        const user = await UserModel.findOne({username: req.loggedUserId});
+        const { id } = req.params;
+        const user = await UserModel.findById(id);
+        if(!user) return res.status(404).json({success: false, message: `User not found`});
         res.status(200).json(user);
     } catch (err) {
         console.log(err.message);
@@ -55,8 +56,9 @@ export const getUser = async(req, res, next) => {
 };
 
 export const updateUser = async(req, res, next) => {
-    if(!req.loggedUserId) return res.status(400).json({success: false, message: `Not logged`});
     try {
+        if(!req.loggedUser) return res.status(400).json({success: false, message: `Not logged`});
+        const { id } = req.params;
         // Check the parameters
         let updatedData = {};
         if(req.body.firstName) updatedData.firstName = req.body.firstName;
@@ -74,9 +76,9 @@ export const updateUser = async(req, res, next) => {
         if(userEmail){
             return res.status(400).json({success: false, message: `Email \'${userEmail.email}\' already in use`});
         }
-        let user = await UserModel.findOne({username: req.loggedUserId});
+        let user = await UserModel.findById(id);
         if(!user) return res.status(404).json({success: false, message: `User not found`});
-        await UserModel.updateOne({username: req.loggedUserId}, {$set: updatedData});
+        await UserModel.updateOne({username: req.loggedUser.username}, {$set: updatedData});
         res.status(200).json({success: true, message: "User modified"});
     }catch (err) {
         if (!err.statusCode) {
@@ -87,9 +89,10 @@ export const updateUser = async(req, res, next) => {
 };
 
 export const deleteUser = async(req, res, next) => {
-    if(!req.loggedUserId) return res.status(400).json({success: false, message: `Not logged`});
     try {
-        const user = await UserModel.findOneAndDelete({username: req.loggedUserId});
+        if(!req.loggedUser) return res.status(400).json({success: false, message: `Not logged`});
+        const { id } = req.params;
+        const user = await UserModel.findByIdAndDelete(id);
         if(!user) return res.status(404).json({success: false, message: `User not found`});
         res.status(200).json(user);
     } catch (err) {

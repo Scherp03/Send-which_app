@@ -11,7 +11,7 @@ export const tokenChecker = (req, res, next) => {
     if(!token) return res.status(401).json({success: false, message: 'No token provided'});
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedToken) => {
         if(err) return res.sendStatus(403);
-        req.loggedUserId = decodedToken.username;
+        req.loggedUser = decodedToken;
         next();
     });
 };

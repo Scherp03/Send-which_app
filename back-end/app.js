@@ -37,4 +37,6 @@ mongoose.connect(dbUri, clientOptions)
 })
 .catch((err) => console.log(err));
 
+// export default app;
+
 /* Swagger setup */
