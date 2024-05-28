@@ -1,8 +1,6 @@
 module.exports = {
-  transform: {
-    '^.+\\.jsx?$': 'babel-jest',
-    '^.+\\.ts?$': 'babel-jest',
-  },
-  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
-  testEnvironment: 'node',
+    transform: {
+        '^.+\\.jsx?$': 'babel-jest',  // Transform JavaScript files using babel-jest
+    },
+    testEnvironment: 'node', // Specify the test environment (Node.js in this case)
 };

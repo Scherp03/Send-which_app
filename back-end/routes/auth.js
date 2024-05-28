@@ -1,11 +1,11 @@
 import express from 'express';
 import { tokenChecker } from '../middleware/tokenCheker.js';
-import { loginUser, logoutUser } from '../controllers/auth.js';
+import { login, logout } from '../controllers/auth.js';
 
 const router = express.Router();
 
-router.post('/login', loginUser);
+router.post('/login', login);
 
-router.get('/logout', tokenChecker, logoutUser)
+router.delete('/logout', tokenChecker, logout)
 
 export default router;

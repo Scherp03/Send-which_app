@@ -29,7 +29,7 @@ export const createUser = async(req, res, next) => {
         if(!userCreated) {
             return res.status(400).json({success: false, message: `User not created`});
         }    
-        res.status(200).json(userCreated);
+        res.status(200).json({success: true, message: `User \'${userCreated.username}\' created successfully`});
     } catch (err) {
         console.log(err.message);
         if (!err.statusCode) {
@@ -79,7 +79,7 @@ export const updateUser = async(req, res, next) => {
         let user = await UserModel.findById(id);
         if(!user) return res.status(404).json({success: false, message: `User not found`});
         await UserModel.updateOne({username: req.loggedUser.username}, {$set: updatedData});
-        res.status(200).json({success: true, message: "User modified"});
+        res.status(200).json({success: true, message: "User modified successfully"});
     }catch (err) {
         if (!err.statusCode) {
             err.statusCode = 500;
@@ -94,7 +94,7 @@ export const deleteUser = async(req, res, next) => {
         const { id } = req.params;
         const user = await UserModel.findByIdAndDelete(id);
         if(!user) return res.status(404).json({success: false, message: `User not found`});
-        res.status(200).json(user);
+        res.status(200).json({success: true, message: `User \'${user.username}\' deleted successfully`});
     } catch (err) {
         console.log(err.message);
         if (!err.statusCode) {
