@@ -2,12 +2,12 @@
   "name": "send-which_app",
   "version": "1.0.0",
   "description": "Repository for the 2024 Software Engineering project",
-  "main": "index.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
     "test": "jest",
-    "devStart": "nodemon app.js",
-    "dev": "node -r dotenv/config back-end/app.js"
+    "devStart": "nodemon back-end/server.js",
+    "dev": "node -r dotenv/config back-end/server.js"
   },
   "keywords": [],
   "author": "",
