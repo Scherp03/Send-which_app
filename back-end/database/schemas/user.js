@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
         required: true,
         lowercase: true
     },
-    // should be the same as timestamps below!!!
+    // should be the same as timestamps below
     // created:    {
     //     type: Date,
     //     default: () => Date.now(),
