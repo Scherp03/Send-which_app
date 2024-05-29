@@ -27,6 +27,32 @@ const slotSchema = new mongoose.Schema({
     // }
 })  
 
+//Creation of the timeSlot
+const CreateTimeSlot = async() =>{
+  try{
+    const timeSlot= new Slot({
+      orderIDs:[],
+      durationMinutes:15,
+      time:"",
+      capacity:0,
+      creation:Date.now
+    })
+    const result = await timeSlot.save()
+    console.log(result)
+  }
+  catch(error){
+    console.log(error)
+  }
+}
+
+//==METHODS==//
+
+
+
+//==VIRTUALS==//
+slotSchema.virtual("")
+
+
 // Export the models
 const Slot = mongoose.model('Slot', slotSchema);
 export default Slot;
