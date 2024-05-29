@@ -1,7 +1,7 @@
 
 import {Slot} from '../database/schemas/slot.js'
 import mongoose from 'mongoose';
-
+import {OrdersId} from '../database/schemas/order.js'
 
 app.get('/available-time', async (req, res) => {
     try {
@@ -11,7 +11,7 @@ app.get('/available-time', async (req, res) => {
       const bookedTimeSlots = await Slot.find({ date: req.query.date });
       
       // Remove booked time slots from available ones
-      const filteredTimeSlots = availableTimeSlots.filter(slot => !bookedTimeSlots.includes(slot));
+      const filteredTimeSlots = availableTimeSlots.filter(slot =>  !bookedTimeSlots.includes(slot));
   
       res.json({ availableTimeSlots: filteredTimeSlots });
     } catch (error) {
@@ -25,7 +25,7 @@ app.get('/available-time', async (req, res) => {
       const { OrdersId, date, time } = req.body;
       
       // Check if the selected time slot is available
-      const isSlotAvailable = await Slot.findOne({ date, time });
+      const isSlotAvailable = await Slot.findOne({ OrdersId, date, time });
   
       if (isSlotAvailable) {
         res.status(400).json({ error: 'Selected time slot is not available' });
