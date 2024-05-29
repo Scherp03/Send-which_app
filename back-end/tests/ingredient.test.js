@@ -1,0 +1,1 @@
+const ingredient = require('../database/schemas/ingredient');
