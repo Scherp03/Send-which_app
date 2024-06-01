@@ -7,6 +7,7 @@
         "test": "jest",
         "devStart": "nodemon back-end/server.js",
         "dev": "node -r dotenv/config back-end/server.js",
+        "dev:init": "node -r dotenv/config back-end/server.js --init-db",
         "format": "node_modules/prettier/bin/prettier.cjs . --write"
     },
     "keywords": [],

@@ -1,6 +1,6 @@
 import UserModel from '../database/schemas/user.js';
 import bcrypt from 'bcryptjs';
-import { Permissions } from '../database/schemas/userTypeDefinitions.js';
+import { Permissions } from '../../userTypeDefinitions.js';
 
 export const createUser = async (req, res, next) => {
     try {

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { Permissions, Roles } from './userTypeDefinitions.js';
+import { Permissions, Roles } from '../../../userTypeDefinitions.js';
 
 const userTypeSchema = new mongoose.Schema({
     id: {
