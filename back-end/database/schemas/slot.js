@@ -1,18 +1,18 @@
-import mongoose, { mongo } from 'mongoose'
+import mongoose, { mongo } from 'mongoose';
 
 // Slot schema
 const slotSchema = new mongoose.Schema({
     orderIDs: [mongoose.Schema.Types.ObjectId],
-    durationMinutes:{
+    durationMinutes: {
         type: Number,
-        default: 15
+        default: 15,
     },
     time: Date,
-    capacity:{
+    capacity: {
         type: Number,
-        default: 5
-    }
-})  
+        default: 5,
+    },
+});
 
 // Export the models
 const Slot = mongoose.model('Slot', slotSchema);

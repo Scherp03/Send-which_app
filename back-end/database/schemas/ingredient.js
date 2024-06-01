@@ -1,4 +1,4 @@
-import mongoose, { mongo } from 'mongoose'
+import mongoose, { mongo } from 'mongoose';
 
 // Ingredient schema
 const ingredientSchema = new mongoose.Schema({
@@ -10,7 +10,7 @@ const ingredientSchema = new mongoose.Schema({
     price: Number,
     quantity: Number,
     tags: [String],
-})  
+});
 
 // Export the models
 const Order = mongoose.model('Ingredient', ingredientSchema);
