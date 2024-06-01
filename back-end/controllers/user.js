@@ -1,5 +1,6 @@
 import UserModel from '../database/schemas/user.js';
 import bcrypt from 'bcryptjs';
+import { Permissions } from '../database/schemas/userTypeDefinitions.js';
 
 export const createUser = async(req, res, next) => {
     try {
@@ -57,7 +58,7 @@ export const getUser = async(req, res, next) => {
 
 export const updateUser = async(req, res, next) => {
     try {
-        if(!req.loggedUser) return res.status(400).json({success: false, message: `Not logged`});
+        if(!req.decodedToken && !req.decodedToken.permissions.includes(Permissions.EDITOR)) return res.status(400).json({success: false, message: `No permissions`});
         const { id } = req.params;
         // Check the parameters
         let updatedData = {};
@@ -90,7 +91,7 @@ export const updateUser = async(req, res, next) => {
 
 export const deleteUser = async(req, res, next) => {
     try {
-        if(!req.loggedUser) return res.status(400).json({success: false, message: `Not logged`});
+        if(!req.decodedToken && !req.decodedToken.permissions.includes(Permissions.EDITOR)) return res.status(400).json({success: false, message: `No permissions`});
         const { id } = req.params;
         const user = await UserModel.findByIdAndDelete(id);
         if(!user) return res.status(404).json({success: false, message: `User not found`});

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { Roles } from './userTypeDefinitions.js';
 
 // Schema for the user
 const userSchema = new mongoose.Schema({
@@ -41,13 +42,13 @@ const userSchema = new mongoose.Schema({
     userType: { 
         type: String, 
         required: true,
-        enum: ['User', 'Admin', 'Owner'] 
+        enum: Object.values(Roles)
     },
     notificationMail: String,
     },
     {
         timestamps: true
-    }
+    },
 );
 
 
