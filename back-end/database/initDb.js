@@ -10,7 +10,7 @@ const users = [
     username: 'mockUsername',
     email: 'mockEmail@something',
     password: 'mockpswd',
-    userTypes: Roles.USER,
+    userType: Roles.USER,
   },
   {
     firstName: 'Luca',
@@ -18,7 +18,7 @@ const users = [
     username: 'scherp03',
     email: 'luca.carpella@gmail.com',
     password: 'lessgoski69',
-    userTypes: Roles.ADMIN,
+    userType: Roles.ADMIN,
   },
 ];
 
