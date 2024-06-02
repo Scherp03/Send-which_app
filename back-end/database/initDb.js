@@ -24,7 +24,7 @@ const users = [
 
 // define all permissions
 const userPerm = [Permissions.VIEWER];
-const adminPerm = [Permissions.EDITOR];
+const adminPerm = [Permissions.VIEWER, Permissions.EDITOR];
 
 const userTypes = [
   { id: Roles.USER, permissions: userPerm },
