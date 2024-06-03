@@ -10,7 +10,7 @@ const { DB_CREDENTIALS, DB_HOST, DB_NAME } = process.env;
 
 if (!DB_CREDENTIALS || !DB_HOST || !DB_NAME) {
   console.error(
-    "Missing necessary environment variables for MongoDB connection"
+    "Missing necessary environment variables for MongoDB connection",
   );
   process.exit(1);
 }

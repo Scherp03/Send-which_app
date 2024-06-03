@@ -17,10 +17,12 @@ describe("Server start and DB connection", () => {
 
   beforeAll(async () => {
     await mongoose.connect(dbUri);
+    console.log(`Database \'${process.env.DB_NAME}\' connected for testing!`);
   });
 
   afterAll(async () => {
     await mongoose.connection.close();
+    console.log("Database connection closed");
   });
 
   test("GET / should return 200", async () => {
