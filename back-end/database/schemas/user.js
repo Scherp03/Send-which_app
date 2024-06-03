@@ -18,18 +18,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       lowercase: true,
-    }, // Removed: "unique: true",
+    },
     email: {
       type: String,
       required: true,
       lowercase: true,
     },
-    // should be the same as timestamps below!!!
-    // created:    {
-    //     type: Date,
-    //     default: () => Date.now(),
-    //     immutable: true,
-    // },
     password: {
       type: String,
       required: true,
