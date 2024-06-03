@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose, { mongo } from 'mongoose';
 
 // Slot schema
 const slotSchema = new mongoose.Schema({
@@ -15,5 +15,5 @@ const slotSchema = new mongoose.Schema({
 });
 
 // Export the models
-const Slot = mongoose.model("Slot", slotSchema);
+const Slot = mongoose.model('Slot', slotSchema);
 export default Slot;

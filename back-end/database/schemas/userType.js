@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { Permissions, Roles } from "../../../shared/userTypeDefinitions.js";
+import mongoose from 'mongoose';
+import { Permissions, Roles } from '../../../shared/userTypeDefinitions.js';
 
 const userTypeSchema = new mongoose.Schema({
   id: {
@@ -13,5 +13,5 @@ const userTypeSchema = new mongoose.Schema({
   },
 });
 
-const UserType = mongoose.model("UserType", userTypeSchema);
+const UserType = mongoose.model('UserType', userTypeSchema);
 export default UserType;

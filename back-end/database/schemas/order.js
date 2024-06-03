@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 // Order schema
 const orderSchema = new mongoose.Schema({
@@ -13,5 +13,5 @@ const orderSchema = new mongoose.Schema({
 // Add here the methods, like calculate price
 
 // Export the models
-const Order = mongoose.model("Order", orderSchema);
+const Order = mongoose.model('Order', orderSchema);
 export default Order;

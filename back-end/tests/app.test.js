@@ -1,19 +1,19 @@
-import app from "../app.js";
-import request from "supertest";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
+import app from '../app.js';
+import request from 'supertest';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
-describe("Server start and DB connection", () => {
+describe('Server start and DB connection', () => {
   const dbUri =
-    "mongodb+srv://" +
+    'mongodb+srv://' +
     process.env.DB_CREDENTIALS +
-    "@" +
+    '@' +
     process.env.DB_HOST +
-    "/" +
+    '/' +
     process.env.DB_NAME +
-    "?retryWrites=true&w=majority";
+    '?retryWrites=true&w=majority';
 
   beforeAll(async () => {
     await mongoose.connect(dbUri);
@@ -22,12 +22,12 @@ describe("Server start and DB connection", () => {
 
   afterAll(async () => {
     await mongoose.connection.close();
-    console.log("Database connection closed");
+    console.log('Database connection closed');
   });
 
-  test("GET / should return 200", async () => {
-    const response = await request(app).get("/");
+  test('GET / should return 200', async () => {
+    const response = await request(app).get('/');
     expect(response.status).toBe(200);
-    expect(response.text).toBe("Welcome to homepage!");
+    expect(response.text).toBe('Welcome to homepage!');
   });
 });

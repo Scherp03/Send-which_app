@@ -1,10 +1,10 @@
 export const Permissions = {
-  VIEWER: "viewer",
-  EDITOR: "editor",
+  VIEWER: 'viewer',
+  EDITOR: 'editor',
 };
 
 export const Roles = {
-  USER: "User",
-  ADMIN: "Admin",
-  OWNER: "Owner",
+  USER: 'User',
+  ADMIN: 'Admin',
+  OWNER: 'Owner',
 };

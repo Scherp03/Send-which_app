@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { Roles } from "../../../shared/userTypeDefinitions.js";
+import mongoose from 'mongoose';
+import { Roles } from '../../../shared/userTypeDefinitions.js';
 
 // Schema for the user
 const userSchema = new mongoose.Schema(
@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema(
         function (password) {
           return password.length >= 6;
         },
-        "Password should be at least 6 characters long",
+        'Password should be at least 6 characters long',
       ],
     },
     userType: {
@@ -50,20 +50,20 @@ const userSchema = new mongoose.Schema(
 
 // Search for a user by name (case insensitive)
 userSchema.statics.findByNameInsensitive = function (queryName) {
-  return this.find({ name: new RegExp(queryName, "i") });
+  return this.find({ name: new RegExp(queryName, 'i') });
 };
 
 // The same, with query instead of find
 // It must be used as User.where.byName("___")
 userSchema.query.byName = function (name) {
-  return this.where({ name: new RegExp(name, "i") });
+  return this.where({ name: new RegExp(name, 'i') });
 };
 
 // ==== VIRTUALS ==== //
-userSchema.virtual("fullCredentials").get(function () {
+userSchema.virtual('fullCredentials').get(function () {
   return `${this.name} ${this.email}`;
 });
 
 // Export the model
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model('User', userSchema);
 export default User;

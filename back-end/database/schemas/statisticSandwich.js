@@ -1,5 +1,5 @@
-import mongoose, { mongo } from "mongoose";
-import Ingredient from "./ingredient.js";
+import mongoose, { mongo } from 'mongoose';
+import Ingredient from './ingredient.js';
 
 // Sandwich schema with basic content used for statistics
 const statSchema = new mongoose.Schema({
@@ -11,7 +11,7 @@ const statSchema = new mongoose.Schema({
 // === METHODS === //
 // Get hash; equivalent to getHash in sandwich.js
 statSchema.methods.setHash = async function () {
-  let hash = "_";
+  let hash = '_';
   try {
     // Sort ingredientsID array by the string representation of their _id field;
     // This is eventually the same as sorting the ingredients by name, it is univocous
@@ -29,7 +29,7 @@ statSchema.methods.setHash = async function () {
       }
     }
   } catch (error) {
-    console.log("Error in ingredientsHash: " + error);
+    console.log('Error in ingredientsHash: ' + error);
   }
   this.ingredientsHash = hash;
 };
@@ -45,5 +45,5 @@ statSchema.statics.findBestSeller = function (resultsNumber) {
 };
 
 // Export the models
-const statSandwich = mongoose.model("statSandwich", statSchema);
+const statSandwich = mongoose.model('statSandwich', statSchema);
 export default statSandwich;

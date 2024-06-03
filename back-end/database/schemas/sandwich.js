@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import Ingredient from "./ingredient.js";
+import mongoose from 'mongoose';
+import Ingredient from './ingredient.js';
 
 // Orders is the class with a list of orders
 const sandwichSchema = new mongoose.Schema({
@@ -12,7 +12,7 @@ const sandwichSchema = new mongoose.Schema({
 
 // Generate a hash for the ingredients
 sandwichSchema.methods.getHash = async function () {
-  let hash = "_";
+  let hash = '_';
   try {
     // Sort ingredientsID array by the string representation of their _id field;
     // This is eventually the same as sorting the ingredients by name, it is univocous
@@ -30,7 +30,7 @@ sandwichSchema.methods.getHash = async function () {
       }
     }
   } catch (error) {
-    console.log("Error in ingredientsHash: " + error);
+    console.log('Error in ingredientsHash: ' + error);
   }
   return hash;
 };
@@ -42,20 +42,20 @@ sandwichSchema.methods.printPrice = function () {
 
 // Search for a sandwich by bread (case insensitive)
 sandwichSchema.statics.findByBreadInsensitive = function (queryBread) {
-  return this.where({ bread: new RegExp(queryName, "i") });
+  return this.where({ bread: new RegExp(queryName, 'i') });
 };
 
 // === VIRTUALS === //
-sandwichSchema.virtual("ingredientsHash").get(function () {});
+sandwichSchema.virtual('ingredientsHash').get(function () {});
 
 // === MIDDLEWARE === //
 
 // Add one to list of stats when saving
-sandwichSchema.pre("save", function (next) {
+sandwichSchema.pre('save', function (next) {
   this.hash = this.getHash();
   next();
 });
 
 // Export the models
-const Sandwich = mongoose.model("Sandwich", sandwichSchema);
+const Sandwich = mongoose.model('Sandwich', sandwichSchema);
 export default Sandwich;
