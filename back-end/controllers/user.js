@@ -1,6 +1,6 @@
 import UserModel from '../database/schemas/user.js';
 import bcrypt from 'bcryptjs';
-import { Permissions } from '../../shared/userTypeDefinitions.js';
+import { Permissions, Roles } from '../../shared/userTypeDefinitions.js';
 
 export const createUser = async (req, res, next) => {
   try {
@@ -22,7 +22,7 @@ export const createUser = async (req, res, next) => {
       username: req.body.username,
       email: req.body.email,
       password: hashedPassword,
-      userType: 'User',
+      userType: Roles.USER,
     });
     // Check the user existance
     const userUsername = await UserModel.findOne({

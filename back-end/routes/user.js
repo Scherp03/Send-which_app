@@ -3,15 +3,15 @@ import express from 'express';
 import { tokenChecker } from '../middleware/tokenChecker.js';
 
 import {
-    createUser,
-    getUser,
-    updateUser,
-    deleteUser,
+  createUser,
+  getUser,
+  updateUser,
+  deleteUser,
 } from '../controllers/user.js';
 
 const router = express.Router();
 
-router.post('/signup', createUser);
+router.post('/', createUser);
 
 router.get('/:id', tokenChecker, getUser);
 

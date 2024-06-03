@@ -14,7 +14,7 @@ app.use('/auth', authRouter);
 
 /* Quick check if it's working */
 app.get('/', (req, res) => {
-    res.status(200).send('Welcome to homepage!');
+  res.status(200).send('Welcome to homepage!');
 });
 
 /* Swagger setup */
