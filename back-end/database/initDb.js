@@ -33,13 +33,13 @@ const userTypes = [
 
 export const initDb = async () => {
   // deleteMany() does not work!
-  User.deleteMany();
+  await User.deleteMany();
   for (let user of users) {
     await User.create(user);
   }
   console.log('Users collection populated');
   // deleteMany() does not work!
-  UserType.deleteMany();
+  await UserType.deleteMany();
   for (let userType of userTypes) {
     await UserType.create(userType);
   }
