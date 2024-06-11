@@ -27,19 +27,15 @@ univocousTest();
 async function univocousTest(){
   // Add ingredients
   try{
-    Ingredient.addOneSafe('Lettuce', 'Fresh green lettuce', 0.5, 100, ['vegetable', 'vegan']);
-    Ingredient.addOneSafe('Tomato', 'Juicy red tomato', 0.7, 100, ['vegetable', 'vegan']);
+    await Ingredient.addOneSafe('Lettuce', 'Fresh green lettuce', 0.5, 100, ['vegetable', 'vegan']);
+    await Ingredient.addOneSafe('Tomato', 'Juicy red tomato', 0.7, 100, ['vegetable', 'vegan']);
   } catch (err) {
     console.error('Error adding ingredients: ', err.message);
   }
   let ingredient = await Ingredient.findOne({ name: 'Lettuce' });
-  console.log('Before changes: ', ingredient);
-  ingredient.changeAvailability(50);
-  console.log('Changed availability: ', ingredient);
   ingredient.safeDelete();
-  console.log('Deleted ingredient: ', ingredient);
   Ingredient.restoreDeleted('lettuce');
-  console.log('Restored ingredient: ', ingredient);
+  ingredient.changeAvailability(50);
 }
 
 // Function to add a base set of data to the database

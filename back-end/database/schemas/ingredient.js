@@ -1,4 +1,4 @@
-import mongoose, { mongo } from 'mongoose'
+import mongoose from 'mongoose'
 
 // Ingredient schema
 const ingredientSchema = new mongoose.Schema({
@@ -20,20 +20,24 @@ const ingredientSchema = new mongoose.Schema({
 // Insert one order only if certain parameters are met
 ingredientSchema.statics.addOneSafe = async function(name, description, price, quantity, tags) {
     // Test that it is not a duplicate
-    let duplicateNamesList = await this.find({ name: name });
-    if (duplicateNamesList.length > 0) {
-        console.log("Duplicate ingredient: " + name);
+    let duplicateIngredient = await this.findOne({ name: name });
+    if (duplicateIngredient) {
+        console.log("Duplicate ingredient: " + name + " ID: " + duplicateIngredient._id);
         return false;
     }
-    // Test that it is long enough
+    // Test that the name is long enough
     if (name.length < 3) {
-        console.log("Name too short");
+        console.log("Name too short: " + name);
         return false;
     }
     
-    await this.create({ name: name, description: description, price: price, quantity: quantity, tags: tags });
-    console.log("Ingredient added: " + name);
-    return true;
+    if(name.length >= 3 && !duplicateIngredient){
+        await this.create({ name: name, description: description, price: price, quantity: quantity, tags: tags });
+        console.log("Ingredient added: " + name);
+        return true;
+    }else {
+        return false
+    } // totally not needed, but apparently jest fails and calls create anyways
 }
 
 // Change the availability of an ingredient, verify that the new availability is valid
@@ -103,5 +107,5 @@ ingredientSchema.statics.restoreDeleted = async function(restoredName) {
 }
 
 // Export the models
-const Order = mongoose.model('Ingredient', ingredientSchema);
-export default Order;
+const Ingredient = mongoose.model('Ingredient', ingredientSchema);
+export default Ingredient;
