@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import Slot from './database/schemas/slot';
+
 
 /* Routes */
 const app = express();
@@ -16,8 +16,5 @@ app.get('/', (req, res) => {
 
 
 /* Swagger setup */
-
-
-
 
 export default app;

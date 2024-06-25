@@ -1,14 +1,14 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
 // Order schema
 const orderSchema = new mongoose.Schema({
-    userID: String,
-    slotID: String,
-    content: [mongoose.Schema.Types.ObjectId],
-    total: Number,
-    status: String,
-    date: Date
-})  
+  userID: String,
+  slotID: String,
+  content: [mongoose.Schema.Types.ObjectId],
+  total: Number,
+  status: String,
+  date: Date,
+});
 
 // Add here the methods, like calculate price
 

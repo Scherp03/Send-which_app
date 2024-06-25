@@ -56,5 +56,3 @@ slotSchema.virtual("")
 // Export the models
 const Slot = mongoose.model('Slot', slotSchema);
 export default Slot;
-
-
