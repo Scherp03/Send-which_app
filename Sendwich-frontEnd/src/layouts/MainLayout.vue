@@ -11,16 +11,34 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title>
+        <q-toolbar-title v-show="false">
           Quasar App
         </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
+         <q-btn flat label="Home" to="/" />
+        <q-btn flat label="Settings" to="/settings" />
+        <q-btn flat name="Contacts"  label="Contact"  to="/contacts" />
+        <q-avatar @click="goUserSettings"  color="red" text-color="white" icon="directions" />
+        <div v-show="false">Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
+     <q-footer >
+        <q-tabs
+        v-model="tab"
+        class="text-teal"
+      >
+      
+        <q-route-tab name="Sendwich" icon="home" label="Sendwich" to="/" />
+        <q-route-tab name="Contacts" icon="contacts" label="Contact"  to="/contacts" />
+        <q-route-tab name="Setting" icon="settings" label="Settings" to="/settings" />
+      </q-tabs>
+
+      </q-footer>
+
     <q-drawer
       v-model="leftDrawerOpen"
+      :breakpoint="767"
+      :width="250"
       show-if-above
       bordered
     >
@@ -28,7 +46,7 @@
         <q-item-label
           header
         >
-          Essential Links
+          Navigation
         </q-item-label>
 
         <EssentialLink
@@ -50,52 +68,29 @@ import { ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 
 defineOptions({
-  name: 'MainLayout'
+  name: 'MainLayout',
+  data(){
+    return{
+      
+    }
+  }
 })
 
 const linksList = [
   {
-    title: 'Docs',
+    title: 'SandWichApp',
     caption: 'quasar.dev',
     icon: 'school',
     link: 'https://quasar.dev'
+   
   },
   {
     title: 'Github',
-    caption: 'github.com/quasarframework',
+    caption: 'github.com/Send-which-app',
     icon: 'code',
-    link: 'https://github.com/quasarframework'
+    link: 'https://github.com/Scherp03/Send-which_app'
   },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
+  
 ]
 
 const leftDrawerOpen = ref(false)
@@ -104,3 +99,23 @@ function toggleLeftDrawer () {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
 </script>
+
+<style>
+
+@media screen and (min-width: 768px){
+  .q-footer{
+    display: none;
+  }
+}
+  
+
+  .q-toolbar{
+    background-color: green;
+  }
+  .q-footer{
+       background-color: green;
+  }
+  .q-tab{
+    color: black;
+  }
+</style>
