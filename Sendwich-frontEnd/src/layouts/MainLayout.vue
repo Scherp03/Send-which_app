@@ -1,3 +1,4 @@
+
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
@@ -11,28 +12,28 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title >
-          SendwhichApp
+        <q-toolbar-title v-show="false">
+          Quasar App
         </q-toolbar-title>
-
-        <div>
-           <q-avatar>
-      <img src="https://cdn.quasar.dev/img/avatar.png">
-    </q-avatar>
-        </div>
+         <q-btn flat label="Home" to="/" />
+        <q-btn flat label="Settings" to="/settings" />
+        <q-btn flat name="Contacts"  label="Contact"  to="/contacts" />
+        <q-avatar @click="goUserSettings"  color="red" text-color="white" icon="directions" />
+        <div v-show="false">Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
-  
-  
-      <q-footer >
-        <q-toolbar >
-           <q-tabs class="absolute-center" >
-        <q-route-tab name="Sendwhich" icon="home" label="Sendwhich" to='/' />
-        <q-route-tab name="Settings" icon="settings" label="settings" to='/settings' />
-        <q-route-tab name="movies" icon="movie" label="Movies" to='/contacts' />
+
+     <q-footer >
+        <q-tabs
+        v-model="tab"
+        class="text-teal"
+      >
+      
+        <q-route-tab name="Sendwich" icon="home" label="Sendwich" to="/" />
+        <q-route-tab name="Contacts" icon="contacts" label="Contact"  to="/contacts" />
+        <q-route-tab name="Setting" icon="settings" label="Settings" to="/settings" />
       </q-tabs>
 
-        </q-toolbar>
       </q-footer>
 
     <q-drawer
@@ -46,7 +47,7 @@
         <q-item-label
           header
         >
-          Essential Links
+          Navigation
         </q-item-label>
 
         <EssentialLink
@@ -68,23 +69,29 @@ import { ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 
 defineOptions({
-  name: 'MainLayout'
+  name: 'MainLayout',
+  data(){
+    return{
+      
+    }
+  }
 })
 
 const linksList = [
   {
-    title: 'Sendwhich',
-    caption: 'Sendwhich',
-    icon: 'home',
-    to:'/'
+    title: 'SandWichApp',
+    caption: 'quasar.dev',
+    icon: 'school',
+    link: 'https://quasar.dev'
+   
   },
   {
     title: 'Github',
-    caption: 'github.com/SendwhichApp',
+    caption: 'github.com/Send-which-app',
     icon: 'code',
-    link: 'https://github.com/quasarframework'
+    link: 'https://github.com/Scherp03/Send-which_app'
   },
- 
+  
 ]
 
 const leftDrawerOpen = ref(false)
@@ -93,13 +100,23 @@ function toggleLeftDrawer () {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
 </script>
+
 <style>
-.q-page{
-  background-color: red;
-}
+
 @media screen and (min-width: 768px){
-  q-footer{
+  .q-footer{
     display: none;
   }
 }
+  
+
+  .q-toolbar{
+    background-color: green;
+  }
+  .q-footer{
+       background-color: green;
+  }
+  .q-tab{
+    color: black;
+  }
 </style>

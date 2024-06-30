@@ -23,7 +23,11 @@
 defineOptions({
   data(){
     return{
-      message: "Welcome to Sendwich APP"
+      message: "Welcome to Sendwich APP",
+      
+      // user:'',
+      // password:'',
+
     }
   },
 
@@ -67,7 +71,7 @@ defineOptions({
   },
   mounted(){
     console.log(this.$refs)
-    
+
   },
   beforeUpdate(){
     console.log('before update')
@@ -82,6 +86,9 @@ defineOptions({
 
 <style>
 
+.q-page{
+  background-color: red;
+}
 .border-gray{
   border: 1px solid gray;
 }
