@@ -13,13 +13,17 @@
         />
 
         <q-toolbar-title v-show="false">
-          Quasar App
+          Sendwhich App
         </q-toolbar-title>
-         <q-btn flat label="Home" to="/" />
+        <q-btn flat label="Home" to="/" />
         <q-btn flat label="Settings" to="/settings" />
         <q-btn flat name="Contacts"  label="Contact"  to="/contacts" />
-        <q-avatar @click="goUserSettings"  color="red" text-color="white" icon="directions" />
-        <div v-show="false">Quasar v{{ $q.version }}</div>
+        <q-btn flat name="Sign In"  label="Sign In"  to="/signin" />
+        <q-btn flat name="Sign Up"  label="Sign Up"  to="/signup" />
+        
+        <div>
+          <q-avatar @click="goUserSettings"  color="red" text-color="white" icon="directions" />
+        </div>
       </q-toolbar>
     </q-header>
 
