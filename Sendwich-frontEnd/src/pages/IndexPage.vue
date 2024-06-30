@@ -19,7 +19,6 @@
 
   </q-page>
 </template>
-
 <script setup>
 defineOptions({
   data(){
@@ -93,4 +92,5 @@ defineOptions({
   color: red;
   background-color: pink ;
 }
+
 </style>

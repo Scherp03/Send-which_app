@@ -9,6 +9,7 @@
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
 
+const { QFooter, QTab, QTabs, QAvatar, QIcon, QToolbar } = require('quasar');
 const { configure } = require('quasar/wrappers');
 
 
@@ -41,7 +42,8 @@ module.exports = configure(function (/* ctx */) {
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
       'roboto-font', // optional, you are not bound to it
-      'material-icons', // optional, you are not bound to it
+      'material-icons',
+      '' // optional, you are not bound to it
     ],
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
@@ -96,7 +98,10 @@ module.exports = configure(function (/* ctx */) {
       // (like functional components as one of the examples),
       // you can manually specify Quasar components/directives to be available everywhere:
       //
-      // components: [],
+       components: [
+    
+         
+       ],
       // directives: [],
 
       // Quasar plugins
