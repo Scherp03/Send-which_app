@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { Permissions, Roles } from '../../../shared/userTypeDefinitions.js';
 
 const userTypeSchema = new mongoose.Schema({
-  id: {
+  role: {
     type: String,
     required: true,
     enum: Object.values(Roles),
