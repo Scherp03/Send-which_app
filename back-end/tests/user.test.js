@@ -27,8 +27,9 @@ afterAll(async () => {
   console.log('Database connection closed');
 });
 
-describe('POST /users', () => {
-  test('Create new user correctly', async () => {
+//Create new user correctly
+describe('POST /api/v1/users', () => {
+  test('Should respond with 200 status code and a message', async () => {
     const userCorrect = {
       firstName: 'John',
       lastName: 'Doe',
@@ -36,58 +37,59 @@ describe('POST /users', () => {
       email: 'john.doe@gmail.com',
       password: 'ILoveUbuntu123',
     };
-    const response = await request(app).post('/users').send(userCorrect);
+    const response = await request(app).post('/api/v1/users').send(userCorrect);
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual(
       expect.objectContaining({
         success: true,
-        message: expect.stringContaining(
-          `User \'${userCorrect.username}\' created successfully`,
-        ),
+        message: `User \'${userCorrect.username}\' created successfully`,
       }),
     );
   });
 
-  test('Create new user with empty fields', async () => {
+  // Create new user with empty fields
+  test('Should respond with 400 status code and an error message', async () => {
     const userWrong = {
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@gmail.com',
     };
-    const response = await request(app).post('/users').send(userWrong);
+    const response = await request(app).post('/api/v1/users').send(userWrong);
     expect(response.statusCode).toBe(400);
     expect(response.body).toEqual(
       expect.objectContaining({
         success: false,
-        message: expect.stringContaining('Missing some parameters'),
+        message: 'Missing some parameters',
       }),
     );
   });
 });
 
-// describe('PATCH /users', () => {
-//   test('Update user', async () => {
+// Update user
+// describe('PATCH /api/v1/users', () => {
+//   test('', async () => {
 //     const userUpdate = {};
-//     const response = await request(app).patch('/users').send(userUpdate);
+//     const response = await request(app).patch('/api/v1/users').send(userUpdate);
 //     expect(response.statusCode).toBe(200);
 //     expect(response.body).toEqual(
 //       expect.objectContaining({
 //         success: true,
-//         message: expect.stringContaining(''),
+//         message: '',
 //       }),
 //     );
 //   });
 // });
 
-// describe('DELETE /users', () => {
-//   test('Delete user', async () => {
+// Delete user
+// describe('DELETE /api/v1/users', () => {
+//   test('', async () => {
 //     const userDelete = {};
-//     const response = await request(app).delete('/users').send(userDelete);
+//     const response = await request(app).delete('/api/v1/users').send(userDelete);
 //     expect(response.statusCode).toBe(200);
 //     expect(response.body).toEqual(
 //       expect.objectContaining({
 //         success: true,
-//         message: expect.stringContaining(''),
+//         message: ''
 //       }),
 //     );
 //   });

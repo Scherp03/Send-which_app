@@ -1,27 +1,28 @@
 import UserModel from '../database/schemas/user.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import Roles from '../database/schemas/userType.js';
+import { Roles } from '../../shared/userTypeDefinitions.js';
+import UserTypeModel from '../database/schemas/userType.js';
 
 export const login = async (req, res, next) => {
   try {
     if (!req.body.username || !req.body.password) {
       return res
         .status(400)
-        .json({ success: false, message: `Missing some parameters` });
+        .json({ success: false, message: 'Missing some parameters' });
     }
     const user = await UserModel.findOne({ username: req.body.username });
     if (!user)
-      return res.status(400).json({
+      return res.status(404).json({
         success: false,
         message: `Cannot find user \'${req.body.username}\' in our database`,
       });
     if (await bcrypt.compare(req.body.password, user.password)) {
       // if the password is correct, generate JWT token
-      const userType = await Roles.findOne({ id: user.userType });
+      const userType = await UserTypeModel.findOne({ id: user.userType });
       const payload = {
         username: req.body.username,
-        // both fe and be
+        id: userType.id,
         permissions: userType.permissions,
       };
       const options = { expiresIn: '8h' };
@@ -37,7 +38,9 @@ export const login = async (req, res, next) => {
         token: access_key,
       });
     } else {
-      return res.status(400).json({ message: 'Wrong password' });
+      return res
+        .status(400)
+        .json({ success: false, message: 'Wrong password!' });
     }
   } catch (err) {
     console.log(err.message);

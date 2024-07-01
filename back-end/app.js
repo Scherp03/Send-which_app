@@ -9,8 +9,8 @@ import userRouter from './routes/user.js';
 
 app.use(bodyParser.json());
 
-app.use('/users', userRouter);
-app.use('/auth', authRouter);
+app.use('/api/v1/users', userRouter);
+app.use('/api/v1/auth', authRouter);
 
 /* Quick check if it's working */
 app.get('/', (req, res) => {
