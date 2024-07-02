@@ -2,6 +2,7 @@ import app from './app.js';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import initDb from './database/initDb.js';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -30,12 +31,14 @@ const clientOptions = {
 
 const PORT = process.env.PORT || 3000;
 
+app.use(cors({ origin: 'http://localhost:9000' }));
+
 /* Run server */
 app.listen(PORT, async () => {
   console.log('Wait for database connection...');
   try {
     /* Database connection */
-    const db = await mongoose.connect(dbUri, clientOptions);
+    const db = await mongoose.connect(process.env.MONGODB_URI, clientOptions);  //dbUri
     console.log('Connected to mongoDB successfully!');
 
     if (process.argv.includes('--init-db')) {
