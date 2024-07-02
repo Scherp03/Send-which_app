@@ -20,9 +20,8 @@ beforeAll(async () => {
   console.log(`Database \'${process.env.DB_NAME}\' connected for testing!`);
 });
 
+// no need to delete the user created since it's done by the test
 afterAll(async () => {
-  // will be done by the delete test
-  await User.deleteOne({ username: 'johndoe' });
   await mongoose.connection.close();
   console.log('Database connection closed');
 });
@@ -45,7 +44,7 @@ describe('POST /api/v1/users', () => {
         message: `User \'${userCorrect.username}\' created successfully`,
       }),
     );
-  });
+  }, 10000);
 
   // Create new user with empty fields
   test('Should respond with 400 status code and an error message', async () => {
@@ -62,35 +61,72 @@ describe('POST /api/v1/users', () => {
         message: 'Missing some parameters',
       }),
     );
-  });
+  }, 10000);
 });
 
 // Update user
-// describe('PATCH /api/v1/users', () => {
-//   test('', async () => {
-//     const userUpdate = {};
-//     const response = await request(app).patch('/api/v1/users').send(userUpdate);
-//     expect(response.statusCode).toBe(200);
-//     expect(response.body).toEqual(
-//       expect.objectContaining({
-//         success: true,
-//         message: '',
-//       }),
-//     );
-//   });
-// });
+
+// login credentials
+const correctLogin = {
+  username: 'johndoe',
+  password: 'ILoveUbuntu123',
+};
+
+// updated credentials
+const userUpdate = {
+  firstName: 'Giovanni',
+  username: 'newusername',
+  password: 'NewPasswdKek666',
+};
+
+describe('PATCH /api/v1/users', () => {
+  test('should respond with a 200 status code and a message', async () => {
+    // first need to login to retrive the access token and id
+    const loginData = await request(app)
+      .post('/api/v1/auth/login')
+      .send(correctLogin);
+    const userId = loginData.body.id;
+    const accessToken = loginData.body.token;
+    // patch to modify
+    const response = await request(app)
+      .patch(`/api/v1/users/${userId}`)
+      .set('authorization', `Bearer ${accessToken}`)
+      .send(userUpdate);
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        success: true,
+        message: 'User modified successfully',
+      }),
+    );
+  }, 10000);
+});
+
+const newCorrectLogin = {
+  username: 'newusername',
+  password: 'NewPasswdKek666',
+};
 
 // Delete user
-// describe('DELETE /api/v1/users', () => {
-//   test('', async () => {
-//     const userDelete = {};
-//     const response = await request(app).delete('/api/v1/users').send(userDelete);
-//     expect(response.statusCode).toBe(200);
-//     expect(response.body).toEqual(
-//       expect.objectContaining({
-//         success: true,
-//         message: ''
-//       }),
-//     );
-//   });
-// });
+describe('DELETE /api/v1/users', () => {
+  test('should respond with a 200 status code and a message', async () => {
+    // first need to login to retrive the access token and id
+    const loginData = await request(app)
+      .post('/api/v1/auth/login')
+      .send(newCorrectLogin);
+    const userId = loginData.body.id;
+    const accessToken = loginData.body.token;
+
+    // actual user deletion
+    const response = await request(app)
+      .delete(`/api/v1/users/${userId}`)
+      .set('authorization', `Bearer ${accessToken}`);
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        success: true,
+        message: "User 'newusername' deleted successfully",
+      }),
+    );
+  }, 10000);
+});

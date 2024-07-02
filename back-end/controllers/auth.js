@@ -19,10 +19,10 @@ export const login = async (req, res, next) => {
       });
     if (await bcrypt.compare(req.body.password, user.password)) {
       // if the password is correct, generate JWT token
-      const userType = await UserTypeModel.findOne({ id: user.userType });
+      const userType = await UserTypeModel.findOne({ role: user.userType });
       const payload = {
         username: req.body.username,
-        id: userType.id,
+        role: userType.role,
         permissions: userType.permissions,
       };
       const options = { expiresIn: '8h' };
@@ -60,7 +60,7 @@ export const logout = async (req, res, next) => {
     // handle token in the front-end
     res.status(200).json({
       success: true,
-      message: `user \'${req.decodedToken.username}\' logged out successfully`,
+      message: `User \'${req.decodedToken.username}\' logged out successfully!`,
     });
   } catch (err) {
     console.log(err.message);

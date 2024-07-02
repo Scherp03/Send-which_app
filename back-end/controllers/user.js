@@ -62,7 +62,7 @@ export const createUser = async (req, res, next) => {
 };
 
 export const getUser = async (req, res, next) => {
-  if (!req.loggedUser)
+  if (!req.decodedToken)
     return res.status(400).json({ success: false, message: `Not logged` });
   try {
     const { id } = req.params;
@@ -87,6 +87,7 @@ export const updateUser = async (req, res, next) => {
       !req.decodedToken &&
       !req.decodedToken.permissions.includes(Permissions.EDITOR)
     )
+      // if (!req.decodedToken)
       return res
         .status(400)
         .json({ success: false, message: `No permissions` });
@@ -123,7 +124,7 @@ export const updateUser = async (req, res, next) => {
         .status(404)
         .json({ success: false, message: `User not found` });
     await UserModel.updateOne(
-      { username: req.loggedUser.username },
+      { username: req.decodedToken.username },
       { $set: updatedData },
     );
     res.status(200).json({
@@ -131,6 +132,7 @@ export const updateUser = async (req, res, next) => {
       message: 'User modified successfully',
     });
   } catch (err) {
+    console.log(err);
     if (!err.statusCode) {
       err.statusCode = 500;
     }
@@ -139,6 +141,7 @@ export const updateUser = async (req, res, next) => {
 };
 
 export const deleteUser = async (req, res, next) => {
+  console.log('ciaooo');
   try {
     if (
       !req.decodedToken &&

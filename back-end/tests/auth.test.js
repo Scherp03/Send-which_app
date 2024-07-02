@@ -53,11 +53,15 @@ describe('POST api/v1/auth/login', () => {
     const response = await request(app)
       .post('/api/v1/auth/login')
       .send(correctLogin);
+    const tkn = response.body.token;
+    const userId = response.body.id;
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual(
       expect.objectContaining({
         success: true,
         message: 'Welcome to your account, username_test!',
+        id: userId,
+        token: tkn,
       }),
     );
   }, 10000); // Timeout set to 10 seconds
@@ -120,6 +124,28 @@ describe('POST api/v1/auth/login', () => {
       expect.objectContaining({
         success: false,
         message: 'Missing some parameters',
+      }),
+    );
+  }, 10000); // Timeout set to 10 seconds
+});
+
+// Logout
+describe('DELETE api/v1/auth/logout', () => {
+  test('Should respond with 200 status code and a message', async () => {
+    // first need to login to retrive the access token
+    const loginData = await request(app)
+      .post('/api/v1/auth/login')
+      .send(correctLogin);
+    const accessToken = loginData.body.token;
+    // actual logout
+    const response = await request(app)
+      .delete('/api/v1/auth/logout')
+      .set('authorization', `Bearer ${accessToken}`);
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        success: true,
+        message: "User 'username_test' logged out successfully!",
       }),
     );
   }, 10000); // Timeout set to 10 seconds
