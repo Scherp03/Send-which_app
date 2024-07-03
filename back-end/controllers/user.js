@@ -89,11 +89,23 @@ export const updateUser = async (req, res, next) => {
     if (
       !req.decodedToken
       // && !req.decodedToken.permissions.includes(Permissions.EDITOR)
-    )
-      // if (!req.decodedToken)
+    ) {
       return res
         .status(403)
         .json({ success: false, message: `No permissions` });
+    }
+    if (
+      !req.body.firstName &&
+      !req.body.lastName &&
+      !req.body.username &&
+      !req.body.email &&
+      !req.body.password
+    ) {
+      return res
+        .status(400)
+        .json({ success: false, message: 'No data modified' });
+    }
+
     const { id } = req.params;
     // Check the parameters
     let updatedData = {};
@@ -105,29 +117,18 @@ export const updateUser = async (req, res, next) => {
       updatedData.password = await bcrypt.hash(req.body.password, 10);
     if (req.body.userType) updatedData.userType = req.body.userType;
     // Check the user existance
-    if (
-      !req.body.firstName ||
-      !req.body.lastName ||
-      !req.body.username ||
-      !req.body.email ||
-      !req.body.password
-    ) {
-      return res
-        .status(400)
-        .json({ success: false, message: 'No data modified' });
-    }
     const userUsername = await UserModel.findOne({
       username: updatedData.username,
     });
     if (userUsername) {
-      return res.status(401).json({
+      return res.status(400).json({
         success: false,
         message: `Username \'${userUsername.username}\' already in use`,
       });
     }
     const userEmail = await UserModel.findOne({ email: updatedData.email });
     if (userEmail) {
-      return res.status(401).json({
+      return res.status(400).json({
         success: false,
         message: `Email \'${userEmail.email}\' already in use`,
       });
@@ -160,10 +161,11 @@ export const deleteUser = async (req, res, next) => {
     if (
       !req.decodedToken
       //&& !req.decodedToken.permissions.includes(Permissions.EDITOR)
-    )
+    ) {
       return res
         .status(403)
         .json({ success: false, message: `No permissions` });
+    }
     const { id } = req.params;
     const user = await UserModel.findByIdAndDelete(id);
     if (!user)

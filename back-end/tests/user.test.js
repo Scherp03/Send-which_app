@@ -32,7 +32,7 @@ describe('POST /api/v1/users', () => {
     const userCorrect = {
       firstName: 'John',
       lastName: 'Doe',
-      username: 'johndoe',
+      username: 'ermeio94',
       email: 'john.doe@gmail.com',
       password: 'ILoveUbuntu123',
     };
@@ -68,7 +68,7 @@ describe('POST /api/v1/users', () => {
 
 // login credentials
 const correctLogin = {
-  username: 'johndoe',
+  username: 'ermeio94',
   password: 'ILoveUbuntu123',
 };
 

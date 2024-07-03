@@ -54,10 +54,11 @@ export const login = async (req, res, next) => {
 export const logout = async (req, res, next) => {
   res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
   try {
-    if (!req.decodedToken)
+    if (!req.decodedToken) {
       return res
         .status(403)
         .json({ success: false, message: `No permissions` });
+    }
     // handle token in the front-end
     res.status(200).json({
       success: true,
