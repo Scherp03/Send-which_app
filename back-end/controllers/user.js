@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { Permissions, Roles } from '../../shared/userTypeDefinitions.js';
 
 export const createUser = async (req, res, next) => {
+  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
   try {
     if (
       !req.body.firstName ||
@@ -29,14 +30,14 @@ export const createUser = async (req, res, next) => {
       username: newUser.username,
     });
     if (userUsername) {
-      return res.status(400).json({
+      return res.status(401).json({
         success: false,
         message: `Username \'${userUsername.username}\' already in use`,
       });
     }
     const userEmail = await UserModel.findOne({ email: newUser.email });
     if (userEmail) {
-      return res.status(400).json({
+      return res.status(401).json({
         success: false,
         message: `Email \'${userEmail.email}\' already in use`,
       });
@@ -45,12 +46,12 @@ export const createUser = async (req, res, next) => {
     const userCreated = await UserModel.create(newUser);
     if (!userCreated) {
       return res
-        .status(400)
+        .status(503)
         .json({ success: false, message: `User not created` });
     }
     res.status(200).json({
       success: true,
-      message: `User \'${userCreated.username}\' created successfully`,
+      message: `User \'${userCreated.username}\' created successfully!`,
     });
   } catch (err) {
     console.log(err.message);
@@ -62,8 +63,9 @@ export const createUser = async (req, res, next) => {
 };
 
 export const getUser = async (req, res, next) => {
+  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
   if (!req.decodedToken)
-    return res.status(400).json({ success: false, message: `Not logged` });
+    return res.status(403).json({ success: false, message: `No permissions` });
   try {
     const { id } = req.params;
     const user = await UserModel.findById(id);
@@ -82,14 +84,15 @@ export const getUser = async (req, res, next) => {
 };
 
 export const updateUser = async (req, res, next) => {
+  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
   try {
     if (
-      !req.decodedToken &&
-      !req.decodedToken.permissions.includes(Permissions.EDITOR)
+      !req.decodedToken
+      // && !req.decodedToken.permissions.includes(Permissions.EDITOR)
     )
       // if (!req.decodedToken)
       return res
-        .status(400)
+        .status(403)
         .json({ success: false, message: `No permissions` });
     const { id } = req.params;
     // Check the parameters
@@ -102,18 +105,29 @@ export const updateUser = async (req, res, next) => {
       updatedData.password = await bcrypt.hash(req.body.password, 10);
     if (req.body.userType) updatedData.userType = req.body.userType;
     // Check the user existance
+    if (
+      !req.body.firstName ||
+      !req.body.lastName ||
+      !req.body.username ||
+      !req.body.email ||
+      !req.body.password
+    ) {
+      return res
+        .status(400)
+        .json({ success: false, message: 'No data modified' });
+    }
     const userUsername = await UserModel.findOne({
       username: updatedData.username,
     });
     if (userUsername) {
-      return res.status(400).json({
+      return res.status(401).json({
         success: false,
         message: `Username \'${userUsername.username}\' already in use`,
       });
     }
     const userEmail = await UserModel.findOne({ email: updatedData.email });
     if (userEmail) {
-      return res.status(400).json({
+      return res.status(401).json({
         success: false,
         message: `Email \'${userEmail.email}\' already in use`,
       });
@@ -141,14 +155,14 @@ export const updateUser = async (req, res, next) => {
 };
 
 export const deleteUser = async (req, res, next) => {
-  console.log('ciaooo');
+  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
   try {
     if (
-      !req.decodedToken &&
-      !req.decodedToken.permissions.includes(Permissions.EDITOR)
+      !req.decodedToken
+      //&& !req.decodedToken.permissions.includes(Permissions.EDITOR)
     )
       return res
-        .status(400)
+        .status(403)
         .json({ success: false, message: `No permissions` });
     const { id } = req.params;
     const user = await UserModel.findByIdAndDelete(id);

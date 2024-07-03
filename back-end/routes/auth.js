@@ -8,84 +8,144 @@ const router = express.Router();
  * @openapi
  * api/v1/auth/login:
  *   post:
- *     summary: Authenticate user and return tokens
- *     description: Login to the application, and returns a bearer access token that is handled by the front end and used throughout every other request
+ *     summary: Authenticate user and return token
+ *     description: Login to the application and return a bearer access token that is handled by the front end and will be used throughout every other request.
  *     tags:
- *      - Authentication
+ *       - Authentication
  *     produces:
  *       - application/json
  *     consumes:
  *       - application/json
  *     requestBody:
- *       description: The request body is be a JSON object containing the token and the user's id.
+ *       description: The request body is a JSON object containing the user's username and password.
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - username
+ *               - password
  *             properties:
  *               username:
  *                 type: string
- *                 description: The username of the user
- *                 example: myusername
+ *                 description: The username of the user.
+ *                 example: "myusername"
  *               password:
  *                 type: string
- *                 description: The password of the user
- *                 example: mypassword
+ *                 description: The password of the user.
+ *                 example: "mysuperdupersecretPassword"
  *     responses:
  *       '200':
- *         description: The user has provided the correct email and password and is given tokens
+ *         description: "OK: The user has provided the correct username and password, thus a token is returned."
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 AccessToken:
+ *                 success:
+ *                   type: bool
+ *                   example: true
+ *                 message:
  *                   type: string
- *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI7gH8Trdua..."
+ *                   example: "Welcome to your account, <username>!"
+ *                 token:
+ *                   type: string
+ *                   example: "2e739d8ab455f8cb78eaf4c..."
  *       '400':
- *         description: The user has inserted an invalid request, both email and password are required
+ *         description: "Bad Request: The user has not filled all fields."
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 error:
+ *                 success:
+ *                   type: bool
+ *                   example: false
+ *                 message:
  *                   type: string
- *                   example: "Invalid request. Email and password are required."
+ *                   example: "Missing some parameters"
  *       '401':
- *         description: The user has inserted an invalid password
+ *         description: "Unauthorized: The user has entered an invalid password."
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 error:
+ *                 success:
+ *                   type: bool
+ *                   example: false
+ *                 message:
  *                   type: string
- *                   example: "Invalid password."
+ *                   example: "Wrong password!"
  *       '404':
- *         description: The user has inserted an invalid email
+ *         description: "Not Found: The user has entered an invalid username."
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 error:
+ *                 success:
+ *                   type: bool
+ *                   example: false
+ *                 message:
  *                   type: string
- *                   example: "Account not registered."
+ *                   example: "Cannot find user <username> in our database"
  *       '500':
- *         description: The server has had some problems during login
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: "An error occurred during login."
+ *         description: "Internal Server Error: The server encountered an unexpected condition that prevented it from fulfilling the request."
  */
 router.post('/login', login);
 
+/**
+ * @openapi
+ * api/v1/auth/logout:
+ *   delete:
+ *     summary: Logout from the application
+ *     description: By doing the logout, the token gets discarded by the frontend
+ *     tags:
+ *       - Authentication
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: Bearer <token>
+ *         description: "JWT token obtained during login."
+ *     responses:
+ *       '200':
+ *         description: "OK: The user has provided the correct username and password, thus a token is returned."
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: bool
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "User <username> logged out successfully!"
+ *       '403':
+ *         description: "Not Found: The user has entered an invalid username."
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: bool
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "No permissions"
+ *       '500':
+ *         description: "Internal Server Error: The server encountered an unexpected condition that prevented it from fulfilling the request."
+ */
 router.delete('/logout', tokenChecker, logout);
 
 export default router;

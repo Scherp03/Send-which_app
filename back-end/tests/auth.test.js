@@ -74,11 +74,11 @@ const wrongPasswd = {
 
 // login with wrong password
 describe('POST api/v1/auth/login', () => {
-  test('Should respond with 400 status code and an error message', async () => {
+  test('Should respond with 401 status code and an error message', async () => {
     const response = await request(app)
       .post('/api/v1/auth/login')
       .send(wrongPasswd);
-    expect(response.statusCode).toBe(400);
+    expect(response.statusCode).toBe(401);
     expect(response.body).toEqual(
       expect.objectContaining({
         success: false,

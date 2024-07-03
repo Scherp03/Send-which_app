@@ -1,10 +1,10 @@
 import UserModel from '../database/schemas/user.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { Roles } from '../../shared/userTypeDefinitions.js';
 import UserTypeModel from '../database/schemas/userType.js';
 
 export const login = async (req, res, next) => {
+  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
   try {
     if (!req.body.username || !req.body.password) {
       return res
@@ -39,7 +39,7 @@ export const login = async (req, res, next) => {
       });
     } else {
       return res
-        .status(400)
+        .status(401)
         .json({ success: false, message: 'Wrong password!' });
     }
   } catch (err) {
@@ -52,10 +52,11 @@ export const login = async (req, res, next) => {
 };
 
 export const logout = async (req, res, next) => {
+  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
   try {
     if (!req.decodedToken)
       return res
-        .status(400)
+        .status(403)
         .json({ success: false, message: `No permissions` });
     // handle token in the front-end
     res.status(200).json({

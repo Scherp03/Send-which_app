@@ -41,7 +41,7 @@ describe('POST /api/v1/users', () => {
     expect(response.body).toEqual(
       expect.objectContaining({
         success: true,
-        message: `User \'${userCorrect.username}\' created successfully`,
+        message: `User \'${userCorrect.username}\' created successfully!`,
       }),
     );
   }, 10000);
