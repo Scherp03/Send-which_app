@@ -16,27 +16,16 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         lowercase: true
-    }, // Removed: "unique: true",
+    }, 
+    // Removed: "unique: true" as agreed
     email:  {
         type: String,
         required: true,
         lowercase: true
     },
-    // should be the same as timestamps below
-    // created:    {
-    //     type: Date,
-    //     default: () => Date.now(),
-    //     immutable: true,
-    // },
     password:   {
         type: String,
-        required: true,
-        // validate: [
-        //     function(password) {
-        //         return password.length >= 6;
-        //     },
-        //     "Password should be at least 6 characters long"
-        // ]
+        required: true
     },
     notificationMail: String
     },
@@ -51,12 +40,6 @@ const userSchema = new mongoose.Schema({
 // Search for a user by name (case insensitive)
 userSchema.statics.findByNameInsensitive = function(queryName) {
     return this.find({ name: new RegExp(queryName, 'i') });
-}
-
-// The same, with query instead of find
-// It must be used as User.where.byName("___")
-userSchema.query.byName = function(name) {
-    return this.where({ name: new RegExp(name, 'i') });
 }
 
 // ==== VIRTUALS ==== //

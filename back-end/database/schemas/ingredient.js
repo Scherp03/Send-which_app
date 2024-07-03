@@ -30,14 +30,28 @@ ingredientSchema.statics.addOneSafe = async function(name, description, price, q
         console.log("Name too short: " + name);
         return false;
     }
+
+    // Test that the quantity and price are a number
+    if (typeof price !== 'number' || isNaN(price)) {
+        console.log("Price is not a valid number: " + price);
+        return false;
+    }
+    if (typeof quantity !== 'number' || isNaN(quantity)) {
+        console.log("Quantity is not a valid number: " + quantity);
+        return false;
+    }
+   if (! Number.isInteger(quantity)){
+        console.log("Invalid quantity, not an integer: " + quantity);
+        return false;
+    } else if (quantity < 0 || price < 0){
+        console.log("Invalid quantity or price (negative): " + quantity + ", " + price);
+        return false;
+    }
+
     
-    if(name.length >= 3 && !duplicateIngredient){
-        await this.create({ name: name, description: description, price: price, quantity: quantity, tags: tags });
-        console.log("Ingredient added: " + name);
-        return true;
-    }else {
-        return false
-    } // totally not needed, but apparently jest fails and calls create anyways
+    await this.create({ name: name, description: description, price: price, quantity: quantity, tags: tags });
+    console.log("Ingredient added: " + name);
+    return true;
 }
 
 // Change the availability of an ingredient, verify that the new availability is valid

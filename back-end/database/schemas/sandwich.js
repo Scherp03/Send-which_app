@@ -1,8 +1,6 @@
 import mongoose from 'mongoose'
 import Ingredient from './ingredient.js';
 
-
-// Orders is the class with a list of orders
 const sandwichSchema = new mongoose.Schema({
     breadType: String,
     ingredientsID: [mongoose.Schema.Types.ObjectId],
@@ -10,6 +8,41 @@ const sandwichSchema = new mongoose.Schema({
 })
 
 // === METHODS === //
+
+// Search if there is a matching sandwich in the statistics; 
+// if so, increment the timesSold field;
+// if not, create a new entry with timesSold = 1
+sandwichSchema.methods.addStatistic = async function() {
+    let localHash = this.getHash();
+    let foundStat = await StatSandwich.findOne({ ingredientsHash: localHash });
+    if(foundStat) {
+        foundStat.timesSold++;
+        await foundStat.save();
+    } else {
+        let newStat = new StatSandwich({ ingredientsID: this.ingredientsID, ingredientsHash: localHash, timesSold: 1 });
+        await newStat.save();
+    }
+}
+
+// Calculate the price of the sandwich based on an arbitrary function 
+sandwichSchema.methods.calculatePrice = async function() {
+    let price = 2; // Suppose there is a base price for bread
+    try {
+        for (let i = 0; i < this.ingredientsID.length; i++){
+            let ingredientFound = await Ingredient.findById(this.ingredientsID[i]);
+            if (ingredientFound) {
+                price += ingredientFound.price;
+            } else {
+                throw new Error(`Ingredient with ID ${this.ingredientsID[i]} not found`);
+            }
+        }
+        this.price = price;
+    } catch (error) {
+        console.log("Error in calculatePrice: " + error);
+    }
+    
+    return price;
+}
 
 // Generate a hash for the ingredients
 sandwichSchema.methods.getHash = async function() {
@@ -31,32 +64,15 @@ sandwichSchema.methods.getHash = async function() {
     } catch (error) {
         console.log("Error in ingredientsHash: " + error);
     }
+    
     return hash;
 };
 
-// Methods for the sandwichSchema
-sandwichSchema.methods.printPrice = function() {
-    console.log(`The price of the sandwich is ${this.price}`);
-}
-
 // Search for a sandwich by bread (case insensitive)
+// Just a tiny exercise and reminder for myself, pointless but not worth deleting
 sandwichSchema.statics.findByBreadInsensitive = function(queryBread) {
     return this.where({ bread: new RegExp(queryName, 'i') });
 }
-
-// === VIRTUALS === //
-sandwichSchema.virtual("ingredientsHash").get(function() {
-    
-})
-
-
-// === MIDDLEWARE === //
-
-// Add one to list of stats when saving
-sandwichSchema.pre("save", function(next) {
-    this.hash = this.getHash();
-    next();
-})
 
 // Export the models
 const Sandwich = mongoose.model("Sandwich", sandwichSchema);

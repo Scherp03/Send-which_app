@@ -37,13 +37,9 @@ statSchema.methods.setHash = async function() {
 // Find bestseller
 // Use n=1 for the actual bestseller, otherwise get a list
 
-// TBD
+// TBD?
 statSchema.statics.findBestSeller = function(resultsNumber) { 
-
-    // return this.findOne().sort({timesSold: -1}).limit(resultsNumber);
-
     return this.where({}).sort({timesSold: -1}).limit(resultsNumber);
-
 }
 
 // Export the models
