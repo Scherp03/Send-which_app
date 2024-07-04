@@ -62,26 +62,26 @@ export const createUser = async (req, res, next) => {
   }
 };
 
-export const getUser = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
-  if (!req.decodedToken)
-    return res.status(403).json({ success: false, message: `No permissions` });
-  try {
-    const { id } = req.params;
-    const user = await UserModel.findById(id);
-    if (!user)
-      return res
-        .status(404)
-        .json({ success: false, message: `User not found` });
-    res.status(200).json(user);
-  } catch (err) {
-    console.log(err.message);
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-  }
-};
+// export const getUser = async (req, res, next) => {
+//   res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+//   if (!req.decodedToken)
+//     return res.status(403).json({ success: false, message: `No permissions` });
+//   try {
+//     const { id } = req.params;
+//     const user = await UserModel.findById(id);
+//     if (!user)
+//       return res
+//         .status(404)
+//         .json({ success: false, message: `User not found` });
+//     res.status(200).json(user);
+//   } catch (err) {
+//     console.log(err.message);
+//     if (!err.statusCode) {
+//       err.statusCode = 500;
+//     }
+//     next(err);
+//   }
+// };
 
 export const updateUser = async (req, res, next) => {
   res.set('Access-Control-Allow-Origin', 'http://localhost:9000');

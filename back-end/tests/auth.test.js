@@ -21,7 +21,7 @@ const dbUri =
 
 beforeAll(async () => {
   await mongoose.connect(dbUri);
-  console.log(`Database \'${process.env.DB_NAME}\' connected for testing!`);
+  // console.log(`Database \'${process.env.DB_NAME}\' connected for testing!`);
 
   // create a mock user for testing
   const hashedPassword = await bcrypt.hash('pswd_test', 10);
@@ -39,7 +39,7 @@ beforeAll(async () => {
 afterAll(async () => {
   await User.deleteOne({ username: 'username_test' });
   await mongoose.connection.close();
-  console.log('Database connection closed');
+  // console.log('Database connection closed');
 });
 
 const correctLogin = {

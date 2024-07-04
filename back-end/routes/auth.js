@@ -49,6 +49,9 @@ const router = express.Router();
  *                 message:
  *                   type: string
  *                   example: "Welcome to your account, <username>!"
+ *                 id:
+ *                   type: string
+ *                   example: "6685d4c38fc9b23899737227"
  *                 token:
  *                   type: string
  *                   example: "2e739d8ab455f8cb78eaf4c..."

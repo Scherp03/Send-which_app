@@ -17,13 +17,13 @@ const dbUri =
 
 beforeAll(async () => {
   await mongoose.connect(dbUri);
-  console.log(`Database \'${process.env.DB_NAME}\' connected for testing!`);
+  // console.log(`Database \'${process.env.DB_NAME}\' connected for testing!`);
 });
 
 // no need to delete the user created since it's done by the test
 afterAll(async () => {
   await mongoose.connection.close();
-  console.log('Database connection closed');
+  // console.log('Database connection closed');
 });
 
 //Create new user correctly
