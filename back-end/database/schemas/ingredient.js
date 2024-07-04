@@ -57,8 +57,8 @@ ingredientSchema.statics.addOneSafe = async function(name, description, price, q
 // Change the availability of an ingredient, verify that the new availability is valid
 ingredientSchema.methods.changeAvailability = function(newAvailability) {
     // Fail if basic check does not pass
-    if (newAvailability < 0) {
-        console.log("Invalid availability");
+    if (newAvailability < 0 || typeof newAvailability !== 'number' || isNaN(newAvailability)) {
+        console.log("Invalid availability: " + newAvailability);
         return false;
     }
     this.quantity = newAvailability;
@@ -67,19 +67,33 @@ ingredientSchema.methods.changeAvailability = function(newAvailability) {
 }
 
 // Add or remove a quantity of an ingredient in a safe way
-ingredientSchema.methods.decreaseAvailability = function(amount) {
-    // Fail if basic check does not pass
-    // if (amount < 0) {
-    //     console.log("Invalid availability");
-    //     return false;
-    // }
+// Check the input;
+// If the quantity is negative, set it to 0;
+ingredientSchema.methods.increaseAvailability = function(amount) {
+    if (typeof amount !== 'number' || isNaN(amount)) {
+        console.log("Provided uantity is not a valid number: " + amount);
+        return false;
+    }
     if(this.quantity + amount < 0) {
         console.log("Ran out of (expected) ingredients: " + this.name);
         this.quantity = 0;
-        return false;
+        return true;
     }
     this.quantity += amount;
     console.log("Availability changed: " + this.name + ": " + this.quantity);
+    return true;
+}
+
+ingredientSchema.methods.setAvailability = function(newAvailability) {
+    if (typeof newAvailability !== 'number' || isNaN(newAvailability)) {
+        console.log("Provided uantity is not a valid number: " + newAvailability);
+        return false;
+    }
+    if (newAvailability < 0) {
+        console.log("Negative quantity: " + newAvailability);
+        return false;
+    }
+    this.quantity = newAvailability;
     return true;
 }
 
