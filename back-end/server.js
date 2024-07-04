@@ -14,7 +14,7 @@ if (!DB_CREDENTIALS || !DB_HOST || !DB_NAME) {
   );
   process.exit(1);
 }
-
+const uri='mongodb://localhost:27017/myapp'
 /* MongoDB credentials */
 const dbUri =
   'mongodb+srv://' +
@@ -35,7 +35,7 @@ app.listen(PORT, async () => {
   console.log('Wait for database connection...');
   try {
     /* Database connection */
-    const db = await mongoose.connect(dbUri, clientOptions);
+    const db = await mongoose.connect(uri, clientOptions);   //to change
     console.log('Connected to mongoDB successfully!');
 
     if (process.argv.includes('--init-db')) {

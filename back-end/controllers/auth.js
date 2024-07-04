@@ -6,6 +6,8 @@ import UserTypeModel from '../database/schemas/userType.js';
 export const login = async (req, res, next) => {
   res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
   try {
+    console.log(req.body.username),
+    console.log(req.body.password)
     if (!req.body.username || !req.body.password) {
       return res
         .status(400)
