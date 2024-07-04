@@ -2,7 +2,7 @@ import app from './app.js';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import initDb from './database/initDb.js';
-import cors from 'cors';
+
 
 dotenv.config();
 
