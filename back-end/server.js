@@ -43,6 +43,7 @@ app.listen(PORT, async () => {
       await initDb();
     }
     console.log(`Server running on port: http://localhost:${PORT}`);
+    console.log(`Read API documentation: http://localhost:${PORT}/api-docs`);
   } catch (err) {
     console.error('Could not connect to mongoDB!', err);
     process.exit(1);
