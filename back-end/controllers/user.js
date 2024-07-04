@@ -3,7 +3,16 @@ import bcrypt from 'bcryptjs';
 import { Permissions, Roles } from '../../shared/userTypeDefinitions.js';
 
 export const createUser = async (req, res, next) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   try {
+    console.log(req.body.firstName)
+    console.log(req.body.lastName)
+    console.log(req.body.email)
+    console.log(req.body.username)
+    console.log(req.body.password)
     if (
       !req.body.firstName ||
       !req.body.lastName ||

@@ -31,7 +31,6 @@ const clientOptions = {
 
 const PORT = process.env.PORT || 3000;
 
-app.use(cors({ origin: 'http://localhost:9000' }));
 
 /* Run server */
 app.listen(PORT, async () => {
