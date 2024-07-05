@@ -14,8 +14,7 @@
         <q-toolbar-title v-show="false"> Sendwhich App </q-toolbar-title>
         <q-btn flat label="Home" to="/" />
         <q-btn flat label="Settings" to="/settings" />
-        <q-btn flat label="Contact" to="/contacts" />
-        <q-btn flat label="Ingredients" to="/ingredients" />
+        <q-btn flat name="Contacts" label="Contact" to="/contacts" />
 
         <body>
           <div>
@@ -25,7 +24,7 @@
           </div>
         </body>
 
-        <q-btn flat name="Login" label="Login" to="/login" />
+        <q-btn flat name="Logout" @click="logout" label="Login" to="" />
         <q-btn flat name="Register" label="Register" to="/register" />
 
         <div>
@@ -80,6 +79,9 @@ defineOptions({
   name: "MainLayout",
   data() {
     return {};
+  },
+  methods: {
+    logout() {},
   },
 });
 

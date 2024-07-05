@@ -1,103 +1,94 @@
 <template>
-  <q-page padding >
-    <input v-model="message"
-    @keyup.enter="alertMessage"
-    v-autofocus
-    :class="{'error ' : message.length>22}" 
-    :style="errorStyle"
-    ref="messageInput"/>
-    <h2 class="border-gray" v-show="message.length">{{message}}</h2>
+  <q-page padding>
+    <transition-group
+      appear
+      enter-active-class="animated fadeIn slower delay-0.5s repeat-2"
+      leave-active-class="animated fadeOut"
+    >
+      <div class="fixed-center" style="width: 70%">
+        <!-- We wrap a "p" tag and a QBtn -->
 
-    <button class="id" @click=alertMessage>Sign in</button>
+        <h1
+          class="fixed-center"
+          key="Enter message"
+          style="font-weight: bolder; color: white; font-size: 400%"
+        >
+          WELCOME TO SEND-WHICH APP
+          <h2
+            key="userfirstName"
+            style="font-weight: bolder; color: red; font-size: 300%"
+          >
+            {{ firstName }}
+          </h2>
+        </h1>
+        <div style="height: 400px"></div>
 
-    <button class="id">Sign up</button>
-
-    <hr>
-
-    <p>LoweCase message : {{ messageLowerCase}}</p>
- 
-
+        <q-btn
+          push
+          key="loginbtn"
+          color="black"
+          label="LOGIN"
+          to="/login"
+          style="left: 20%; width: 30%; height: 40px"
+        ></q-btn>
+        <q-btn
+          push
+          key="registerbtn"
+          color="green"
+          label="REGISTER"
+          to="/register"
+          style="left: 25%; width: 30%; height: 40px"
+        ></q-btn>
+      </div>
+    </transition-group>
   </q-page>
 </template>
 <script setup>
+import axios from "axios";
 defineOptions({
-  data(){
-    return{
+  data() {
+    return {
       message: "Welcome to Sendwich APP",
-      
+
+      firstName: "",
       // user:'',
       // password:'',
-
-    }
+    };
   },
 
-  methods:{
-    login(){
+  methods: {
+    login() {},
+    signUp() {},
 
+    alertMessage() {
+      alert(this.message);
     },
-    signUp(){
+  },
+  computed: {},
+  directives: {},
 
-    },
-    
-    alertMessage(){
-      alert(this.message)
-    }
-  },
-  computed:{
-    messageLowerCase(){
-      return this.message.toLowerCase()
-    },
-    errorStyle(){
-      if( this.message.length > 22){
-        return 'color: red; backgrond: pink;'
-      }
-    }
-  },
-  directives:{
-    autofocus:{
-      inserted(el){
-        el.focus()
-      }
-    }
-  },
-  beforeCreate(){
-    console.log('before create')
-  },
-  created(){
-    console.log('created')
-  },
-  beforeMount(){
-    console.log('before mount')
-  },
-  mounted(){
-    console.log(this.$refs)
+  async created() {
+    const response = await axios.get("http://localhost:3000/api/v1/user", {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"), //to repeat every time
+      },
 
+      firstName: response.firstName,
+    });
+    console.log(response);
   },
-  beforeUpdate(){
-    console.log('before update')
-  },
-  updated(){
-    console.log('updatede')
-  }
-
 });
 </script>
 
-
 <style>
-
-.q-page{
-  background-color: red;
-}
-.border-gray{
+.border-gray {
   border: 1px solid gray;
 }
-.id{
+.id {
   background-color: redS;
 }
-.error{
+.error {
   color: red;
-  background-color: pink ;
+  background-color: pink;
 }
-
 </style>
