@@ -68,7 +68,7 @@ defineOptions({
   directives: {},
 
   async created() {
-    const response = await axios.get("http://localhost:3000/api/v1/user", {
+    const response = await axios.get("http://localhost:3000/api/v1/users", {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"), //to repeat every time
       },

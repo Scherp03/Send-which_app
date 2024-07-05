@@ -64,9 +64,8 @@
   </q-page>
 </template>
 <script setup>
-//import store from "src/services/Vuex.js";
 import axios from "axios";
-
+import router from "route"
 defineOptions({
   data() {
     return {
@@ -83,26 +82,26 @@ defineOptions({
         };
         console.log(data);
 
-        const response = await axios.post(
-          "http://localhost:3000/api/v1/auth/login",
-          {
-            body: JSON.stringify(data),
-          }
-        );
-        const status = await response.json();
-        if (status.success) {
+        await axios.post(`http://localhost:3000/api/v1/auth/login`, data)
+        .then((response)=>{
+        
+        if (response.data.success) {
           this.$q.notify({
             type: "positive",
-            message: status.message,
+            message: response.data.message,
           });
-          localStorage.setItem("token", status.token);
-          this.$router.push("/logged");
-        } else if (!status.success) {
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("id", response.data.id);
+          
+        } else if (!response.data.success) {
           this.$q.notify({
             type: "negative",
-            message: status.message,
+            message: response.data.message,
           });
         }
+        this.$router.push("/logged");
+        });
+        
       } catch (error) {
         this.$q.notify({
           type: "negative",

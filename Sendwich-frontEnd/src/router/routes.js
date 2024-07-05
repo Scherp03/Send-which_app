@@ -11,6 +11,10 @@ const routes = [
         path: "/ingredients",
         component: () => import("pages/IngredientsPage.vue"),
       },
+      {
+        path: "/logged",
+        component: () => import("pages/AuthUserPage.vue"),
+      },
     ],
   },
 
