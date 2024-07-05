@@ -10,6 +10,14 @@ import UserTypeModel from '../database/schemas/userType.js';
 
 dotenv.config();
 
+/* Ensure environment variables are correctly loaded */
+const { DB_CREDENTIALS, DB_HOST, DB_NAME } = process.env;
+
+if (!DB_CREDENTIALS || !DB_HOST || !DB_NAME) {
+  throw new Error(
+    'Test suite stopped beacuse necessary environment variables for MongoDB connection are missing',
+  );
+}
 const dbUri =
   'mongodb+srv://' +
   process.env.DB_CREDENTIALS +
