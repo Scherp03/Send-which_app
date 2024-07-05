@@ -1,8 +1,8 @@
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 import Ingredient from './ingredient.js';
 
 
-// Sandwich schema with basic content used for statistics
+// Sandwich schema with basic content used for statistics 
 const statSchema = new mongoose.Schema({
     ingredientsID: [mongoose.Schema.Types.ObjectId],
     ingredientsHash: String,
@@ -32,6 +32,7 @@ statSchema.methods.setHash = async function() {
         console.log("Error in ingredientsHash: " + error);
     }
     this.ingredientsHash = hash;
+    return hash;
 };
 
 // Find bestseller

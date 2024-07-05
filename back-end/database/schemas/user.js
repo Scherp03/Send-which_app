@@ -34,7 +34,6 @@ const userSchema = new mongoose.Schema({
     }
 )
 
-
 // ==== METHODS ==== //
 
 // Search for a user by name (case insensitive)

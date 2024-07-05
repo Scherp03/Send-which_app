@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import Ingredient from './ingredient.js';
+import StatSandwich from './statisticSandwich.js';
 
 const sandwichSchema = new mongoose.Schema({
     breadType: String,
