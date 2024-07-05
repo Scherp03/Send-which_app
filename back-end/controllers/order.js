@@ -4,7 +4,7 @@ import Order from '../database/schemas/order.js';
 // Calculate the price of an order given its _id
 // Parameters required: _id
 
-export const calculateOrderPrice = async (req, res) => {
+export const calculateOrderPrice = async (req, res, next) => {
   try {
     let foundOrder = await Order.findById(req.body._id);
     if (foundOrder) {

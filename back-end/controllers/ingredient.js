@@ -2,7 +2,7 @@ import Ingredient from '../database/schemas/ingredient.js';
 
 // addIngredient: Add a new ingredient to the database
 // Insert one ingredients only if all parameters are met
-export const addIngredient = async (req, res) => {
+export const addIngredient = async (req, res, next) => {
   try {
     const newIngredient = new Ingredient({
       name: req.body.name,
@@ -56,7 +56,7 @@ export const addIngredient = async (req, res) => {
 // Set the availability of an ingredient given the _id
 // Assures that only valid quantities are used
 // Parameters required: _id, availability
-export const setAvailability = async (req, res) => {
+export const setAvailability = async (req, res, next) => {
   try {
     // Test that the input is valid
     let newAvailability = req.body.availability;
@@ -94,7 +94,7 @@ export const setAvailability = async (req, res) => {
 // Like the previous function, adds instead of setting
 // Assures that only valid quantities are used
 // Parameters needed: _id, availability
-export const increaseAvailability = async (req, res) => {
+export const increaseAvailability = async (req, res, next) => {
   try {
     // Test that the input is valid
     let newAvailability = req.body.availability;
@@ -117,6 +117,65 @@ export const increaseAvailability = async (req, res) => {
     return res
       .status(200)
       .json({ success: true, message: 'Availability updated' });
+  } catch (err) {
+    console.log(err.message);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+// deleteIngredient
+// Safe delete an ingredient given its _id
+// Parameters required: _id
+export const deleteIngredient = async (req, res, next) => {
+  try {
+    let foundIngredient = await Ingredient.findById(req.body._id);
+    if (!foundIngredient) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Ingredient not found' });
+    }
+    if (foundIngredient.safeDelete()) {
+      return res
+        .status(200)
+        .json({ success: true, message: 'Ingredient deleted' });
+    }
+    return res
+      .status(500)
+      .json({ success: false, message: 'Failed to delete ingredient' });
+  } catch (err) {
+    console.log(err.message);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+// restoreDeleted
+// Restore a deleted ingredient given its name
+export const restoreDeleted = async (req, res, next) => {
+  try {
+    let restoredName = req.body.name;
+    let foundIngredient = await Ingredient.findOne({
+      name: { $regex: new RegExp(restoredName, 'i') },
+    });
+    if (!foundIngredient) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Ingredient not found' });
+    }
+    if (foundIngredient.active) {
+      return res
+        .status(400)
+        .json({ success: false, message: 'Ingredient already active' });
+    }
+    foundIngredient.active = true;
+    return res
+      .status(200)
+      .json({ success: true, message: 'Ingredient restored' });
   } catch (err) {
     console.log(err.message);
     if (!err.statusCode) {
