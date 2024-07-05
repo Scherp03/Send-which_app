@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { Roles } from '../../../shared/userTypeDefinitions.js';
 
 // Schema for the user
 const userSchema = new mongoose.Schema(
@@ -17,27 +18,26 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       lowercase: true,
-    }, // Removed: "unique: true",
+    },
     email: {
       type: String,
       required: true,
       lowercase: true,
     },
-    // should be the same as timestamps below!!!
-    // created:    {
-    //     type: Date,
-    //     default: () => Date.now(),
-    //     immutable: true,
-    // },
     password: {
       type: String,
       required: true,
-      // validate: [
-      //     function(password) {
-      //         return password.length >= 6;
-      //     },
-      //     "Password should be at least 6 characters long"
-      // ]
+      validate: [
+        function (password) {
+          return password.length >= 6;
+        },
+        'Password should be at least 6 characters long',
+      ],
+    },
+    userType: {
+      type: String,
+      required: true,
+      enum: Object.values(Roles),
     },
     notificationMail: String,
   },

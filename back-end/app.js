@@ -1,45 +1,50 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
-import dotenv from 'dotenv';
-dotenv.config();
+import swaggerUi from 'swagger-ui-express';
+import swaggerJsdoc from 'swagger-jsdoc';
+import cors from 'cors';
 
-const PORT = 3000;
-
+import authRouter from './routes/auth.js';
+import userRouter from './routes/user.js';
 /* Routes */
 const app = express();
 
-// Example: import userRouter from './routes/user.js'
+app.use(
+  cors({
+    origin: 'http://localhost:9000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'Access-Control-Allow-Origin',
+    ],
+  }),
+);
 
 app.use(bodyParser.json());
 
+app.use('/api/v1/users', userRouter);
+app.use('/api/v1/auth', authRouter);
+
 /* Quick check if it's working */
 app.get('/', (req, res) => {
-  res.send('Hello from Homepage.');
+  res.status(200).send('Welcome to homepage!');
 });
 
-/* MongoDB credentials */
-const dbUri =
-  'mongodb+srv://' +
-  process.env.DB_CREDENTIALS +
-  '@' +
-  process.env.DB_HOST +
-  '/' +
-  process.env.DB_NAME +
-  '?retryWrites=true&w=majority';
-const clientOptions = {
-  serverApi: { version: '1', strict: true, deprecationErrors: true },
+/* Swagger setup */
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Send-which API',
+      description: "Documentation for Send-which's REST APIs",
+      version: '1.0.0',
+    },
+  },
+  apis: ['./back-end/routes/*.js'],
 };
 
-/* Database connection */
-mongoose
-  .connect(dbUri, clientOptions)
-  .then(() => {
-    console.log('Connected to mongoDB successfully!');
-    app.listen(PORT, () => {
-      console.log(`Server running on port: http://localhost:${PORT}`);
-    });
-  })
-  .catch((err) => console.log(err));
+const swaggerSpecs = swaggerJsdoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
-/* Swagger setup */
+export default app;
