@@ -7,15 +7,11 @@ const routes = [
       { path: "/settings", component: () => import("pages/SettingsPage.vue") },
       { path: "/login", component: () => import("pages/LoginPage.vue") },
       { path: "/register", component: () => import("pages/RegisterPage.vue") },
-      {
-        path: "/ingredients",
-        component: () => import("pages/IngredientsPage.vue"),
-      },
-      {
-        path: "/logged",
-        component: () => import("pages/AuthUserPage.vue"),
-      },
+      { path: "/ingredients",component: () => import("pages/IngredientsPage.vue")},
+      { path: "/auth",component: () => import("pages/AuthUserPage.vue")},
+      
     ],
+   
   },
 
   // Always leave this as last one,

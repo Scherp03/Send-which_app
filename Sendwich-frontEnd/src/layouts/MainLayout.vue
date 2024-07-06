@@ -83,6 +83,7 @@ defineOptions({
   },
 });
 
+const tab = ref(''); // Define the `tab` property
 const linksList = [
   {
     title: "SandWichApp",

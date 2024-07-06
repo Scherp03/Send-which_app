@@ -1,37 +1,29 @@
 <template>
   <q-page padding>
-   <h3 v-if="firstName">Hello logged page</h3>
+    <h3 v-if="firstName">Hello {{ firstName }}  {{ lastName }} logged page</h3>
     <h3 v-if="!firstName">You are not logged in</h3>
   </q-page>
 </template>
+
 <script setup>
-import { response } from "express";
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
 
-defineOptions({
-  data() {
-    return {
-       name:'Home',
-       firstName:null,
-      fetchDateUrl : ({id}) => `http://localhost:3000/api/v1/users/${id}`,
-    };
-  },
-  methods: {
-  
-  },
-  async created() {
-    await axios.get(this.fetchDateUrl({id:localStorage.getItem("id")}), {
+const firstName = ref('');
+const lastName = ref('');
+const fetchDateUrl = id => `http://localhost:3000/api/v1/users/${id}`;
+
+onMounted(async () => {
+  try {
+    const response = await axios.get(fetchDateUrl(localStorage.getItem('id')), {
       headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"), //to repeat every time
-      }  
-    })
-    .then((response)=>{
-       this.firstName=response.data.firstName
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
     });
-    console.log(response);
-  },
-  
-    
+    firstName.value = response.data.firstName;
+    lastName.value = response.data.lastName;
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+  }
 });
-
-        
 </script>

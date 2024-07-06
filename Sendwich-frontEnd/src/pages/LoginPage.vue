@@ -6,21 +6,20 @@
         class="fixed-center"
         style="max-width: 300px"
       >
-        <transition-group appear enter-active-class="animated fadeIn delay -1s">
+        <transition-group appear enter-active-class="animated fadeIn delay-1s">
           <div
-            key="text"
+            key="login-text"
             style="
               color: white;
               font-size: 15px;
-              font-type: Verdana;
+              font-family: Verdana;
               font-weight: bold;
             "
           >
             ENTER CREDENTIALS TO LOGIN
           </div>
-
-          <br />
-          <br />
+          <br key="br1"/>
+          <br key="br2"/>
           <div style="max-width: 300px" key="username-input">
             <q-input
               color="black"
@@ -28,10 +27,10 @@
               outlined
               v-model="username"
               label="Username"
-              type="username"
+              type="text"
               required
             />
-            <br />
+            <br key="br3"/>
           </div>
           <div style="max-width: 300px" key="password-input">
             <q-input
@@ -44,9 +43,9 @@
               required
             />
           </div>
-          <br />
-          <br />
-          <br />
+          <br key="br4"/>
+          <br key="br5"/>
+          <br key="br6"/>
           <div key="login-btn">
             <q-btn
               style="max-width: 300px; height: 10%"
@@ -63,55 +62,51 @@
     </div>
   </q-page>
 </template>
-<script setup>
-import axios from "axios";
-import router from "route"
-defineOptions({
-  data() {
-    return {
-      email: "",
-      password: "",
-    };
-  },
-  methods: {
-    async onsubmit() {
-      try {
-        const data = {
-          username: this.username,
-          password: this.password,
-        };
-        console.log(data);
 
-        await axios.post(`http://localhost:3000/api/v1/auth/login`, data)
-        .then((response)=>{
-        
-        if (response.data.success) {
-          this.$q.notify({
-            type: "positive",
-            message: response.data.message,
-          });
-          localStorage.setItem("token", response.data.token);
-          localStorage.setItem("id", response.data.id);
-          
-        } else if (!response.data.success) {
-          this.$q.notify({
-            type: "negative",
-            message: response.data.message,
-          });
-        }
-        this.$router.push("/logged");
-        });
-        
-      } catch (error) {
-        this.$q.notify({
-          type: "negative",
-          message: "An error occurred. Please try again later.",
-        });
-        console.error("Error:", error);
-      }
-    },
-  },
-});
+<script setup>
+import { ref } from 'vue';
+import axios from 'axios';
+import { useQuasar } from 'quasar';
+import { useRouter } from 'vue-router';
+
+const username = ref('');
+const password = ref('');
+const $q = useQuasar();
+const router = useRouter();
+
+const onsubmit = async () => {
+  try {
+    const data = {
+      username: username.value,
+      password: password.value,
+    };
+
+    console.log(data);
+
+    const response = await axios.post(`http://localhost:3000/api/v1/auth/login`, data);
+
+    if (response.data.success) {
+      $q.notify({
+        type: 'positive',
+        message: response.data.message,
+      });
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('id', response.data.id);
+      router.push('/auth');
+    } else {
+      $q.notify({
+        type: 'negative',
+        message: response.data.message,
+      });
+    }
+  } catch (error) {
+    $q.notify({
+      type: 'negative',
+      message: 'An error occurred. Please try again later.',
+    });
+    console.error('Error:', error);
+  }
+};
 </script>
 
 <style></style>
