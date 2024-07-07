@@ -81,7 +81,14 @@ defineOptions({
     return {};
   },
   methods: {
-    logout() {},
+    logout() {
+      try{
+        localStorage.removeItem('token');
+        this.$router.push("/auth");
+      }catch(error){
+        console.log(error)
+      }
+    },
   },
 });
 

@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <h3 v-if="firstName">Hello {{ firstName }}  {{ lastName }} logged page</h3>
+    <h3 v-if="firstName">Hello {{ firstName.charAt(0).toUpperCase() + firstName.slice(1) }}  {{ lastName.charAt(0).toUpperCase() + lastName.slice(1) }} logged page</h3>
     <h3 v-if="!firstName">You are not logged in</h3>
   </q-page>
 </template>

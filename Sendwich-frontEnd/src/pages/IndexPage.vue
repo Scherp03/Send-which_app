@@ -5,21 +5,14 @@
       enter-active-class="animated fadeIn slower delay-0.5s repeat-2"
       leave-active-class="animated fadeOut"
     >
-      <div class="fixed-center" style="width: 70%">
-        <!-- We wrap a "p" tag and a QBtn -->
-
+      <div class="fixed-center" style="width: 100%">
         <h1
           class="fixed-center"
           key="Enter message"
           style="font-weight: bolder; color: white; font-size: 400%"
         >
-          WELCOME TO SEND-WHICH APP
-          <h2
-            key="userfirstName"
-            style="font-weight: bolder; color: red; font-size: 300%"
-          >
-            {{ firstName }}
-          </h2>
+          WELCOME TO SEND-WHICH APP {{ firstName.charAt(0).toUpperCase() + firstName.slice(1) }}
+          
         </h1>
         <div style="height: 400px"></div>
 
@@ -43,40 +36,26 @@
     </transition-group>
   </q-page>
 </template>
+
 <script setup>
-import axios from "axios";
-defineOptions({
-  data() {
-    return {
-      message: "Welcome to Sendwich APP",
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
 
-      firstName: "",
-      // user:'',
-      // password:'',
-    };
-  },
+const firstName = ref('');
 
-  methods: {
-    login() {},
-    signUp() {},
+const fetchDateUrl = id => `http://localhost:3000/api/v1/users/${id}`;
 
-    alertMessage() {
-      alert(this.message);
-    },
-  },
-  computed: {},
-  directives: {},
-
-  async created() {
-    const response = await axios.get("http://localhost:3000/api/v1/users", {
+onMounted(async () => {
+  try {
+    const response = await axios.get(fetchDateUrl(localStorage.getItem('id')), {
       headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"), //to repeat every time
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
       },
-
-      firstName: response.firstName,
     });
-    console.log(response);
-  },
+    firstName.value = response.data.firstName;
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+  }
 });
 </script>
 
