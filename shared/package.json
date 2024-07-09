@@ -1,0 +1,6 @@
+{
+  "name": "shared",
+  "version": "1.0.0",
+  "description": "Shared repository for the 2024 Software Engineering project",
+  "type": "module"
+}
