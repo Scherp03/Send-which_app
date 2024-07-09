@@ -6,8 +6,8 @@
   "scripts": {
     "test": "jest",
     "devStart": "nodemon server.js",
-    "dev": "node -r dotenv/config server.js",
-    "dev:init": "node -r dotenv/config server.js --init-db",
+    "dev": "node server.js",
+    "dev:init": "node server.js --init-db",
     "format": "npx prettier . --write"
   },
   "keywords": [],
