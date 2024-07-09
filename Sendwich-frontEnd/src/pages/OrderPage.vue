@@ -1,20 +1,17 @@
 <template>
-  <q-page padding>
-    <div class="q-pa-md">
-      <div class="fixed-center">
-        <transition appear enter-active-class="animated fadeIn slower delay-1s">
-          <div
-            style="
-              color: white;
-              font-size: 25px;
-              font-type: Verdana;
-              font-weight: bold;
-            "
-          >
-            SELECT THE INGREDIENTS FOR YOUR SANDWICH
-          </div>
-        </transition>
-        <q-scroll-area
+  <div class="q-pa-md">
+    <q-stepper
+      v-model="step"
+      ref="stepper"
+      animated
+      active-color="purple"
+    >
+      <q-step
+        :name="1"
+        prefix="1"
+        title="Select campaign settings"
+      >
+         <q-scroll-area
           :thumb-style="thumbStyle"
           :bar-style="barStyle"
           style="
@@ -112,113 +109,67 @@
               "
             />
           </div>
-          <div>
-            <q-checkbox
-              v-model="selection"
-              val="Salad"
-              label="Salad"
-              color="green"
-              style="
-                border-radius: 2px;
-
-                border-bottom: 1px solid #73ad21;
-                border-color: black;
-                width: 100%;
-                height: 50px;
-              "
-            />
-          </div>
-          <div>
-            <q-checkbox
-              v-model="selection"
-              val="Salad"
-              label="Salad"
-              color="green"
-              style="
-                border-radius: 2px;
-
-                border-bottom: 1px solid #73ad21;
-                border-color: black;
-                width: 100%;
-                height: 50px;
-              "
-            />
-          </div>
-          <div>
-            <q-checkbox
-              v-model="selection"
-              val="Salad"
-              label="Salad"
-              color="green"
-              style="
-                border-radius: 2px;
-
-                border-bottom: 1px solid #73ad21;
-                border-color: black;
-                width: 100%;
-                height: 50px;
-              "
-            />
-          </div>
-          <div>
-            <q-checkbox
-              v-model="selection"
-              val="Salad"
-              label="Salad"
-              color="green"
-              style="
-                border-radius: 2px;
-
-                border-bottom: 1px solid #73ad21;
-                border-color: black;
-                width: 100%;
-                height: 50px;
-              "
-            />
-          </div>
+        
         </q-scroll-area>
-        <br />
-        <br />
-        <br />
-        <q-btn
-          style="width: 30%; height: 10%"
-          class="fixed-bottom-right"
-          push
-          color="black"
-          bg-color="white"
-          type="submit"
-          label="Order"
-          @click="placeOrder()"
-        />
-        <q-btn
-          style="width: 30%; height: 10%"
-          class="fixed-bottom-left"
-          push
+      </q-step>
+
+      <q-step
+        :name="2"
+        prefix="2"
+        title="Create an ad group"
+        caption="Optional"
+      >
+         <time-slot-selector style="height: 250px" />
+      </q-step>
+
+      <q-step
+        :name="3"
+        prefix="3"
+        title="Create an ad"
+      >
+        Try out different ad text to see what brings in the most customers, and learn how to
+        enhance your ads using features like ad extensions. If you run into any problems with
+        your ads, find out how to tell if they're running and how to resolve approval issues.
+      </q-step>
+
+      <template v-slot:navigation>
+        <q-stepper-navigation>
+          <q-btn
+          class="q-ml-sm"
+          v-if="step==1"
           color="red"
           bg-color="white"
-          type="submit"
           label="Cancel"
           @click="cancelOrder()"
         />
-
-        <!-- <div class="q-px-sm">
-          The model data: <strong>{{ selection }}</strong>
-        </div> -->
-      </div>
-    </div>
-  </q-page>
+          <q-btn
+          class="q-ml-sm"
+          v-if="step==3"
+          color="green"
+          bg-color="white"
+          label="Pay"
+          @click="placeOrder()"
+        />
+        
+          <q-btn v-if="step<3"  @click="$refs.stepper.next()" color="deep-orange" label="Continue" />
+          <q-btn v-if="step > 1" flat color="deep-orange" @click="$refs.stepper.previous()" label="Back" class="q-ml-sm" />
+            
+        </q-stepper-navigation>
+      </template>
+    </q-stepper>
+  </div>
 </template>
 
 <script>
-import { ref } from "vue";
-
-import axios from "axios";
-import { format } from "quasar";
+import { ref } from 'vue';
+import TimeSlotSelector from '../pages/TimeSlotSelectorPage.vue';
 
 export default {
-  setup() {
+  setup () {
     return {
+      step: ref(1),
       selection: ref([]),
+      
       thumbStyle: {
         right: "4px",
         borderRadius: "5px",
@@ -233,13 +184,16 @@ export default {
         backgroundColor: "#027be3",
         width: "9px",
         opacity: 0.2,
-      },
-    };
+      }, 
+    }
+  },
+   components: {
+    TimeSlotSelector,
   },
   data() {
     return {};
   },
-  methods: {
+   methods: {
     async placeOrder() {
       try {
         if (this.selection.length == 0) {
@@ -256,6 +210,7 @@ export default {
           //   }
           // );
           console.log(this.selection);
+
           this.$q.notify({
             type: "positive",
             message: "Order sent with success",
@@ -272,17 +227,6 @@ export default {
     cancelOrder() {
       this.selection = [];
     },
-  },
-};
+  }
+}
 </script>
-
-<style>
-/* .scroll {
-  background-color: whitesmoke;
-  border-radius: 2px;
-  opacity: 95%;
-  border: 2px solid #73ad21;
-  border-color: black;
-  width: 30%;
-} */
-</style>

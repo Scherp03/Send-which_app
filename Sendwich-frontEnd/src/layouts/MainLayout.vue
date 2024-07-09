@@ -27,13 +27,24 @@
 
         <q-btn  flat name="Login" label="Login" to="/login" />
         <q-btn flat name="Register" label="Register" to="/register" />
-        <q-btn  flat name="Logout" color="red" bg-color="black" @click="logout" label="Logout" />
+       
 
-        <div>
-          <q-avatar>
-            <img src="../assets/Send-Which-logo.svg" alt="" />
-          </q-avatar>
-        </div>
+        <div class="q-pa-md" style="max-width: 300px; height:99px">
+    <q-list bordered class="rounded-borders">
+      <q-expansion-item
+        expand-separator
+        icon="perm_identity"
+        label="Account settings"
+        caption="Account settings"
+      >
+        <q-card>
+          <q-card-section>
+            Account Settings
+          </q-card-section>
+        </q-card>
+      </q-expansion-item>
+    </q-list>
+  </div>
       </q-toolbar>
     </q-header>
 
@@ -86,31 +97,7 @@ import { route } from 'quasar/wrappers';
 const $q = useQuasar();
 const router = useRouter();
 
-onMounted(async () => {
-  try {
-    const storedToken = localStorage.getItem('token');
-    token.value = storedToken;
-  } catch (error) {
-    console.error('Error fetching token from localStorage:', error);
-  }
-});
 
-const logout = async () => {
-  try {
-      localStorage.removeItem('token');
-      router.push('/login');
-      $q.notify({
-      type: 'positive',
-      message: 'You have logged out',
-    });
-    }catch (error) {
-    $q.notify({
-      type: 'negative',
-      message: 'An error occurred. Please try again later.',
-    });
-    console.error('Error:', error);
-  }
-};
 
 const tab = ref(''); // Define the `tab` property
 const linksList = [

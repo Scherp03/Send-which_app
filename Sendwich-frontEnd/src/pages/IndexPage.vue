@@ -9,7 +9,7 @@
         <h1
           class="fixed-center"
           key="Enter message"
-          style="font-weight: bolder; color: white; font-size: 400%"
+          style="font-weight: bolder; color: white; font-size: 300%"
         >
           WELCOME TO SEND-WHICH APP {{ firstName.charAt(0).toUpperCase() + firstName.slice(1) }}
           

@@ -92,7 +92,7 @@ const onsubmit = async () => {
       });
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('id', response.data.id);
-      router.push('/');
+      router.push('/auth');
     } else {
       $q.notify({
         type: 'negative',

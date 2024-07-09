@@ -12,9 +12,10 @@
         />
 
         <q-toolbar-title v-show="false"> Sendwhich App </q-toolbar-title>
-        <q-btn flat label="Home" to="/" />
-        <q-btn flat label="Settings" to="/settings" />
-        <q-btn flat name="Contacts" label="Contact" to="/contacts" />
+        <q-btn flat label="Home" to="/auth" />
+        <q-btn flat label="Settings" to="/auth/settings" />
+        <q-btn flat label="Contact" to="/auth/contacts" />
+        <q-btn flat label="Ingredients" to="/auth/order" />
 
         <body>
           <div>
@@ -24,8 +25,9 @@
           </div>
         </body>
 
-        <q-btn flat name="Logout" @click="logout" label="Login" to="" />
-        <q-btn flat name="Register" label="Register" to="/register" />
+        <q-btn  flat name="Logout" color="red" label="Logout" @click="logout" />
+        
+       
 
         <div>
           <q-avatar>
@@ -37,18 +39,18 @@
 
     <q-footer>
       <q-tabs v-model="tab" class="text-teal">
-        <q-route-tab name="Sendwich" icon="home" label="Sendwich" to="/" />
+        <q-route-tab name="Sendwich" icon="home" label="Sendwich" to="/auth" />
         <q-route-tab
           name="Contacts"
           icon="contacts"
           label="Contact"
-          to="/contacts"
+          to="/auth/contacts"
         />
         <q-route-tab
           name="Setting"
           icon="settings"
           label="Settings"
-          to="/settings"
+          to="/auth/settings"
         />
       </q-tabs>
     </q-footer>
@@ -72,26 +74,45 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import EssentialLink from "components/EssentialLink.vue";
 
-defineOptions({
-  name: "MainLayout",
-  data() {
-    return {};
-  },
-  methods: {
-    logout() {
-      try{
-        localStorage.removeItem('token');
-        this.$router.push("/auth");
-      }catch(error){
-        console.log(error)
-      }
-    },
-  },
+import axios from 'axios';
+import { useQuasar } from 'quasar';
+import { useRouter } from 'vue-router';
+import { ref, onMounted } from "vue";
+import EssentialLink from "components/EssentialLink.vue";
+import { route } from 'quasar/wrappers';
+
+
+const $q = useQuasar();
+const router = useRouter();
+
+onMounted(async () => {
+  try {
+    const storedToken = localStorage.getItem('token');
+    token.value = storedToken;
+  } catch (error) {
+    console.error('Error fetching token from localStorage:', error);
+  }
 });
 
+const logout = async () => {
+  try {
+      localStorage.removeItem('token');
+      router.push('/login');
+      $q.notify({
+      type: 'positive',
+      message: 'You have logged out',
+    });
+    }catch (error) {
+    $q.notify({
+      type: 'negative',
+      message: 'An error occurred. Please try again later.',
+    });
+    console.error('Error:', error);
+  }
+};  
+
+const tab = ref(''); // Define the `tab` property
 const linksList = [
   {
     title: "SandWichApp",
