@@ -6,6 +6,8 @@ import cors from 'cors';
 
 import authRouter from './routes/auth.js';
 import userRouter from './routes/user.js';
+import oauthRouter from './routes/oauth.js';
+import requestRouter from './routes/request.js';
 /* Routes */
 const app = express();
 
@@ -25,6 +27,9 @@ app.use(bodyParser.json());
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/auth', authRouter);
+
+app.use('/oauth', oauthRouter);
+app.use('/request', requestRouter);
 
 /* Quick check if it's working */
 app.get('/', (req, res) => {
