@@ -92,55 +92,55 @@ ingredientSchema.statics.restoreDeleted = async function (restoredName) {
 // Insert one ingredient only if certain parameters are met
 // EQUIVALENT FUNCTION IN OTHER 'ingredient.js'
 
-// ingredientSchema.statics.addOneSafe = async function (
-//   name,
-//   description,
-//   price,
-//   quantity,
-//   tags,
-// ) {
-//   // Test that it is not a duplicate
-//   let duplicateIngredient = await this.findOne({ name: name });
-//   if (duplicateIngredient) {
-//     console.log(
-//       'Duplicate ingredient: ' + name + ' ID: ' + duplicateIngredient._id,
-//     );
-//     return false;
-//   }
-//   // Test that the name is long enough
-//   if (name.length < 3) {
-//     console.log('Name too short: ' + name);
-//     return false;
-//   }
-//   // Test that the quantity and price are a number
-//   if (typeof price !== 'number' || isNaN(price)) {
-//     console.log('Price is not a valid number: ' + price);
-//     return false;
-//   }
-//   if (typeof quantity !== 'number' || isNaN(quantity)) {
-//     console.log('Quantity is not a valid number: ' + quantity);
-//     return false;
-//   }
-//   if (!Number.isInteger(quantity)) {
-//     console.log('Invalid quantity, not an integer: ' + quantity);
-//     return false;
-//   } else if (quantity < 0 || price < 0) {
-//     console.log(
-//       'Invalid quantity or price (negative): ' + quantity + ', ' + price,
-//     );
-//     return false;
-//   }
+ingredientSchema.statics.addOneSafe = async function (
+  name,
+  description,
+  price,
+  quantity,
+  tags,
+) {
+  // Test that it is not a duplicate
+  let duplicateIngredient = await this.findOne({ name: name });
+  if (duplicateIngredient) {
+    console.log(
+      'Duplicate ingredient: ' + name + ' ID: ' + duplicateIngredient._id,
+    );
+    return false;
+  }
+  // Test that the name is long enough
+  if (name.length < 3) {
+    console.log('Name too short: ' + name);
+    return false;
+  }
+  // Test that the quantity and price are a number
+  if (typeof price !== 'number' || isNaN(price)) {
+    console.log('Price is not a valid number: ' + price);
+    return false;
+  }
+  if (typeof quantity !== 'number' || isNaN(quantity)) {
+    console.log('Quantity is not a valid number: ' + quantity);
+    return false;
+  }
+  if (!Number.isInteger(quantity)) {
+    console.log('Invalid quantity, not an integer: ' + quantity);
+    return false;
+  } else if (quantity < 0 || price < 0) {
+    console.log(
+      'Invalid quantity or price (negative): ' + quantity + ', ' + price,
+    );
+    return false;
+  }
 
-//   await this.create({
-//     name: name,
-//     description: description,
-//     price: price,
-//     quantity: quantity,
-//     tags: tags,
-//   });
-//   console.log('Ingredient added: ' + name);
-//   return true;
-// };
+  await this.create({
+    name: name,
+    description: description,
+    price: price,
+    quantity: quantity,
+    tags: tags,
+  });
+  console.log('Ingredient added: ' + name);
+  return true;
+};
 
 // Export the models
 const Ingredient = mongoose.model('Ingredient', ingredientSchema);

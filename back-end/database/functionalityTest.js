@@ -2,10 +2,17 @@ import mongoose from 'mongoose';
 import express from 'express';
 
 const uri =
-  'mongodb+srv://WritingPurposeUser:FpKwCBXmZh7uSvfA@test1.sdy9unk.mongodb.net/?retryWrites=true&w=majority&appName=Test1';
+  'mongodb+srv://' +
+  process.env.DB_CREDENTIALS +
+  '@' +
+  process.env.DB_HOST +
+  '/' +
+  process.env.DB_NAME +
+  '?retryWrites=true&w=majority';
 const clientOptions = {
   serverApi: { version: '1', strict: true, deprecationErrors: true },
 };
+mongoose.connect(uri, clientOptions);
 const app = express();
 
 // IMPORT MODELS
@@ -15,7 +22,6 @@ import User from './schemas/user.js';
 import Ingredient from './schemas/ingredient.js';
 import Slot from './schemas/slot.js';
 import StatSandwich from './schemas/statisticSandwich.js';
-import server from '../server.js';
 
 // Database connection
 mongoose.connect(uri, clientOptions);

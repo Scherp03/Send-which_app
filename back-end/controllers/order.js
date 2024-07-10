@@ -5,6 +5,7 @@ import Order from '../database/schemas/order.js';
 // Parameters required: _id
 
 export const calculateOrderPrice = async (req, res, next) => {
+  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
   try {
     let foundOrder = await Order.findById(req.body._id);
     if (foundOrder) {

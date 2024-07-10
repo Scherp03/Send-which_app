@@ -5,6 +5,7 @@ import Sandwich from '../database/schemas/sandwich.js';
 // Calculate the price of a sandwich given its _id
 // Parameters required: _id
 export const calculateSandwichPrice = async (req, res, next) => {
+  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
   try {
     let foundSandwich = await Sandwich.findById(req.body._id);
     if (foundSandwich) {
@@ -27,6 +28,7 @@ export const calculateSandwichPrice = async (req, res, next) => {
 // findBestSeller
 // Parameters: none
 export const findBestSeller = async (req, res, next) => {
+  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
   try {
     let bestSeller = await Sandwich.findBestSeller(1);
     return res.status(200).json({ success: true, bestSeller: bestSeller });

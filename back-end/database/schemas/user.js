@@ -1,57 +1,41 @@
 import mongoose from 'mongoose';
+import Roles from '../../../shared/userTypeDefinitions.js';
 
 // Schema for the user
-const userSchema = new mongoose.Schema(
-  {
-const userSchema = new mongoose.Schema(
-  {
-    // Actual name
-    firstName: {
-      type: String,
-      required: true,
-    firstName: {
-      type: String,
-      required: true,
-    },
-    lastName: {
-      type: String,
-      required: true,
-    lastName: {
-      type: String,
-      required: true,
-    },
-    // Username chosen by user
-    username: {
-      type: String,
-      required: true,
-      lowercase: true,
-    },
-    // Removed: "unique: true" as agreed
-    email: {
-      type: String,
-      required: true,
-      lowercase: true,
-    },
-    userType: {
-      type: String,
-      required: true,
-      enum: Object.values(Roles),
-    password: {
-      type: String,
-      required: true,
-    },
-    notificationMail: String,
+const userSchema = new mongoose.Schema({
+  // Actual name
+  firstName: {
+    type: String,
+    required: true,
   },
-  {
-    timestamps: true,
+  lastName: {
+    type: String,
+    required: true,
   },
-);
-    notificationMail: String,
+  // Username chosen by user
+  username: {
+    type: String,
+    required: true,
+    lowercase: true,
   },
-  {
-    timestamps: true,
+  // Removed: "unique: true" as agreed
+  email: {
+    type: String,
+    required: true,
+    lowercase: true,
   },
-);
+  userType: {
+    type: String,
+    required: true,
+    enum: Object.values(Roles),
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  notificationMail: String,
+  timestamp: true,
+});
 
 // ==== METHODS ==== //
 
@@ -64,11 +48,7 @@ userSchema.statics.findByNameInsensitive = function (queryName) {
 userSchema.virtual('fullCredentials').get(function () {
   return `${this.name} ${this.email}`;
 });
-userSchema.virtual('fullCredentials').get(function () {
-  return `${this.name} ${this.email}`;
-});
 
 // Export the model
-const User = mongoose.model('User', userSchema);
 const User = mongoose.model('User', userSchema);
 export default User;
