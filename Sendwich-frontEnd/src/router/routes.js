@@ -18,7 +18,15 @@ const routes = [
       { path: "", component: () => import("pages/AuthUserPage.vue") },
       { path: "/auth/settings", component: () => import("pages/SettingsPage.vue") },
       { path: "/auth/ingredients",component: () => import("pages/IngredientsPage.vue")},
-      { path: "/order",component: () => import("pages/OrderPage.vue")}, 
+      { path: "/auth/order",component: () => import("pages/OrderPage.vue")}, 
+    ],
+  },
+  {
+    path: "/admin",
+    component: () => import("layouts/AdminLayout.vue"),
+    children: [
+      { path: "", component: () => import("pages/AdminView/AdminPage.vue") },
+     
     ],
   },
 

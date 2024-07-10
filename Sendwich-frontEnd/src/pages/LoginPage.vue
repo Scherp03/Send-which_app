@@ -1,66 +1,40 @@
 <template>
-  <q-page padding>
-    <div class="q-pa-md">
-      <q-form
-        @submit.prevent="onsubmit"
-        class="fixed-center"
-        style="max-width: 300px"
-      >
-        <transition-group appear enter-active-class="animated fadeIn delay-1s">
-          <div
-            key="login-text"
-            style="
-              color: white;
-              font-size: 15px;
-              font-family: Verdana;
-              font-weight: bold;
-            "
-          >
-            ENTER CREDENTIALS TO LOGIN
-          </div>
-          <br key="br1"/>
-          <br key="br2"/>
-          <div style="max-width: 300px" key="username-input">
-            <q-input
-              color="black"
-              bg-color="white"
-              outlined
-              v-model="username"
-              label="Username"
-              type="text"
-              required
-            />
-            <br key="br3"/>
-          </div>
-          <div style="max-width: 300px" key="password-input">
-            <q-input
-              color="black"
-              bg-color="white"
-              outlined
-              v-model="password"
-              label="Password"
-              type="password"
-              required
-            />
-          </div>
-          <br key="br4"/>
-          <br key="br5"/>
-          <br key="br6"/>
-          <div key="login-btn">
-            <q-btn
-              style="max-width: 300px; height: 10%"
-              push
-              class="fixed-bottom"
-              color="black"
-              bg-color="white"
-              type="submit"
-              label="LogIn"
-            />
-          </div>
-        </transition-group>
-      </q-form>
-    </div>
-  </q-page>
+  <q-layout view="lHh Lpr lFf">
+    <q-page-container>
+      <q-page class="flex flex-center">
+        <q-card class="q-pa-md shadow-2 my_card" bordered>
+          <q-card-section class="text-center">
+            <div class="text-grey-9 text-h5 text-weight-bold">Sign in</div>
+            <div class="text-grey-8">Sign in below to access your account</div>
+          </q-card-section>
+          <q-card-section>
+            <q-input dense outlined v-model="username" label="Username"></q-input>
+            <q-input dense outlined class="q-mt-md" v-model="password" type="password" label="Password"></q-input>
+          </q-card-section>
+          <q-card-section>
+            <q-btn style="border-radius: 8px;" color="dark" rounded size="md" label="Sign in" no-caps class="full-width" @click="onsubmit"></q-btn>
+          </q-card-section>
+          <q-card-section class="text-center q-pt-none">
+            <div class="text-grey-8">Don't have an account yet?
+              <a href="#/register" class="text-dark text-weight-bold" style="text-decoration: none">Sign
+                up.</a></div>
+          </q-card-section>
+          <q-card-section class="text-center q-pt-none">
+            <div class="text-grey-8 q-mb-md">or sign in with</div>
+            <q-btn class="social-btn q-mb-sm" color="white" text-color="black" rounded size="md" no-caps  @click="signInWithGoogle">
+              <i class="fab fa-google"></i> Google
+            </q-btn>
+            <q-btn class="social-btn q-mb-sm" color="white" text-color="black" rounded size="md" no-caps @click="signInWithFacebook">
+              <i class="fab fa-facebook"></i> Facebook
+            </q-btn>
+            <q-btn class="social-btn q-mb-sm" color="white" text-color="black" rounded size="md" no-caps  @click="signInWithTwitter">
+              <i class="fab fa-twitter"></i> Twitter
+            </q-btn>
+          </q-card-section>
+        </q-card>
+      </q-page>
+    </q-page-container>
+  </q-layout>
 </template>
 
 <script setup>
@@ -75,24 +49,37 @@ const $q = useQuasar();
 const router = useRouter();
 
 const onsubmit = async () => {
+   if (!username.value || !password.value) {
+    $q.notify({
+      type: 'negative',
+      message: 'Username and password are required.',
+    });
+    return;
+  }
   try {
     const data = {
       username: username.value,
       password: password.value,
     };
-
-    console.log(data);
-
-    const response = await axios.post(`http://localhost:3000/api/v1/auth/login`, data);
+   
+    const response = await axios.post('http://localhost:3000/api/v1/auth/login', data);
 
     if (response.data.success) {
+      const userType = response.data.payload.role; // Assuming userType is part of the response
+
       $q.notify({
         type: 'positive',
         message: response.data.message,
       });
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('id', response.data.id);
-      router.push('/auth');
+      localStorage.setItem('userType', userType);
+
+      if (userType === 'Admin') {
+        router.push('/admin'); // Route to admin page if user is an admin
+      } else {
+        router.push('/auth'); // Route to a different page if user is not an admin
+      }
     } else {
       $q.notify({
         type: 'negative',
@@ -107,6 +94,47 @@ const onsubmit = async () => {
     console.error('Error:', error);
   }
 };
+
+const signInWithGoogle = () => {
+  // Handle Google sign in logic
+  console.log('Google sign in');
+};
+
+const signInWithFacebook = () => {
+  // Handle Facebook sign in logic
+  console.log('Facebook sign in');
+};
+
+const signInWithTwitter = () => {
+  // Handle Twitter sign in logic
+  console.log('Twitter sign in');
+};
 </script>
 
-<style></style>
+<style>
+.my_card {
+  width: 25rem;
+  border-radius: 8px;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+/* Social button hover effects */
+.social-btn {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.google-btn:hover {
+  background-color: #db4437;
+  color: white;
+}
+
+.facebook-btn:hover {
+  background-color: #3b5998;
+  color: white;
+}
+
+.twitter-btn:hover {
+  background-color: #1da1f2;
+  color: white;
+}
+</style>

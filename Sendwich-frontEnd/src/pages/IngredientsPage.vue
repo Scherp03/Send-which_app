@@ -7,7 +7,7 @@
             style="
               color: white;
               font-size: 25px;
-              font-type: Verdana;
+              font-family: Verdana;
               font-weight: bold;
             "
           >
@@ -21,159 +21,26 @@
             height: 350px;
             background-color: whitesmoke;
             border-radius: 2px;
-
             border: 2px solid #73ad21;
             border-color: black;
           "
         >
-          <div>
+          <div v-for="ingredient in ingredients" :key="ingredient" class="checkbox-container">
             <q-checkbox
               v-model="selection"
-              val="Salad"
-              label="Salad"
+              :val="ingredient"
+              :label="ingredient"
               color="green"
               style="
                 border-radius: 2px;
-
                 border-bottom: 1px solid #73ad21;
                 border-color: black;
                 width: 100%;
                 height: 50px;
               "
-            />
-          </div>
-          <div style="height: 5px"></div>
-          <div>
-            <q-checkbox
-              v-model="selection"
-              val="Tomato"
-              label="Tomato"
-              color="green"
-              style="
-                border-radius: 2px;
-
-                border-bottom: 1px solid #73ad21;
-                border-top: 1px solid #73ad21;
-                border-color: black;
-                width: 100%;
-                height: 50px;
-              "
-            />
-          </div>
-          <div style="height: 5px"></div>
-          <div>
-            <q-checkbox
-              v-model="selection"
-              val="Meat"
-              label="Meat"
-              color="green"
-              style="
-                border-radius: 2px;
-
-                border-bottom: 1px solid #73ad21;
-                border-top: 1px solid #73ad21;
-                border-color: black;
-                width: 100%;
-                height: 50px;
-              "
-            />
-          </div>
-          <div style="height: 5px"></div>
-          <div>
-            <q-checkbox
-              v-model="selection"
-              val="Mayonese"
-              label="Mayonese"
-              color="green"
-              style="
-                border-radius: 2px;
-
-                border-bottom: 1px solid #73ad21;
-                border-top: 1px solid #73ad21;
-                border-color: black;
-                width: 100%;
-                height: 50px;
-              "
-            />
-          </div>
-          <div style="height: 5px"></div>
-          <div>
-            <q-checkbox
-              v-model="selection"
-              val="Cheese"
-              label="Cheese"
-              color="green"
-              style="
-                border-bottom: 1px solid #73ad21;
-                border-top: 1px solid #73ad21;
-                border-color: black;
-                width: 100%;
-                height: 50px;
-              "
-            />
-          </div>
-          <div>
-            <q-checkbox
-              v-model="selection"
-              val="Salad"
-              label="Salad"
-              color="green"
-              style="
-                border-radius: 2px;
-
-                border-bottom: 1px solid #73ad21;
-                border-color: black;
-                width: 100%;
-                height: 50px;
-              "
-            />
-          </div>
-          <div>
-            <q-checkbox
-              v-model="selection"
-              val="Salad"
-              label="Salad"
-              color="green"
-              style="
-                border-radius: 2px;
-
-                border-bottom: 1px solid #73ad21;
-                border-color: black;
-                width: 100%;
-                height: 50px;
-              "
-            />
-          </div>
-          <div>
-            <q-checkbox
-              v-model="selection"
-              val="Salad"
-              label="Salad"
-              color="green"
-              style="
-                border-radius: 2px;
-
-                border-bottom: 1px solid #73ad21;
-                border-color: black;
-                width: 100%;
-                height: 50px;
-              "
-            />
-          </div>
-          <div>
-            <q-checkbox
-              v-model="selection"
-              val="Salad"
-              label="Salad"
-              color="green"
-              style="
-                border-radius: 2px;
-
-                border-bottom: 1px solid #73ad21;
-                border-color: black;
-                width: 100%;
-                height: 50px;
-              "
+              checked-icon="check_circle"
+              unchecked-icon="check"
+              class="custom-checkbox"
             />
           </div>
         </q-scroll-area>
@@ -200,10 +67,6 @@
           label="Cancel"
           @click="cancelOrder()"
         />
-
-        <!-- <div class="q-px-sm">
-          The model data: <strong>{{ selection }}</strong>
-        </div> -->
       </div>
     </div>
   </q-page>
@@ -212,13 +75,25 @@
 <script>
 import { ref } from "vue";
 
-import axios from "axios";
-import { format } from "quasar";
-
 export default {
   setup() {
+    const ingredients = [
+      "Salad",
+      "Tomato",
+      "Meat",
+      "Mayonese",
+      "Cheese",
+      "Ham",
+      "Turkey",
+      "Lettuce",
+      "Onion",
+      "Pickles",
+    ];
+    const selection = ref([]);
+
     return {
-      selection: ref([]),
+      selection,
+      ingredients,
       thumbStyle: {
         right: "4px",
         borderRadius: "5px",
@@ -226,7 +101,6 @@ export default {
         width: "5px",
         opacity: 0.75,
       },
-
       barStyle: {
         right: "2px",
         borderRadius: "7px",
@@ -236,29 +110,20 @@ export default {
       },
     };
   },
-  data() {
-    return {};
-  },
   methods: {
     async placeOrder() {
       try {
         if (this.selection.length == 0) {
           this.$q.notify({
             type: "negative",
-            message: "Error,there are no element to place an order",
+            message: "Error, there are no ingredients selected.",
           });
-          console.log("can't place order, there are no element");
+          console.log("Can't place order, there are no ingredients selected.");
         } else {
-          // const response = await axios.post(
-          //   "http://localhost:3000/api/v1/auth/login",
-          //   {
-          //     body: JSON.stringify(data),
-          //   }
-          // );
           console.log(this.selection);
           this.$q.notify({
             type: "positive",
-            message: "Order sent with success",
+            message: "Order placed successfully.",
           });
           this.$router.push("/");
         }
@@ -277,12 +142,24 @@ export default {
 </script>
 
 <style>
-/* .scroll {
-  background-color: whitesmoke;
-  border-radius: 2px;
-  opacity: 95%;
-  border: 2px solid #73ad21;
-  border-color: black;
-  width: 30%;
-} */
+.checkbox-container {
+  margin-bottom: 5px;
+}
+
+.custom-checkbox .q-checkbox__inner--checked .q-checkbox__bg {
+  background-color: #73ad21 !important;
+}
+
+.custom-checkbox .q-checkbox__inner--focus .q-checkbox__bg {
+  border-color: #73ad21 !important;
+}
+
+.custom-checkbox .q-checkbox__inner--hover .q-checkbox__bg {
+  border-color: #73ad21 !important;
+}
+
+/* Change label color when checkbox is checked */
+.custom-checkbox .q-checkbox__inner--checked + .q-checkbox__label {
+  color: green !important;
+}
 </style>

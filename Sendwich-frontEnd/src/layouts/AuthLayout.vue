@@ -25,7 +25,20 @@
           </div>
         </body>
 
-        <q-btn  flat name="Logout" color="red" label="Logout" @click="logout" />
+        <q-btn  flat name="Logout" color="red" label="Logout" @click="confirm = true" />
+         <q-dialog v-model="confirm" persistent>
+          <q-card>
+            <q-card-section class="row items-center">
+              <q-avatar icon="logout" color="primary" text-color="white" />
+              <span class="q-ml-sm">Are you sure to log out?</span>
+            </q-card-section>
+
+            <q-card-actions align="right">
+              <q-btn flat label="Cancel" color="primary" v-close-popup />
+              <q-btn flat label="Logout" color="red" @click="logout" v-close-popup />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
         
        
 
@@ -82,7 +95,7 @@ import { ref, onMounted } from "vue";
 import EssentialLink from "components/EssentialLink.vue";
 import { route } from 'quasar/wrappers';
 
-
+const confirm= ref(false);
 const $q = useQuasar();
 const router = useRouter();
 
@@ -129,6 +142,7 @@ const linksList = [
 ];
 
 const leftDrawerOpen = ref(false);
+
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;

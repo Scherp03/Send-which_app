@@ -151,7 +151,7 @@
           @click="placeOrder()"
         />
         
-          <q-btn v-if="step<3"  @click="$refs.stepper.next()" color="deep-orange" label="Continue" />
+          <q-btn v-if="step<3" :disable="disableContinue" @click="$refs.stepper.next()" color="deep-orange" label="Continue" />
           <q-btn v-if="step > 1" flat color="deep-orange" @click="$refs.stepper.previous()" label="Back" class="q-ml-sm" />
             
         </q-stepper-navigation>
@@ -161,30 +161,40 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import TimeSlotSelector from '../pages/TimeSlotSelectorPage.vue';
 
 export default {
   setup () {
-    return {
-      step: ref(1),
-      selection: ref([]),
-      
-      thumbStyle: {
-        right: "4px",
-        borderRadius: "5px",
-        backgroundColor: "#027be3",
-        width: "5px",
-        opacity: 0.75,
-      },
+    const step = ref(1);
+    const selection = ref([]);
+    
+    const thumbStyle = {
+      right: "4px",
+      borderRadius: "5px",
+      backgroundColor: "#027be3",
+      width: "5px",
+      opacity: 0.75,
+    };
 
-      barStyle: {
-        right: "2px",
-        borderRadius: "7px",
-        backgroundColor: "#027be3",
-        width: "9px",
-        opacity: 0.2,
-      }, 
+    const barStyle = {
+      right: "2px",
+      borderRadius: "7px",
+      backgroundColor: "#027be3",
+      width: "9px",
+      opacity: 0.2,
+    };
+
+    const disableContinue = computed(() => {
+      return selection.value.length === 0;
+    });
+
+    return {
+      step,
+      selection,
+      thumbStyle,
+      barStyle,
+      disableContinue,
     }
   },
    components: {
@@ -199,9 +209,9 @@ export default {
         if (this.selection.length == 0) {
           this.$q.notify({
             type: "negative",
-            message: "Error,there are no element to place an order",
+            message: "Error, there are no elements to place an order",
           });
-          console.log("can't place order, there are no element");
+          console.log("can't place order, there are no elements");
         } else {
           // const response = await axios.post(
           //   "http://localhost:3000/api/v1/auth/login",
@@ -215,7 +225,7 @@ export default {
             type: "positive",
             message: "Order sent with success",
           });
-          this.$router.push("/");
+          this.$router.push("/auth");
         }
       } catch (error) {
         this.$q.notify({

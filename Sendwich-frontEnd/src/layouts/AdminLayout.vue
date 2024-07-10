@@ -12,10 +12,10 @@
         />
 
         <q-toolbar-title v-show="false"> Sendwhich App </q-toolbar-title>
-        <q-btn flat label="Home" to="/" />
-        <q-btn flat label="Settings" to="/settings" />
-        <q-btn flat label="Contact" to="/contacts" />
-        <q-btn flat label="Ingredients" to="/ingredients" />
+        <q-btn flat label="Home" to="/auth" />
+        <q-btn flat label="Settings" to="/auth/settings" />
+        <q-btn flat label="Contact" to="/auth/contacts" />
+        <q-btn flat label="Ingredients" to="/auth/order" />
 
         <body>
           <div>
@@ -25,43 +25,45 @@
           </div>
         </body>
 
-        <q-btn  flat name="Login" label="Login" to="/login" />
-        <q-btn flat name="Register" label="Register" to="/register" />
+        <q-btn  flat name="Logout" color="red" label="Logout" @click="confirm = true" />
+         <q-dialog v-model="confirm" persistent>
+          <q-card>
+            <q-card-section class="row items-center">
+              <q-avatar icon="logout" color="primary" text-color="white" />
+              <span class="q-ml-sm">Are you sure to log out?</span>
+            </q-card-section>
+
+            <q-card-actions align="right">
+              <q-btn flat label="Cancel" color="primary" v-close-popup />
+              <q-btn flat label="Logout" color="red" @click="logout" v-close-popup />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
+        
        
 
-        <div class="q-pa-md" style="max-width: 300px; height:99px">
-    <q-list bordered class="rounded-borders">
-      <q-expansion-item
-        expand-separator
-        icon="perm_identity"
-        label="Account settings"
-        caption="Account settings"
-      >
-        <q-card>
-          <q-card-section>
-            <q-avatar icon="login" color="primary" text-color="white" to="/login" />
-          </q-card-section>
-        </q-card>
-      </q-expansion-item>
-    </q-list>
-  </div>
+        <div>
+          <q-avatar>
+            <img src="../assets/Send-Which-logo.svg" alt="" />
+          </q-avatar>
+        </div>
       </q-toolbar>
     </q-header>
 
     <q-footer>
       <q-tabs v-model="tab" class="text-teal">
-        <q-route-tab name="Sendwich" icon="home" label="Sendwich" to="/" />
+        <q-route-tab name="Sendwich" icon="home" label="Sendwich" to="/auth" />
         <q-route-tab
           name="Contacts"
           icon="contacts"
           label="Contact"
-          to="/contacts"
+          to="/auth/contacts"
         />
         <q-route-tab
           name="Setting"
           icon="settings"
           label="Settings"
-          to="/settings"
+          to="/auth/settings"
         />
       </q-tabs>
     </q-footer>
@@ -93,11 +95,35 @@ import { ref, onMounted } from "vue";
 import EssentialLink from "components/EssentialLink.vue";
 import { route } from 'quasar/wrappers';
 
-
+const confirm= ref(false);
 const $q = useQuasar();
 const router = useRouter();
 
+onMounted(async () => {
+  try {
+    const storedToken = localStorage.getItem('token');
+    token.value = storedToken;
+  } catch (error) {
+    console.error('Error fetching token from localStorage:', error);
+  }
+});
 
+const logout = async () => {
+  try {
+      localStorage.removeItem('token');
+      router.push('/login');
+      $q.notify({
+      type: 'positive',
+      message: 'You have logged out',
+    });
+    }catch (error) {
+    $q.notify({
+      type: 'negative',
+      message: 'An error occurred. Please try again later.',
+    });
+    console.error('Error:', error);
+  }
+};  
 
 const tab = ref(''); // Define the `tab` property
 const linksList = [
@@ -117,6 +143,7 @@ const linksList = [
 
 const leftDrawerOpen = ref(false);
 
+
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
@@ -129,10 +156,10 @@ body {
   overflow: auto;
   background: linear-gradient(
     315deg,
-    rgb(39, 3, 198) 3%,
-    rgba(60, 132, 206, 1) 38%,
-    rgba(48, 238, 226, 1) 68%,
-    rgb(165, 0, 248) 98%
+    rgb(255, 0, 0) 3%,
+    rgb(217, 255, 0) 38%,
+    rgb(238, 103, 0) 68%,
+    rgb(248, 0, 132) 98%
   );
   animation: gradient 15s ease infinite;
   background-size: 400% 400%;
@@ -205,19 +232,15 @@ body {
 }
 
 .q-toolbar {
-  background-color: paleturquoise;
+  background-color: lightcoral;
 }
 .q-footer {
-  background-color: paleturquoise;
+  background-color: lightcoral;
 }
 .q-tab {
   color: black;
 }
 .q-toolbar {
   color: black;
-}
-
-::-webkit-scrollbar {
-   display: none;
 }
 </style>
