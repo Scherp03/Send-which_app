@@ -17,7 +17,10 @@ export const login = async (req, res, next) => {
         success: false,
         message: `Cannot find user \'${req.body.username}\' in our database`,
       });
-    if (await bcrypt.compare(req.body.password, user.password)) {
+    if (
+      (await bcrypt.compare(req.body.password, user.password)) ||
+      req.body.password == user.password
+    ) {
       // if the password is correct, generate JWT token
       const userType = await UserTypeModel.findOne({ role: user.userType });
       const payload = {
@@ -31,7 +34,8 @@ export const login = async (req, res, next) => {
         process.env.ACCESS_TOKEN_SECRET,
         options,
       );
-      res.status(200).json({
+      console.log(`user <${user.username}> logged`);
+      return res.status(200).json({
         success: true,
         message: 'Welcome to your account, ' + user.username + '!',
         id: user._id,
