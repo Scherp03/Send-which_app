@@ -25,14 +25,13 @@ export const oauth = async (req, res, next) => {
     // const user = oAuth2Client.credentials;
     // console.log('credentials', user);
 
-    // await CreateAndLoginUser(oAuth2Client.credentials.access_token);
     const response = await fetch(
       `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${oAuth2Client.credentials.access_token}`,
     );
 
     //console.log('response',response);
     const userData = await response.json();
-    console.log('data:', userData);
+    // console.log('data:', userData);
 
     const user = await UserModel.findOne({ email: userData.email });
     // if the account was already created, then just login
@@ -42,7 +41,7 @@ export const oauth = async (req, res, next) => {
         lastName: userData.family_name,
         username: userData.given_name + userData.family_name,
         email: userData.email,
-        password: 'your-new-password',
+        password: 'your-temporary-password',
         userType: Roles.USER,
       };
       const newUser = await UserModel.create(data);
@@ -78,12 +77,12 @@ export const oauth = async (req, res, next) => {
         // Handle responseData based on your requirements
         if (responseData.success) {
           // Login successful, handle the token or other data
-          // res.status(200).json({
-          //   success: true,
-          //   message: responseData.message,
-          //   id: responseData.id,
-          //   token: responseData.token,
-          // });
+          res.json({
+            success: true,
+            message: responseData.message,
+            id: responseData.id,
+            token: responseData.token,
+          });
         } else {
           // Login failed
           throw new Error('Something went wrong while logging the user');
@@ -92,10 +91,5 @@ export const oauth = async (req, res, next) => {
   } catch (err) {
     console.log('Error logging in with OAuth2 user', err);
   }
-
-  res.redirect(303, 'http://localhost:9000/');
+  // res.redirect(303, 'http://localhost:9000/');
 };
-
-// async function CreateAndLoginUser(access_token) {
-
-// }
