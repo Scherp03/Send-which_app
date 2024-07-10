@@ -4,8 +4,8 @@
   "description": "Shared repository for the 2024 Software Engineering project",
   "type": "module",
   "scripts": {
-    "start": "cd back-end/ && npm run dev && cd .. ",
-    "start:initdb": "cd back-end/ && npm run dev:init && cd ..",
+    "start": "cd back-end/ && npm run dev && cd .. && cd front-end/ && npm run dev",
+    "start:initdb": "cd back-end/ && npm run dev:init && cd .. && cd front-end && npm run dev",
     "tests": "cd back-end/ && npm run test"
   }
 }
