@@ -31,7 +31,7 @@ export const login = async (req, res, next) => {
         process.env.ACCESS_TOKEN_SECRET,
         options,
       );
-      res.status(200).json({
+      return res.status(200).json({
         success: true,
         message: 'Welcome to your account, ' + user.username + '!',
         id: user._id,

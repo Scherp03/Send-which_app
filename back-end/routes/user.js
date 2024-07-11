@@ -4,7 +4,7 @@ import { tokenChecker } from '../middleware/tokenChecker.js';
 
 import {
   createUser,
-  // getUser,
+  getUser,
   updateUser,
   deleteUser,
 } from '../controllers/user.js';
@@ -115,70 +115,73 @@ const router = express.Router();
  */
 router.post('/', createUser);
 
-// /**
-//  * @openapi
-//  * api/v1/users/:id:
-//  *   get:
-//  *     summary: Fetch account data
-//  *     description: Fetch all data of the account
-//  *     tags:
-//  *       - User Registration and Account Management
-//  *     produces:
-//  *       - application/json
-//  *     consumes:
-//  *       - application/json
-//  *     parameters:
-//  *       - in: header
-//  *         name: Authorization
-//  *         required: true
-//  *         schema:
-//  *           type: string
-//  *           example: Bearer <token>
-//  *         description: "JWT token obtained during login."
-//  *     responses:
-//  *       '200':
-//  *         description: "OK: Account data is returned."
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *               type: object
-//  *               properties:
-//  *                 success:
-//  *                   type: bool
-//  *                   example: true
-//  *                 message:
-//  *                   type: string
-//  *                   example: "User modified successfully"
-//  *       '403':
-//  *         description: "Not Found: The user does not have the needed rights"
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *               type: object
-//  *               properties:
-//  *                 success:
-//  *                   type: bool
-//  *                   example: false
-//  *                 message:
-//  *                   type: string
-//  *                   example: "No permissions"
-//  *       '404':
-//  *         description: "Not Found: The user doing request was not found in the database."
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *               type: object
-//  *               properties:
-//  *                 success:
-//  *                   type: bool
-//  *                   example: false
-//  *                 message:
-//  *                   type: string
-//  *                   example: "User not found"
-//  *       '500':
-//  *         description: "Internal Server Error: The server encountered an unexpected condition that prevented it from fulfilling the request."
-//  */
-// router.get('/:id', tokenChecker, getUser);
+/**
+ * @openapi
+ * api/v1/users/:id:
+ *   get:
+ *     summary: Fetch account data => name and surname
+ *     description: Fetch all data of the account
+ *     tags:
+ *       - User Registration and Account Management
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: Bearer <token>
+ *         description: "JWT token obtained during login."
+ *     responses:
+ *       '200':
+ *         description: "OK: Account data is returned."
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: bool
+ *                   example: true
+ *                 firstName:
+ *                   type: string
+ *                   example: "MyName"
+ *                 lastName:
+ *                   type: string
+ *                   example: "MySurname"
+ *       '403':
+ *         description: "Not Found: The user does not have the needed rights"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: bool
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "No permissions"
+ *       '404':
+ *         description: "Not Found: The user doing request was not found in the database."
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: bool
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "User not found"
+ *       '500':
+ *         description: "Internal Server Error: The server encountered an unexpected condition that prevented it from fulfilling the request."
+ */
+router.get('/:id', tokenChecker, getUser);
 
 /**
  * @openapi

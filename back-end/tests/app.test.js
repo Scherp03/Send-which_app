@@ -5,16 +5,24 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-describe('Server start and DB connection', () => {
-  const dbUri =
-    'mongodb+srv://' +
-    process.env.DB_CREDENTIALS +
-    '@' +
-    process.env.DB_HOST +
-    '/' +
-    process.env.DB_NAME +
-    '?retryWrites=true&w=majority';
+/* Ensure environment variables are correctly loaded */
+const { DB_CREDENTIALS, DB_HOST, DB_NAME } = process.env;
 
+if (!DB_CREDENTIALS || !DB_HOST || !DB_NAME) {
+  throw new Error(
+    'Test suite stopped beacuse necessary environment variables for MongoDB connection are missing',
+  );
+}
+const dbUri =
+  'mongodb+srv://' +
+  process.env.DB_CREDENTIALS +
+  '@' +
+  process.env.DB_HOST +
+  '/' +
+  process.env.DB_NAME +
+  '?retryWrites=true&w=majority';
+
+describe('Server start and DB connection', () => {
   beforeAll(async () => {
     await mongoose.connect(dbUri);
     // console.log(`Database \'${process.env.DB_NAME}\' connected for testing!`);
