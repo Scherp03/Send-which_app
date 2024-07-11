@@ -27,5 +27,8 @@ export const request = async (req, res, next) => {
     prompt: 'consent',
   });
 
-  res.json({ url: authorizeUrl });
+  return res.status(200).json({
+    success: true,
+    url: authorizeUrl,
+  });
 };
