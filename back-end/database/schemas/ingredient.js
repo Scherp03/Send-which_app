@@ -22,7 +22,7 @@ const ingredientSchema = new mongoose.Schema({
 // If the quantity is negative, set it to 0;
 ingredientSchema.methods.increaseAvailability = function (amount) {
   if (typeof amount !== 'number' || isNaN(amount)) {
-    console.log('Provided uantity is not a valid number: ' + amount);
+    console.log('Provided quantity is not a valid number: ' + amount);
     return false;
   }
   if (this.quantity + amount < 0) {
@@ -31,13 +31,13 @@ ingredientSchema.methods.increaseAvailability = function (amount) {
     return true;
   }
   this.quantity += amount;
-  console.log('Availability changed: ' + this.name + ': ' + this.quantity);
+  // console.log('Availability changed: ' + this.name + ': ' + this.quantity);
   return true;
 };
 
 ingredientSchema.methods.setAvailability = function (newAvailability) {
   if (typeof newAvailability !== 'number' || isNaN(newAvailability)) {
-    console.log('Provided uantity is not a valid number: ' + newAvailability);
+    console.log('Provided quantity is not a valid number: ' + newAvailability);
     return false;
   }
   if (newAvailability < 0) {
@@ -53,14 +53,14 @@ ingredientSchema.methods.setAvailability = function (newAvailability) {
 ingredientSchema.methods.safeDelete = function () {
   // Fail if already deleted;
   if (this.active == false) {
-    console.log('Ingredient ' + this.name + ' found but already deleted');
+    console.log('Ingredient ' + this.name + ' found, but already deleted');
     return false;
   }
-  // Ok otherwise; set quantity to 0 for good measure
+  // Ok otherwise; set quantity to 0 and set active to false
   this.active = false;
   this.quantity = 0;
   this.save();
-  console.log('Ingredient deleted: ' + this.name);
+  // console.log('Ingredient deleted: ' + this.name);
   return true;
 };
 
@@ -78,14 +78,13 @@ ingredientSchema.statics.restoreDeleted = async function (restoredName) {
   // Fail if ingredient is already active
   if (ingredient.active == true) {
     console.log(
-      'Failed to activate: ngredient already active: ' + restoredName,
+      'Failed to activate: ingredient already active: ' + restoredName,
     );
     return false;
   }
   // Otherwise, restore the ingredient
   ingredient.active = true;
   await ingredient.save();
-  console.log('Ingredient restored: ' + restoredName);
   return true;
 };
 
@@ -138,7 +137,7 @@ ingredientSchema.statics.addOneSafe = async function (
     quantity: quantity,
     tags: tags,
   });
-  console.log('Ingredient added: ' + name);
+  // console.log('Ingredient added: ' + name);
   return true;
 };
 

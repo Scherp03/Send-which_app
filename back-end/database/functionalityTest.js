@@ -1,14 +1,17 @@
 import mongoose from 'mongoose';
 import express from 'express';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const uri =
   'mongodb+srv://' +
   process.env.DB_CREDENTIALS +
   '@' +
   process.env.DB_HOST +
-  '/' +
+  '.' + // TO BE EVENTUALLY CHANGED WITH '/'
   process.env.DB_NAME +
-  '?retryWrites=true&w=majority';
+  '?retryWrites=true&w=majority&appName=Test1';
 const clientOptions = {
   serverApi: { version: '1', strict: true, deprecationErrors: true },
 };
@@ -29,8 +32,10 @@ mongoose.connect(uri, clientOptions);
 // populateTest();
 // populateStats();
 // tryGetBest();
-// univocousTest();
-// safeTest();
+await univocousTest();
+await safeTest();
+
+await mongoose.connection.close();
 
 // === TEST FUNCTIONS === //
 
@@ -40,7 +45,7 @@ async function safeTest() {
   const description = 'A unique ingredient';
   const price = 10;
   const quantity = 100;
-  const tags = ['unique', 'special'];
+  const tags = ['unique', 'toBeDeleted'];
 
   let result = await Ingredient.addOneSafe(
     name,
@@ -67,6 +72,7 @@ async function univocousTest() {
     await Ingredient.addOneSafe('Lettuce', 'Fresh green lettuce', 0.5, 100, [
       'vegetable',
       'vegan',
+      'toBeDeleted',
     ]);
     await Ingredient.addOneSafe('Tomato', 'Juicy red tomato', 0.7, 100, [
       'vegetable',

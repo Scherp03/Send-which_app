@@ -2,40 +2,44 @@ import mongoose from 'mongoose';
 import Roles from '../../../shared/userTypeDefinitions.js';
 
 // Schema for the user
-const userSchema = new mongoose.Schema({
-  // Actual name
-  firstName: {
-    type: String,
-    required: true,
+const userSchema = new mongoose.Schema(
+  {
+    // Actual name
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+    },
+    // Username chosen by user
+    username: {
+      type: String,
+      required: true,
+      lowercase: true,
+    },
+    // Removed: "unique: true" as agreed
+    email: {
+      type: String,
+      required: true,
+      lowercase: true,
+    },
+    userType: {
+      type: String,
+      required: true,
+      enum: Object.values(Roles),
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    notificationMail: String,
   },
-  lastName: {
-    type: String,
-    required: true,
+  {
+    timestamps: true,
   },
-  // Username chosen by user
-  username: {
-    type: String,
-    required: true,
-    lowercase: true,
-  },
-  // Removed: "unique: true" as agreed
-  email: {
-    type: String,
-    required: true,
-    lowercase: true,
-  },
-  userType: {
-    type: String,
-    required: true,
-    enum: Object.values(Roles),
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  notificationMail: String,
-  timestamp: true,
-});
+);
 
 // ==== METHODS ==== //
 

@@ -14,7 +14,7 @@ const sandwichSchema = new mongoose.Schema({
 // if so, increment the timesSold field;
 // if not, create a new entry with timesSold = 1
 sandwichSchema.methods.addStatistic = async function () {
-  let localHash = this.getHash();
+  let localHash = await this.getHash();
   let foundStat = await StatSandwich.findOne({ ingredientsHash: localHash });
   if (foundStat) {
     foundStat.timesSold++;
