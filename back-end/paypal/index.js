@@ -1,12 +1,12 @@
-import {} from 'dotenv/config.js';
+import dotenv from "dotenv";
 import express from 'express';
-import generateAccessToken, { createOrder } from './services/paypal_ser.js';
+import generateAccessToken, { createOrder } from './services/paypal_serv.js';
 
 /*require('dotenv').config()
 const express = require('express')
 const paypal=require("./services/paypal_ser")*/
 
-//dotenv.config();
+dotenv.config();
 
 //generateAccessToken();
 
@@ -27,9 +27,16 @@ app.post('/pay', async (req, res) => {
   }
 });
 
-app.get('/complete-order', (req, res) => {
-  res.send('Complete Order');
+app.get('/api/v1/paypal/complete-order', async (req, res) => {
+  try {
+      const result = await capturePayment(req.query.token);
+      res.send('Course purchased successfully');
+  } catch (error) {
+      console.error('Error completing order:', error);
+      res.status(500).send('An error occurred while completing the order.');
+  }
 });
+
 app.get('/cancel-order', (req, res) => {
   res.redirect('/');
 });
