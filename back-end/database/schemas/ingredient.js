@@ -22,11 +22,11 @@ const ingredientSchema = new mongoose.Schema({
 // If the quantity is negative, set it to 0;
 ingredientSchema.methods.increaseAvailability = function (amount) {
   if (typeof amount !== 'number' || isNaN(amount)) {
-    console.log('Provided quantity is not a valid number: ' + amount);
+    // console.log('Provided quantity is not a valid number: ' + amount);
     return false;
   }
   if (this.quantity + amount < 0) {
-    console.log('Ran out of (expected) ingredients: ' + this.name);
+    // console.log('Ran out of (expected) ingredients: ' + this.name);
     this.quantity = 0;
     return true;
   }
@@ -37,11 +37,11 @@ ingredientSchema.methods.increaseAvailability = function (amount) {
 
 ingredientSchema.methods.setAvailability = function (newAvailability) {
   if (typeof newAvailability !== 'number' || isNaN(newAvailability)) {
-    console.log('Provided quantity is not a valid number: ' + newAvailability);
+    // console.log('Provided quantity is not a valid number: ' + newAvailability);
     return false;
   }
   if (newAvailability < 0) {
-    console.log('Negative quantity: ' + newAvailability);
+    // console.log('Negative quantity: ' + newAvailability);
     return false;
   }
   this.quantity = newAvailability;
@@ -50,16 +50,16 @@ ingredientSchema.methods.setAvailability = function (newAvailability) {
 
 // Safe delete an ingredient: do not actually delete it, just set parameters
 // This way information can be retrieved from the past
-ingredientSchema.methods.safeDelete = function () {
+ingredientSchema.methods.safeDelete = async function () {
   // Fail if already deleted;
   if (this.active == false) {
-    console.log('Ingredient ' + this.name + ' found, but already deleted');
+    // console.log('Ingredient ' + this.name + ' found, but already deleted');
     return false;
   }
   // Ok otherwise; set quantity to 0 and set active to false
   this.active = false;
   this.quantity = 0;
-  this.save();
+  await this.save();
   // console.log('Ingredient deleted: ' + this.name);
   return true;
 };
@@ -101,32 +101,28 @@ ingredientSchema.statics.addOneSafe = async function (
   // Test that it is not a duplicate
   let duplicateIngredient = await this.findOne({ name: name });
   if (duplicateIngredient) {
-    console.log(
-      'Duplicate ingredient: ' + name + ' ID: ' + duplicateIngredient._id,
-    );
+    // console.log('Duplicate ingredient: ' + name + ' ID: ' + duplicateIngredient._id  );
     return false;
   }
   // Test that the name is long enough
   if (name.length < 3) {
-    console.log('Name too short: ' + name);
+    // console.log('Name too short: ' + name);
     return false;
   }
   // Test that the quantity and price are a number
   if (typeof price !== 'number' || isNaN(price)) {
-    console.log('Price is not a valid number: ' + price);
+    // console.log('Price is not a valid number: ' + price);
     return false;
   }
   if (typeof quantity !== 'number' || isNaN(quantity)) {
-    console.log('Quantity is not a valid number: ' + quantity);
+    // console.log('Quantity is not a valid number: ' + quantity);
     return false;
   }
   if (!Number.isInteger(quantity)) {
-    console.log('Invalid quantity, not an integer: ' + quantity);
+    // console.log('Invalid quantity, not an integer: ' + quantity);
     return false;
   } else if (quantity < 0 || price < 0) {
-    console.log(
-      'Invalid quantity or price (negative): ' + quantity + ', ' + price,
-    );
+    // console.log('Invalid quantity or price (negative): ' + quantity + ', ' + price );
     return false;
   }
 

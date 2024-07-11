@@ -43,11 +43,11 @@ sandwichSchema.methods.calculatePrice = async function () {
         );
       }
     }
-    this.price = price;
   } catch (error) {
     console.log('Error in calculatePrice: ' + error);
   }
-
+  this.price = price;
+  await this.save();
   return price;
 };
 

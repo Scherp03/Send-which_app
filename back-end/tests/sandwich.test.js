@@ -46,54 +46,56 @@ async function populateDatabase() {
   await sandwich1.save();
   return sandwich1._id;
 }
+describe('Sandwich methods', () => {
+  // Function 1: addStatistic
+  test('addStatistic takes a sandwich and makes a statistic out of it', async () => {
+    await mongoose.connect(uri, clientOptions);
 
-// Function 1: addStatistic
-test('addStatistic takes a sandwich and makes a statistic out of it', async () => {
-  await mongoose.connect(uri, clientOptions);
-
-  let sandwichID = await populateDatabase();
-  let sandwich1 = await Sandwich.findOne({ _id: sandwichID });
-  await sandwich1.addStatistic();
-  let localHash = await sandwich1.getHash();
-  let stat = await StatSandwich.findOne({
-    ingredientsHash: localHash,
+    let sandwichID = await populateDatabase();
+    let sandwich1 = await Sandwich.findOne({ _id: sandwichID });
+    await sandwich1.addStatistic();
+    let localHash = await sandwich1.getHash();
+    let stat = await StatSandwich.findOne({
+      ingredientsHash: localHash,
+    });
+    expect(stat.timesSold).toBe(1);
+    await sandwich1.addStatistic();
+    stat = await StatSandwich.findOne({
+      ingredientsHash: localHash,
+    });
+    await sandwich1.getHash(); // Buy time
+    expect(stat.timesSold).toBe(2);
+    await Ingredient.deleteMany({ name: 'UniqueIngredient' });
+    await Sandwich.deleteOne({ _id: sandwichID });
+    await mongoose.connection.close();
   });
-  expect(stat.timesSold).toBe(1);
-  await sandwich1.addStatistic();
-  stat = await StatSandwich.findOne({
-    ingredientsHash: localHash,
+
+  // Function 2: calculatePrice
+
+  test('calculatePrice calculates the price of a sandwich', async () => {
+    await mongoose.connect(uri, clientOptions);
+
+    let sandwichID = await populateDatabase();
+    let sandwich1 = await Sandwich.findOne({ _id: sandwichID });
+    expect(sandwich1.price).toBe(undefined);
+    let price = await sandwich1.calculatePrice();
+    expect(price).toBe(2 + 0.5 + 1);
+    // Clear generated things
+    await Ingredient.deleteMany({ tags: 'toBeDeleted' });
+    await Sandwich.deleteOne({ _id: sandwichID });
+    await mongoose.connection.close();
   });
-  expect(stat.timesSold).toBe(2);
-  await Ingredient.deleteMany({ name: 'UniqueIngredient' });
-  await Sandwich.deleteOne({ _id: sandwichID });
-  await mongoose.connection.close();
-});
 
-// Function 2: calculatePrice
+  // Function 3: getHash
 
-test('calculatePrice calculates the price of a sandwich', async () => {
-  await mongoose.connect(uri, clientOptions);
+  test('getHash generates a hash for the ingredients of a sandwich', async () => {
+    await mongoose.connect(uri, clientOptions);
 
-  let sandwichID = await populateDatabase();
-  let sandwich1 = await Sandwich.findOne({ _id: sandwichID });
-  expect(sandwich1.price).toBe(undefined);
-  let price = await sandwich1.calculatePrice();
-  expect(price).toBe(2 + 0.5 + 1);
-  // Clear generated things
-  await Ingredient.deleteMany({ tags: 'toBeDeleted' });
-  await Sandwich.deleteOne({ _id: sandwichID });
-  await mongoose.connection.close();
-});
+    let sandwichID = await populateDatabase();
+    let sandwich1 = await Sandwich.findOne;
 
-// Function 3: getHash
-
-test('getHash generates a hash for the ingredients of a sandwich', async () => {
-  await mongoose.connect(uri, clientOptions);
-
-  let sandwichID = await populateDatabase();
-  let sandwich1 = await Sandwich.findOne;
-
-  await Sandwich.deleteOne({ _id: sandwichID });
-  await Ingredient.deleteMany({ tags: 'toBeDeleted' });
-  await mongoose.connection.close();
+    await Sandwich.deleteOne({ _id: sandwichID });
+    await Ingredient.deleteMany({ tags: 'toBeDeleted' });
+    await mongoose.connection.close();
+  });
 });

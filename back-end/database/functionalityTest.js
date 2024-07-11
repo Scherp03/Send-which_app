@@ -32,8 +32,8 @@ mongoose.connect(uri, clientOptions);
 // populateTest();
 // populateStats();
 // tryGetBest();
-await univocousTest();
-await safeTest();
+// await univocousTest();
+// await safeTest();
 
 await mongoose.connection.close();
 
@@ -84,7 +84,7 @@ async function univocousTest() {
   let ingredient = await Ingredient.findOne({ name: 'Lettuce' });
   ingredient.safeDelete();
   Ingredient.restoreDeleted('lettuce');
-  ingredient.changeAvailability(50);
+  ingredient.setAvailability(50);
 }
 
 // Function to add a base set of data to the database

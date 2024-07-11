@@ -27,8 +27,9 @@ orderSchema.methods.calculatePrice = async function () {
       );
       break;
     }
-    return this.total;
   }
+  await this.save();
+  return this.total;
 };
 
 // Add statistics for all sandwiches in the order
