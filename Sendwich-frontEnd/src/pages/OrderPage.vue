@@ -1,27 +1,11 @@
 <template>
   <div class="q-pa-md">
-    <q-stepper
-      v-model="step"
-      ref="stepper"
-      animated
-      active-color="purple"
-    >
-      <q-step
-        :name="1"
-        prefix="1"
-        title="Select campaign settings"
-      >
-         <q-scroll-area
+    <q-stepper v-model="step" ref="stepper" animated active-color="purple">
+      <q-step :name="1" prefix="1" title="Select campaign settings">
+        <q-scroll-area
           :thumb-style="thumbStyle"
           :bar-style="barStyle"
-          style="
-            height: 350px;
-            background-color: whitesmoke;
-            border-radius: 2px;
-
-            border: 2px solid #73ad21;
-            border-color: black;
-          "
+          style="height: 350px; background-color: whitesmoke; border-radius: 2px; border: 2px solid #73ad21; border-color: black;"
         >
           <div>
             <q-checkbox
@@ -29,14 +13,7 @@
               val="Salad"
               label="Salad"
               color="green"
-              style="
-                border-radius: 2px;
-
-                border-bottom: 1px solid #73ad21;
-                border-color: black;
-                width: 100%;
-                height: 50px;
-              "
+              style="border-radius: 2px; border-bottom: 1px solid #73ad21; border-color: black; width: 100%; height: 50px;"
             />
           </div>
           <div style="height: 5px"></div>
@@ -46,15 +23,7 @@
               val="Tomato"
               label="Tomato"
               color="green"
-              style="
-                border-radius: 2px;
-
-                border-bottom: 1px solid #73ad21;
-                border-top: 1px solid #73ad21;
-                border-color: black;
-                width: 100%;
-                height: 50px;
-              "
+              style="border-radius: 2px; border-bottom: 1px solid #73ad21; border-top: 1px solid #73ad21; border-color: black; width: 100%; height: 50px;"
             />
           </div>
           <div style="height: 5px"></div>
@@ -64,15 +33,7 @@
               val="Meat"
               label="Meat"
               color="green"
-              style="
-                border-radius: 2px;
-
-                border-bottom: 1px solid #73ad21;
-                border-top: 1px solid #73ad21;
-                border-color: black;
-                width: 100%;
-                height: 50px;
-              "
+              style="border-radius: 2px; border-bottom: 1px solid #73ad21; border-top: 1px solid #73ad21; border-color: black; width: 100%; height: 50px;"
             />
           </div>
           <div style="height: 5px"></div>
@@ -82,15 +43,7 @@
               val="Mayonese"
               label="Mayonese"
               color="green"
-              style="
-                border-radius: 2px;
-
-                border-bottom: 1px solid #73ad21;
-                border-top: 1px solid #73ad21;
-                border-color: black;
-                width: 100%;
-                height: 50px;
-              "
+              style="border-radius: 2px; border-bottom: 1px solid #73ad21; border-top: 1px solid #73ad21; border-color: black; width: 100%; height: 50px;"
             />
           </div>
           <div style="height: 5px"></div>
@@ -100,60 +53,26 @@
               val="Cheese"
               label="Cheese"
               color="green"
-              style="
-                border-bottom: 1px solid #73ad21;
-                border-top: 1px solid #73ad21;
-                border-color: black;
-                width: 100%;
-                height: 50px;
-              "
+              style="border-bottom: 1px solid #73ad21; border-top: 1px solid #73ad21; border-color: black; width: 100%; height: 50px;"
             />
           </div>
-        
         </q-scroll-area>
       </q-step>
 
-      <q-step
-        :name="2"
-        prefix="2"
-        title="Create an ad group"
-        caption="Optional"
-      >
-         <time-slot-selector style="height: 250px" />
+      <q-step :name="2" prefix="2" title="Create an ad group" caption="Optional">
+        <time-slot-selector style="height: 250px" />
       </q-step>
 
-      <q-step
-        :name="3"
-        prefix="3"
-        title="Create an ad"
-      >
-        Try out different ad text to see what brings in the most customers, and learn how to
-        enhance your ads using features like ad extensions. If you run into any problems with
-        your ads, find out how to tell if they're running and how to resolve approval issues.
+      <q-step :name="3" prefix="3" title="Pay Order">
+        Pay your order with PayPal
       </q-step>
 
       <template v-slot:navigation>
         <q-stepper-navigation>
-          <q-btn
-          class="q-ml-sm"
-          v-if="step==1"
-          color="red"
-          bg-color="white"
-          label="Cancel"
-          @click="cancelOrder()"
-        />
-          <q-btn
-          class="q-ml-sm"
-          v-if="step==3"
-          color="green"
-          bg-color="white"
-          label="Pay"
-          @click="placeOrder()"
-        />
-        
+          <q-btn class="q-ml-sm" v-if="step==1" color="red" bg-color="white" label="Cancel" @click="cancelOrder" />
+          <q-btn class="q-ml-sm" v-if="step==3" color="green" bg-color="white" label="Pay" @click="placeOrder" />
           <q-btn v-if="step<3" :disable="disableContinue" @click="$refs.stepper.next()" color="deep-orange" label="Continue" />
           <q-btn v-if="step > 1" flat color="deep-orange" @click="$refs.stepper.previous()" label="Back" class="q-ml-sm" />
-            
         </q-stepper-navigation>
       </template>
     </q-stepper>
@@ -163,25 +82,30 @@
 <script>
 import { ref, computed } from 'vue';
 import TimeSlotSelector from '../pages/TimeSlotSelectorPage.vue';
+import axios from 'axios';
+import { useQuasar } from 'quasar';
+import { useRouter } from 'vue-router';
 
 export default {
-  setup () {
+  setup() {
+    const $q = useQuasar();
+    const router = useRouter();
     const step = ref(1);
     const selection = ref([]);
-    
+
     const thumbStyle = {
-      right: "4px",
-      borderRadius: "5px",
-      backgroundColor: "#027be3",
-      width: "5px",
+      right: '4px',
+      borderRadius: '5px',
+      backgroundColor: '#027be3',
+      width: '5px',
       opacity: 0.75,
     };
 
     const barStyle = {
-      right: "2px",
-      borderRadius: "7px",
-      backgroundColor: "#027be3",
-      width: "9px",
+      right: '2px',
+      borderRadius: '7px',
+      backgroundColor: '#027be3',
+      width: '9px',
       opacity: 0.2,
     };
 
@@ -189,54 +113,59 @@ export default {
       return selection.value.length === 0;
     });
 
+    const placeOrder = async () => {
+      try {
+        const response = await axios.post('http://localhost:3000/api/v1/paypal/pay');
+        const popup = window.open(response.data.url, '_blank', 'width=500,height=600');
+
+        window.addEventListener('message', (event) => {
+          if (event.origin !== 'http://127.0.0.1:3000') {
+            // Ensure the message is coming from your server
+            return;
+          }
+
+          const success = event.data.success;
+
+          if (success) {
+            setTimeout(() => {
+              $q.notify({
+                progress: true,
+                type: 'positive',
+                message: 'Payment received, order completed',
+              });
+            }, 5000);
+            router.push('/auth'); // Or the appropriate route based on your app logic
+          } else {
+            $q.notify({
+              type: 'negative',
+              message: 'Payment failed or cancelled',
+            });
+          }
+        });
+      } catch (error) {
+        $q.notify({
+          type: 'negative',
+          message: 'Error, something went wrong 😭',
+        });
+      }
+    };
+
+    const cancelOrder = () => {
+      selection.value = [];
+    };
+
     return {
       step,
       selection,
       thumbStyle,
       barStyle,
       disableContinue,
-    }
+      placeOrder,
+      cancelOrder,
+    };
   },
-   components: {
+  components: {
     TimeSlotSelector,
   },
-  data() {
-    return {};
-  },
-   methods: {
-    async placeOrder() {
-      try {
-        if (this.selection.length == 0) {
-          this.$q.notify({
-            type: "negative",
-            message: "Error, there are no elements to place an order",
-          });
-          console.log("can't place order, there are no elements");
-        } else {
-          // const response = await axios.post(
-          //   "http://localhost:3000/api/v1/auth/login",
-          //   {
-          //     body: JSON.stringify(data),
-          //   }
-          // );
-          console.log(this.selection);
-
-          this.$q.notify({
-            type: "positive",
-            message: "Order sent with success",
-          });
-          this.$router.push("/auth");
-        }
-      } catch (error) {
-        this.$q.notify({
-          type: "negative",
-          message: "Error, something went wrong 😭",
-        });
-      }
-    },
-    cancelOrder() {
-      this.selection = [];
-    },
-  }
-}
+};
 </script>

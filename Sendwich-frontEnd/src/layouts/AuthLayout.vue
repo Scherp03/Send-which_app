@@ -15,7 +15,7 @@
         <q-btn flat label="Home" to="/auth" />
         <q-btn flat label="Settings" to="/auth/settings" />
         <q-btn flat label="Contact" to="/auth/contacts" />
-        <q-btn flat label="Ingredients" to="/auth/order" />
+        <q-btn flat label="Order" to="/auth/order" />
 
         <body>
           <div>

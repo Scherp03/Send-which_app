@@ -91,7 +91,7 @@ const onsubmit = async () => {
 };
 
 const signInWithGoogle = async () => {
-  const response =await axios.post('http://localhost:3000/request');
+  const response =await axios.post('http://localhost:3000/api/v1/request');
 
   const popup = window.open(response.data.url, '_blank', 'width=500,height=600');
   
@@ -103,17 +103,17 @@ const signInWithGoogle = async () => {
     }
 
     const { success, message, id, token } = event.data;
-  console.log(event.data.success);
-  console.log("////////////////")
-  console.log(event.data);
-   console.log("////////////////")
-  console.log(success);
+    
     if (success) {
       
-      $q.notify({
-        type: 'positive',
+      setTimeout(() => {
+        $q.notify({
+        progress: true,
+        type: 'warning',
         message: message,
       });
+      },5000)
+      
       localStorage.setItem('token', token);
       localStorage.setItem('id', id);
       router.push('/auth'); // Or the appropriate route based on your app logic
