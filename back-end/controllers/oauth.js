@@ -1,7 +1,10 @@
 import dotenv from 'dotenv';
 import { OAuth2Client } from 'google-auth-library';
 import fetch from 'node-fetch';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 import UserModel from '../database/schemas/user.js';
+import UserTypeModel from '../database/schemas/userType.js';
 import { Roles } from '../../shared/userTypeDefinitions.js';
 
 dotenv.config();
@@ -22,74 +25,60 @@ export const oauth = async (req, res, next) => {
     // Make sure to set the credentials on the OAuth2 client.
     await oAuth2Client.setCredentials(tokens);
 
-    // const user = oAuth2Client.credentials;
-    // console.log('credentials', user);
+    const oauthToken = oAuth2Client.credentials.access_token;
 
     const response = await fetch(
-      `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${oAuth2Client.credentials.access_token}`,
+      `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${oauthToken}`,
     );
-
-    //console.log('response',response);
     const userData = await response.json();
-    // console.log('data:', userData);
 
     const user = await UserModel.findOne({ email: userData.email });
     // if the account was already created, then just login
     if (!user) {
+      // create crypted password
+      const hashedPassword = await bcrypt.hash('temporary-password', 10);
       const data = {
         firstName: userData.given_name,
         lastName: userData.family_name,
         username: userData.given_name + userData.family_name,
         email: userData.email,
-        password: 'your-temporary-password',
+        password: hashedPassword,
         userType: Roles.USER,
       };
-      const newUser = await UserModel.create(data);
+      await UserModel.create(data);
     }
-    const url = 'http://localhost:3000/api/v1/auth/login'; // Replace with your API endpoint
+    // user to login
+    const loginUser = await UserModel.findOne({ email: userData.email });
 
-    const logUser = await UserModel.findOne({ email: userData.email });
-    // Data to be sent in the request body
-    const data = {
-      username: logUser.username,
-      password: logUser.password,
+    // generate JWT token
+    const userType = await UserTypeModel.findOne({ role: loginUser.userType });
+    const payload = {
+      username: req.body.username,
+      role: userType.role,
+      permissions: userType.permissions,
+    };
+    const options = { expiresIn: '8h' };
+    const access_key = jwt.sign(
+      payload,
+      process.env.ACCESS_TOKEN_SECRET,
+      options,
+    );
+    const responseData = {
+      success: true,
+      message: `Welcome ${loginUser.username}! Your current password is: <temporary-password>. Change it ASAP`,
+      id: loginUser._id,
+      token: access_key,
     };
 
-    // Configuration for the fetch request
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json', // Indicates the content
-      },
-      body: JSON.stringify(data), // Converts data to JSON string
-    };
-
-    // Sending the fetch request
-    fetch(url, requestOptions)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        } else {
-          return response.json(); // Parse the JSON from the response
-        }
-      })
-      .then((responseData) => {
-        // Handle responseData based on your requirements
-        if (responseData.success) {
-          // Login successful, handle the token or other data
-          res.json({
-            success: true,
-            message: responseData.message,
-            id: responseData.id,
-            token: responseData.token,
-          });
-        } else {
-          // Login failed
-          throw new Error('Something went wrong while logging the user');
-        }
-      });
+    const script = `
+    <script>
+      window.opener.postMessage(${JSON.stringify(responseData)}, '*');
+      window.close();
+    </script>
+  `;
+    res.send(script);
   } catch (err) {
-    console.log('Error logging in with OAuth2 user', err);
+    res.redirect(303, 'http://localhost:9000/#');
+    console.log('Error logging in with OAuth2 user: ', err);
   }
-  // res.redirect(303, 'http://localhost:9000/');
 };

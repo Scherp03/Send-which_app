@@ -49,7 +49,6 @@ export const createUser = async (req, res, next) => {
         .status(503)
         .json({ success: false, message: `User not created` });
     }
-    console.log(`user <${userCreated.username}> created`);
     res.status(200).json({
       success: true,
       message: `User \'${userCreated.username}\' created successfully!`,

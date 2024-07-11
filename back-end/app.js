@@ -29,7 +29,7 @@ app.use('/api/v1/users', userRouter);
 app.use('/api/v1/auth', authRouter);
 
 app.use('/oauth', oauthRouter);
-app.use('/request', requestRouter);
+app.use('/api/v1/request', requestRouter);
 
 /* Quick check if it's working */
 app.get('/', (req, res) => {
