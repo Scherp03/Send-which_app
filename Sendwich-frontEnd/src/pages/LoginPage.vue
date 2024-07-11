@@ -24,12 +24,7 @@
             <q-btn class="social-btn q-mb-sm" color="white" text-color="black" rounded size="md" no-caps  @click="signInWithGoogle">
               <i class="fab fa-google"></i> Google
             </q-btn>
-            <q-btn class="social-btn q-mb-sm" color="white" text-color="black" rounded size="md" no-caps @click="signInWithFacebook">
-              <i class="fab fa-facebook"></i> Facebook
-            </q-btn>
-            <q-btn class="social-btn q-mb-sm" color="white" text-color="black" rounded size="md" no-caps  @click="signInWithTwitter">
-              <i class="fab fa-twitter"></i> Twitter
-            </q-btn>
+          
           </q-card-section>
         </q-card>
       </q-page>
@@ -95,20 +90,43 @@ const onsubmit = async () => {
   }
 };
 
-const signInWithGoogle = () => {
-  // Handle Google sign in logic
-  console.log('Google sign in');
+const signInWithGoogle = async () => {
+  const response =await axios.post('http://localhost:3000/request');
+
+  const popup = window.open(response.data.url, '_blank', 'width=500,height=600');
+  
+  window.addEventListener('message', (event) => {
+    console.log(event)
+    if (event.origin !== 'http://127.0.0.1:3000') {
+      // Ensure the message is coming from your server
+      return;
+    }
+
+    const { success, message, id, token } = event.data;
+  console.log(event.data.success);
+  console.log("////////////////")
+  console.log(event.data);
+   console.log("////////////////")
+  console.log(success);
+    if (success) {
+      
+      $q.notify({
+        type: 'positive',
+        message: message,
+      });
+      localStorage.setItem('token', token);
+      localStorage.setItem('id', id);
+      router.push('/auth'); // Or the appropriate route based on your app logic
+    } else {
+      $q.notify({
+        type: 'negative',
+        message: message,
+      });
+    }
+  });
 };
 
-const signInWithFacebook = () => {
-  // Handle Facebook sign in logic
-  console.log('Facebook sign in');
-};
 
-const signInWithTwitter = () => {
-  // Handle Twitter sign in logic
-  console.log('Twitter sign in');
-};
 </script>
 
 <style>
