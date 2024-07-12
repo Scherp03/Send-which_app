@@ -1,5 +1,5 @@
 import express from 'express';
-import { request } from '../controllers/request.js';
+import { request } from '../controllers/requestGoogle.js';
 
 const router = express.Router();
 

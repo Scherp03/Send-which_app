@@ -6,22 +6,12 @@ import User from '../database/schemas/user.js';
 
 dotenv.config();
 
-/* Ensure environment variables are correctly loaded */
-const { DB_CREDENTIALS, DB_HOST, DB_NAME } = process.env;
-
-if (!DB_CREDENTIALS || !DB_HOST || !DB_NAME) {
+if (!process.env.DB_URI) {
   throw new Error(
-    'Test suite stopped beacuse necessary environment variables for MongoDB connection are missing',
+    'Test suite stopped beacuse necessary URI environmental variable for MongoDB connection is missing',
   );
 }
-const dbUri =
-  'mongodb+srv://' +
-  process.env.DB_CREDENTIALS +
-  '@' +
-  process.env.DB_HOST +
-  '/' +
-  process.env.DB_NAME +
-  '?retryWrites=true&w=majority';
+const dbUri = process.env.DB_URI;
 
 beforeAll(async () => {
   await mongoose.connect(dbUri);
