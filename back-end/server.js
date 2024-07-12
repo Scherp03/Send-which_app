@@ -6,11 +6,10 @@ import initDb from './database/initDb.js';
 dotenv.config();
 
 /* Ensure environment variables are correctly loaded */
-const { DB_CREDENTIALS, DB_HOST, DB_NAME } = process.env;
 
-if (!DB_CREDENTIALS || !DB_HOST || !DB_NAME) {
+if (!process.env.DB_URI) {
   console.error(
-    'Missing necessary environment variables for MongoDB connection',
+    'Missing necessary URI environmental variable for MongoDB connection',
   );
   process.exit(1);
 }
