@@ -37,7 +37,7 @@ export const createSandwich = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       sandwichID: sandwichCreated._id,
-      sandwichIngredientsId: sandwichCreated.ingredientsID,
+      sandwichIngredientsID: sandwichCreated.ingredientsID,
       sandwichPrice: sandwichCreated.price,
     });
   } catch (err) {
