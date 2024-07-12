@@ -43,20 +43,20 @@ import axios from 'axios';
 
 const firstName = ref('');
 
-const fetchDateUrl = id => `http://localhost:3000/api/v1/users/${id}`;
+// const fetchDateUrl = id => `http://localhost:3000/api/v1/users/${id}`;
 
-onMounted(async () => {
-  try {
-    const response = await axios.get(fetchDateUrl(localStorage.getItem('id')), {
-      headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('token'),
-      },
-    });
-    firstName.value = response.data.firstName;
-  } catch (error) {
-    console.error('Error fetching user data:', error);
-  }
-});
+// onMounted(async () => {
+//   try {
+//     const response = await axios.get(fetchDateUrl(localStorage.getItem('id')), {
+//       headers: {
+//         Authorization: 'Bearer ' + localStorage.getItem('token'),
+//       },
+//     });
+//     firstName.value = response.data.firstName;
+//   } catch (error) {
+//     console.error('Error fetching user data:', error);
+//   }
+// });
 </script>
 
 <style>

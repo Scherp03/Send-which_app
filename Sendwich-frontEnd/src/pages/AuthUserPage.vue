@@ -24,7 +24,7 @@
   </q-page>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import axios from 'axios';
 import { useQuasar } from 'quasar';
 
@@ -54,6 +54,10 @@ onMounted(async () => {
     console.error('Error fetching user data:', error);
   }
 });
+ onUnmounted(() => {
+      console.log('Component is unmounted');
+      // Any cleanup logic goes here
+    });
 </script>
 <style scoped>
 .fixed-center {

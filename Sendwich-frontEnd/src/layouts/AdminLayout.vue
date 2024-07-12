@@ -99,14 +99,14 @@ const confirm= ref(false);
 const $q = useQuasar();
 const router = useRouter();
 
-onMounted(async () => {
-  try {
-    const storedToken = localStorage.getItem('token');
-    token.value = storedToken;
-  } catch (error) {
-    console.error('Error fetching token from localStorage:', error);
-  }
-});
+// onMounted(async () => {
+//   try {
+//     const storedToken = localStorage.getItem('token');
+//     token.value = storedToken;
+//   } catch (error) {
+//     console.error('Error fetching token from localStorage:', error);
+//   }
+// });
 
 const logout = async () => {
   try {

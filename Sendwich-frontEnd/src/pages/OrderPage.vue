@@ -125,20 +125,21 @@ export default {
           }
 
           const success = event.data.success;
+          const message = event.data.message;
 
           if (success) {
             setTimeout(() => {
               $q.notify({
                 progress: true,
                 type: 'positive',
-                message: 'Payment received, order completed',
+                message: message,
               });
             }, 5000);
-            router.push('/auth'); // Or the appropriate route based on your app logic
+            router.push('/'); // Or the appropriate route based on your app logic
           } else {
             $q.notify({
               type: 'negative',
-              message: 'Payment failed or cancelled',
+              message: message,
             });
           }
         });

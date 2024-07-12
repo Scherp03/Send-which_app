@@ -1,6 +1,5 @@
+import dotenv from 'dotenv';
 import axios from 'axios';
-import dotenv from 'dotenv'
-import { name } from 'ejs';
 
 dotenv.config();
 
@@ -25,14 +24,16 @@ async function generateAccessToken() {
   }
 }
 
-generateAccessToken();
-
 export const createOrder = async (req, res) => {
-  const accessToken = await generateAccessToken();
+  res.header('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Referrer-Policy', 'no-referrer-when-downgrade');
 
-  //const price = req.body.totalprice     price of order
-  const price = 10.00
   try {
+    const accessToken = await generateAccessToken();
+
+    //const price = req.body.totalprice
+    const price = 10.0;
     const response = await axios({
       url: process.env.PAYPAL_BASE_URL + '/v2/checkout/orders',
       method: 'post',
@@ -69,39 +70,26 @@ export const createOrder = async (req, res) => {
         ],
 
         application_context: {
-          return_url: process.env.BASE_URL + '/api/v1/paypal/complete-order', //final url after the payment
-          cancel_url: process.env.BASE_URL + '/cancel-order',
+          return_url: process.env.BASE_URL + '/payment', //final url after the payment
+          cancel_url: process.env.BASE_URL + '/payment/cancel-order',
           shipping_preference: 'NO_SHIPPING',
           user_action: 'PAY_NOW',
         },
       }),
     });
-    //console.log(response.data);
-    //console.log(response.data.links.find(link => link.rel === 'approve').href);
-    //return response.data.links.find((link) => link.rel === 'approve').href;
+    
     return res.status(200).json({
       success: true,
-      url: response.data.links.find((link) => link.rel === 'approve').href
-    })
+      url: response.data.links.find((link) => link.rel === 'approve').href,
+    });
   } catch (error) {
-    console.error('Error', error);
-  }
+    console.error(
+      'Si è verificato un errore durante la chiamata Axios:',
+      error,
+    );
+    return res.status(500).json({
+      success: false,
+      message: 'something went wrong',
+    });
+  }
 };
-
-export const completeOrder = async (req, res) => {
-    try{
-        const script = `
-        <script>
-        window.opener.postMessage('payment-completed', '*');
-        window.close();
-        </script>
-    `;
-        res.send(script);
-
-    }catch(error){
-        res.redirect(303, 'http://localhost:9000/#');
-        console.log('Error logging in with OAuth2 user: ', error);
-    }
-}
-
-export default generateAccessToken;

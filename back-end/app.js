@@ -8,7 +8,8 @@ import authRouter from './routes/auth.js';
 import userRouter from './routes/user.js';
 import oauthRouter from './routes/oauth.js';
 import requestRouter from './routes/request.js';
-import paypalRouter from './routes/paypal.js';
+import requestPaypalRouter from './routes/requestPaypal.js';
+import paymentRouter from './routes/payment.js'
 /* Routes */
 const app = express();
 
@@ -28,7 +29,10 @@ app.use(bodyParser.json());
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/paypal', paypalRouter);
+
+app.use('/api/v1/paypal', requestPaypalRouter);
+app.use('/payment', paymentRouter);
+
 
 app.use('/oauth', oauthRouter);
 app.use('/api/v1/request', requestRouter);
