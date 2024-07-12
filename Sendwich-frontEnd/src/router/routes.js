@@ -21,6 +21,7 @@ const routes = [
       { path: "/auth/ingredients",component: () => import("pages/IngredientsPage.vue")},
       { path: "/auth/order",component: () => import("pages/OrderPage.vue")}, 
       { path: "/auth/contacts",component: () => import("pages/ContactPage.vue")},
+      { path: "/auth/account",component: () => import("pages/AccountPage.vue")},
     ],
   },
   {

@@ -30,21 +30,23 @@
        
 
         <div class="q-pa-md" style="max-width: 300px; height:99px">
-    <q-list bordered class="rounded-borders">
-      <q-expansion-item
-        expand-separator
-        icon="perm_identity"
-        label="Account settings"
-        caption="Account settings"
-      >
-        <q-card>
-          <q-card-section>
-            <q-avatar icon="login" color="primary" text-color="white" to="/login" />
-          </q-card-section>
-        </q-card>
-      </q-expansion-item>
-    </q-list>
-  </div>
+  <q-list bordered class="rounded-borders">
+    <q-expansion-item
+      expand-separator
+      icon="perm_identity"
+      label="Account settings"
+      caption="Account settings"
+    >
+      <q-card>
+        <q-card-section class="center-content">
+          <q-btn to="/login" flat round>
+            <q-avatar  icon="login" color="primary" text-color="white" />
+          </q-btn>
+        </q-card-section>
+      </q-card>
+    </q-expansion-item>
+  </q-list>
+</div>
       </q-toolbar>
     </q-header>
 
@@ -216,6 +218,12 @@ body {
 }
 .q-toolbar {
   color: black;
+}
+.center-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Ensure it takes the full height of the card section */
 }
 
 ::-webkit-scrollbar {

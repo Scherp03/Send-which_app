@@ -43,10 +43,12 @@
        
 
         <div>
-          <q-avatar>
-            <img src="../assets/Send-WhichLogo.svg" alt="" />
-          </q-avatar>
-        </div>
+    <q-btn flat round to="/auth/account">
+      <q-avatar>
+        <img src="../assets/Send-WhichLogo.svg" alt="Send-Which Logo" />
+      </q-avatar>
+    </q-btn>
+  </div>
       </q-toolbar>
     </q-header>
 
@@ -244,4 +246,8 @@ body {
 .q-toolbar {
   color: black;
 }
+::-webkit-scrollbar {
+    display: none;
+}
+
 </style>

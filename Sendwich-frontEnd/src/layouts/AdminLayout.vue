@@ -240,4 +240,8 @@ body {
 .q-toolbar {
   color: black;
 }
+::-webkit-scrollbar {
+    display: none;
+}
+
 </style>

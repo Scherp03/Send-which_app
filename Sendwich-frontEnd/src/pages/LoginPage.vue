@@ -146,13 +146,4 @@ const signInWithGoogle = async () => {
   color: white;
 }
 
-.facebook-btn:hover {
-  background-color: #3b5998;
-  color: white;
-}
-
-.twitter-btn:hover {
-  background-color: #1da1f2;
-  color: white;
-}
 </style>
