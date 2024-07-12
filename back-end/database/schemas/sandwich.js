@@ -39,9 +39,7 @@ sandwichSchema.methods.calculatePrice = async function () {
       if (ingredientFound) {
         price += ingredientFound.price;
       } else {
-        throw new Error(
-          `Ingredient with ID ${this.ingredientsID[i]} not found`,
-        );
+        console.log(`Ingredient with ID ${this.ingredientsID[i]} not found`);
       }
     }
   } catch (error) {
@@ -66,9 +64,7 @@ sandwichSchema.methods.getHash = async function () {
         hash += ingredientFound.name.substring(0, 3);
         hash += ingredientFound._id.toString().substring(21, 25);
       } else {
-        throw new Error(
-          `Ingredient with ID ${this.ingredientsID[i]} not found`,
-        );
+        console.log(`Ingredient with ID ${this.ingredientsID[i]} not found`);
       }
     }
   } catch (error) {
