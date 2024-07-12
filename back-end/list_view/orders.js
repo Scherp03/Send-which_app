@@ -19,7 +19,7 @@ const newOrder = new OrderModel({
       if (
         !req.body.userID ||
         !req.body.slotID ||
-        !content[] ||
+        //!content[] ||
         !req.body.total ||
         !req.body.date
       ) {
@@ -36,12 +36,12 @@ const newOrder = new OrderModel({
         date: req.body.date,
        });
       
-      // check if UserID exists (ho usato username)
-      const userID = await UserModel.findOne({ username: newUser.username });               // userID doesnt exist, neet to change the parameter we use to check //Used username 
-      if (!username) {
+      
+      const userID = await UserModel.findOne({ userID: newUser.userID });               
+      if (!userID) {
         return res.status(401).json({
           success: false,
-          message: ` Username \'${user.username}\' not found`,
+          message: ` UserID \'${user.username}\' not found`,
         });
       }
     
