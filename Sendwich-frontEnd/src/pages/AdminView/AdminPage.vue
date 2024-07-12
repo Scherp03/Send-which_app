@@ -14,25 +14,33 @@
                       <q-input
                         v-model="newIngredient.name"
                         label="New Ingredient"
+                        filled
+                        class="q-mb-sm"
                         @keyup.enter="addIngredient"
                       />
                       <q-input
                         v-model="newIngredient.price"
                         label="Price in €"
                         type="number"
+                        filled
+                        class="q-mb-sm"
                         @keyup.enter="addIngredient"
                       />
                       <q-btn
                         icon="add"
                         color="primary"
                         @click="addIngredient"
+                        class="q-mb-md"
                       >
                         Add
                       </q-btn>
-                      <q-list>
+                      <q-list bordered>
                         <q-item
                           v-for="(ingredient, index) in ingredients"
                           :key="index"
+                          class="q-pa-xs"
+                          clickable
+                          v-ripple
                         >
                           <q-item-section>
                             {{ ingredient.name }} - €{{ ingredient.price }}
@@ -43,6 +51,7 @@
                               flat
                               round
                               icon="close"
+                              color="negative"
                               @click="removeIngredient(index)"
                             />
                           </q-item-section>
@@ -51,6 +60,7 @@
                       <q-btn
                         color="green"
                         @click="submitIngredients"
+                        class="q-mt-md"
                       >
                         Submit Ingredients
                       </q-btn>
@@ -63,10 +73,13 @@
                   <q-card>
                     <q-card-section>
                       <div class="text-h6">Orders</div>
-                      <q-list>
+                      <q-list bordered>
                         <q-item
                           v-for="(order, index) in orders"
                           :key="index"
+                          class="q-pa-xs"
+                          clickable
+                          v-ripple
                         >
                           <q-item-section>{{ order.name }}</q-item-section>
                         </q-item>
@@ -82,7 +95,6 @@
     </q-layout>
   </q-page>
 </template>
-
 <script>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
@@ -157,8 +169,6 @@ export default {
 };
 </script>
 <style scoped>
-
-
 .row {
   display: flex;
   flex-wrap: wrap;
@@ -168,5 +178,23 @@ export default {
   flex: 0 0 50%;
   max-width: 50%;
   padding: 10px;
+}
+
+.q-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.q-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.q-btn {
+  width: 100%;
+}
+
+.q-input {
+  width: 100%;
 }
 </style>

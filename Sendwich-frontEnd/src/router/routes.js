@@ -8,6 +8,7 @@ const routes = [
       { path: "/login", component: () => import("pages/LoginPage.vue") },
       { path: "/register", component: () => import("pages/RegisterPage.vue") },
       { path: "/ingredients",component: () => import("pages/IngredientsPage.vue")},
+      { path: "/contacts",component: () => import("pages/ContactPage.vue")},
       
     ],
   },
@@ -19,6 +20,7 @@ const routes = [
       { path: "/auth/settings", component: () => import("pages/SettingsPage.vue") },
       { path: "/auth/ingredients",component: () => import("pages/IngredientsPage.vue")},
       { path: "/auth/order",component: () => import("pages/OrderPage.vue")}, 
+      { path: "/auth/contacts",component: () => import("pages/ContactPage.vue")},
     ],
   },
   {

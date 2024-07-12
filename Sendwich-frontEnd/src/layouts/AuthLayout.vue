@@ -44,7 +44,7 @@
 
         <div>
           <q-avatar>
-            <img src="../assets/Send-Which-logo.svg" alt="" />
+            <img src="../assets/Send-WhichLogo.svg" alt="" />
           </q-avatar>
         </div>
       </q-toolbar>
@@ -190,6 +190,7 @@ body {
   bottom: 0;
   left: 0;
   z-index: -1;
+  pointer-events: none;
 }
 
 .wave:nth-of-type(2) {

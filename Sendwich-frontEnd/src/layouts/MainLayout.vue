@@ -163,6 +163,7 @@ body {
   bottom: 0;
   left: 0;
   z-index: -1;
+  pointer-events: none;
 }
 
 .wave:nth-of-type(2) {

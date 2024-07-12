@@ -12,11 +12,7 @@
         />
 
         <q-toolbar-title v-show="false"> Sendwhich App </q-toolbar-title>
-        <q-btn flat label="Home" to="/auth" />
-        <q-btn flat label="Settings" to="/auth/settings" />
-        <q-btn flat label="Contact" to="/auth/contacts" />
-        <q-btn flat label="Ingredients" to="/auth/order" />
-
+       
         <body>
           <div>
             <div class="wave"></div>
@@ -44,7 +40,7 @@
 
         <div>
           <q-avatar>
-            <img src="../assets/Send-Which-logo.svg" alt="" />
+            <img src="../assets/Send-WhichLogo.svg" alt="" />
           </q-avatar>
         </div>
       </q-toolbar>
@@ -190,6 +186,7 @@ body {
   bottom: 0;
   left: 0;
   z-index: -1;
+  pointer-events: none;
 }
 
 .wave:nth-of-type(2) {
