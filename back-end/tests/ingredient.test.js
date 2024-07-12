@@ -173,13 +173,13 @@ describe('Ingredient methods', () => {
       'toBeDeleted',
     ]);
     let loadedIngredient = await Ingredient.findOne({ name: 'TestIngredient' });
-    expect(loadedIngredient.setAvailability(-50)).toBe(false);
+    expect(await loadedIngredient.setAvailability(-50)).toBe(false);
     expect(loadedIngredient.quantity).toBe(100);
-    expect(loadedIngredient.setAvailability(22)).toBe(true);
+    expect(await loadedIngredient.setAvailability(22)).toBe(true);
     expect(loadedIngredient.quantity).toBe(22);
     // Verify that a non-number quantity does not change the availability
-    expect(loadedIngredient.setAvailability('quantity')).toBe(false);
-    expect(loadedIngredient.setAvailability([10])).toBe(false);
+    expect(await loadedIngredient.setAvailability('quantity')).toBe(false);
+    expect(await loadedIngredient.setAvailability([10])).toBe(false);
     expect(loadedIngredient.quantity).toBe(22);
     // Delete the test ingredient
     await Ingredient.deleteMany({ tags: 'toBeDeleted' });

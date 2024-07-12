@@ -21,7 +21,7 @@ const dbUri =
   process.env.DB_CREDENTIALS +
   '@' +
   process.env.DB_HOST +
-  '/' +
+  '.' +
   process.env.DB_NAME +
   '?retryWrites=true&w=majority';
 const clientOptions = {

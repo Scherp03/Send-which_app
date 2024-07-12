@@ -1,5 +1,22 @@
 import Ingredient from '../database/schemas/ingredient.js';
 
+// retrieveIngredients
+// Delivers the whole list of ingreients
+export const retrieveIngredients = async (req, res, next) => {
+  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  try {
+    // find() gets all the documents
+    let allIngredients = await Ingredient.find({ active: true });
+    return res.status(200).json({ success: true, ingredients: allIngredients });
+  } catch (err) {
+    console.log(err.message);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
 // addIngredient: Add a new ingredient to the database
 // Insert one ingredients only if all parameters are met
 export const addIngredient = async (req, res, next) => {

@@ -32,6 +32,7 @@ statSchema.methods.setHash = async function () {
     console.log('Error in ingredientsHash: ' + error);
   }
   this.ingredientsHash = hash;
+  await this.save();
   return hash;
 };
 

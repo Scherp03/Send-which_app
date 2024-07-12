@@ -75,7 +75,7 @@ describe('Order', () => {
 // Function 2: addOrderStatistics
 describe('Order', () => {
   test('addOrderStatistics adds statistics for all sandwiches in the order', async () => {
-    // await mongoose.connect(uri, clientOptions);
+    // Add basic data
     let ingredient1 = new Ingredient({
       name: 'Tomato',
       price: 0.5,
@@ -114,7 +114,7 @@ describe('Order', () => {
 
     await sandwich1.addStatistic();
     await sandwich2.addStatistic();
-    await order1.addOrderStatistics();
+    expect(await order1.addOrderStatistics()).toBe(true);
 
     let stat1 = await StatSandwich.findOne({
       ingredientsHash: hash1,

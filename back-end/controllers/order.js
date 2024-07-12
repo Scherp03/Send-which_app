@@ -24,3 +24,5 @@ export const calculateOrderPrice = async (req, res, next) => {
     next(err);
   }
 };
+
+export default calculateOrderPrice;

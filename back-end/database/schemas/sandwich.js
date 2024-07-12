@@ -25,6 +25,7 @@ sandwichSchema.methods.addStatistic = async function () {
       ingredientsHash: localHash,
       timesSold: 1,
     });
+    await newStat.setHash();
     await newStat.save();
   }
 };

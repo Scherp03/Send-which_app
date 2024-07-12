@@ -3,8 +3,7 @@ import Sandwich from './sandwich.js';
 
 // Order schema
 const orderSchema = new mongoose.Schema({
-  userID: String,
-  slotID: String,
+  userID: mongoose.Schema.Types.ObjectId,
   content: [mongoose.Schema.Types.ObjectId],
   total: Number,
   status: String,
@@ -43,9 +42,10 @@ orderSchema.methods.addOrderStatistics = async function () {
         'Error in addOrderStatistics: Sandwich not found for ID ' +
           this.content[i],
       );
-      break;
+      return false;
     }
   }
+  return true;
 };
 
 // Export the models
