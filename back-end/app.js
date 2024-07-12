@@ -6,10 +6,8 @@ import cors from 'cors';
 
 import authRouter from './routes/auth.js';
 import userRouter from './routes/user.js';
+import oauthRouter from './routes/oauth.js';
 import requestGoogleRouter from './routes/requestGoogle.js';
-import ingredientRouter from './routes/ingredient.js';
-import orderRouter from './routes/order.js';
-import sandwichRouter from './routes/sandwich.js';
 /* Routes */
 const app = express();
 
@@ -29,9 +27,6 @@ app.use(bodyParser.json());
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/ingredient', ingredientRouter);
-app.use('/api/v1/order', orderRouter);
-app.use('/api/v1/sandwich', sandwichRouter);
 app.use('/oauth', oauthRouter);
 app.use('/api/v1/requestgoogle', requestGoogleRouter);
 /* Quick check if it's working */
