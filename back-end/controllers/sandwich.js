@@ -19,10 +19,12 @@ export const createSandwich = async (req, res, next) => {
     // // Check the sandwich existancewith gethash
     // let hash = await newSandwich.getHash();
 
-    // if (/* already exist */ tobedone) {
+    // if (/* already exist */) {
     //   return res.status(200).json({
     //     success: true,
-    //     sandwichID: 'Inserire id del panino già esistente',
+    //     sandwichID: ,
+    //     sandwichIngredientsID: ,
+    //     sandwichPrice: ,
     //   });
     // }
 
