@@ -2,8 +2,7 @@ import mongoose from 'mongoose';
 
 // Order schema
 const orderSchema = new mongoose.Schema({
-  userID: String,
-  slotID: String,
+  userID: ObjectId,
   content: [mongoose.Schema.Types.ObjectId],
   total: Number,
   status: String,

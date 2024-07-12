@@ -7,7 +7,6 @@ import mongoose from 'mongoose';
 const newOrder = new OrderModel({
 
    userID: req.body.userID,
-   slotID: req.body.slotID,
    content: [],
    total: req.body.total,
    date: req.body.date,
