@@ -12,7 +12,7 @@ const uri =
   process.env.DB_CREDENTIALS +
   '@' +
   process.env.DB_HOST +
-  '.' + // TO BE EVENTUALLY CHANGED WITH '/'
+  '/' + // TO BE EVENTUALLY CHANGED WITH '/'
   process.env.DB_NAME +
   '?retryWrites=true&w=majority&appName=Test1';
 const clientOptions = {

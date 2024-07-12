@@ -11,7 +11,7 @@ const uri =
   process.env.DB_CREDENTIALS +
   '@' +
   process.env.DB_HOST +
-  '.' + // TO BE EVENTUALLY CHANGED WITH '/'
+  '/' + // TO BE EVENTUALLY CHANGED WITH '/'
   process.env.DB_NAME +
   '?retryWrites=true&w=majority';
 const clientOptions = {
@@ -24,7 +24,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await Ingredient.deleteMany({ tags: 'toBeDeleted' });
+  await Ingredient.deleteMany({ tags: 'toBeDeleted1' });
   await mongoose.connection.close();
 });
 
@@ -34,23 +34,23 @@ async function populateDatabase() {
     name: 'Tomato',
     price: 0.5,
     quantity: 10,
-    tags: ['vegetarian', 'vegan', 'toBeDeleted'],
+    tags: ['vegetarian', 'vegan', 'toBeDeleted1'],
   });
   let ingredient2 = new Ingredient({
     name: 'Cheese',
     price: 1,
     quantity: 20,
-    tags: ['vegetarian', 'lactose', 'toBeDeleted'],
+    tags: ['vegetarian', 'lactose', 'toBeDeleted1'],
   });
   let ingredient3 = new Ingredient({
     name: 'Ham',
     price: 2,
     quantity: 50,
-    tags: ['meat', 'toBeDeleted'],
+    tags: ['meat', 'toBeDeleted1'],
   });
   await Ingredient.insertMany([ingredient1, ingredient2, ingredient3]);
   let sandwich1 = new Sandwich({
-    breadType: 'White',
+    breadType: 'White1',
     ingredientsID: [ingredient1._id, ingredient2._id],
   });
   await sandwich1.save();
@@ -75,7 +75,7 @@ describe('Sandwich methods', () => {
       ingredientsHash: localHash,
     });
     expect(stat.timesSold).toBe(2);
-    await Ingredient.deleteMany({ name: 'UniqueIngredient' });
+    await Ingredient.deleteMany({ name: 'UniqueIngredient1' });
     await Sandwich.deleteOne({ _id: sandwichID });
     await StatSandwich.deleteOne({ ingredientsHash: localHash });
   });
@@ -83,7 +83,7 @@ describe('Sandwich methods', () => {
   // Function 2: calculatePrice
 
   test('calculatePrice calculates the price of a sandwich', async () => {
-    let sandwich1 = await Sandwich.findOne({ breadType: 'White' });
+    let sandwich1 = await Sandwich.findOne({ breadType: 'White1' });
     expect(sandwich1.price).toBe(undefined);
     let price = await sandwich1.calculatePrice();
     expect(price).toBe(2 + 0.5 + 1);
