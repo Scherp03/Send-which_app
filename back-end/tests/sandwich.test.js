@@ -6,20 +6,13 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const uri =
-  'mongodb+srv://' +
-  process.env.DB_CREDENTIALS +
-  '@' +
-  process.env.DB_HOST +
-  '/' + // TO BE EVENTUALLY CHANGED WITH '/'
-  process.env.DB_NAME +
-  '?retryWrites=true&w=majority';
+const dbUri = process.env.DB_URI;
 const clientOptions = {
   serverApi: { version: '1', strict: true, deprecationErrors: true },
 };
 
 beforeAll(async () => {
-  await mongoose.connect(uri, clientOptions);
+  await mongoose.connect(dbUri, clientOptions);
   await populateDatabase();
 });
 

@@ -16,14 +16,7 @@ if (!DB_CREDENTIALS || !DB_HOST || !DB_NAME) {
 }
 
 /* MongoDB credentials */
-const dbUri =
-  'mongodb+srv://' +
-  process.env.DB_CREDENTIALS +
-  '@' +
-  process.env.DB_HOST +
-  '/' +
-  process.env.DB_NAME +
-  '?retryWrites=true&w=majority';
+const dbUri = process.env.DB_URI;
 const clientOptions = {
   serverApi: { version: '1', strict: true, deprecationErrors: true },
 };

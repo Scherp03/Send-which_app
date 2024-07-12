@@ -13,15 +13,7 @@ if (!DB_CREDENTIALS || !DB_HOST || !DB_NAME) {
     'Test suite stopped beacuse necessary environment variables for MongoDB connection are missing',
   );
 }
-const dbUri =
-  'mongodb+srv://' +
-  process.env.DB_CREDENTIALS +
-  '@' +
-  process.env.DB_HOST +
-  '.' +
-  process.env.DB_NAME +
-  '?retryWrites=true&w=majority';
-
+const dbUri = process.env.DB_URI;
 describe('Server start and DB connection', () => {
   beforeAll(async () => {
     await mongoose.connect(dbUri);
