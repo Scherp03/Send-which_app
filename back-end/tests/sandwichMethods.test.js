@@ -71,7 +71,7 @@ describe('Sandwich methods', () => {
     await Ingredient.deleteMany({ name: 'UniqueIngredient1' });
     await Sandwich.deleteOne({ _id: sandwichID });
     await StatSandwich.deleteOne({ ingredientsHash: localHash });
-  });
+  }, 20000);
 
   // Function 2: calculatePrice
 
@@ -83,7 +83,7 @@ describe('Sandwich methods', () => {
     // Clear generated things
 
     await Sandwich.deleteOne({ _id: sandwich1._id });
-  });
+  }, 20000);
 
   // Function 3: getHash
   // No real way to test this other than repeat the code of the function

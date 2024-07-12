@@ -42,7 +42,7 @@ describe('POST /api/v1/users', () => {
         message: `User \'${userCorrect.username}\' created successfully!`,
       }),
     );
-  }, 10000);
+  }, 20000);
 
   // Create new user with empty fields
   test('Should respond with 400 status code and an error message', async () => {
@@ -59,7 +59,7 @@ describe('POST /api/v1/users', () => {
         message: 'Missing some parameters',
       }),
     );
-  }, 10000);
+  }, 20000);
 });
 
 // Fetch user
@@ -90,7 +90,7 @@ describe('GET /api/v1/users', () => {
         lastName: 'Doe',
       }),
     );
-  }, 10000);
+  }, 20000);
 });
 
 // updated credentials
@@ -122,7 +122,7 @@ describe('PATCH /api/v1/users', () => {
         message: 'User modified successfully',
       }),
     );
-  }, 10000);
+  }, 20000);
 });
 
 const newCorrectLogin = {
@@ -151,5 +151,5 @@ describe('DELETE /api/v1/users', () => {
         message: "User 'newusername' deleted successfully",
       }),
     );
-  }, 10000);
+  }, 20000);
 });

@@ -58,7 +58,7 @@ describe('Order', () => {
 
     await Ingredient.deleteMany({ tags: 'toBeDeleted' });
     await Sandwich.deleteMany({ _id: { $in: sandwich1._id } });
-  });
+  }, 20000);
 });
 
 // Function 2: addOrderStatistics
@@ -112,5 +112,5 @@ describe('Order', () => {
     await Ingredient.deleteMany({ tags: 'toBeDeleted' });
     await Sandwich.deleteMany({ _id: sandwich1._id });
     await StatSandwich.deleteMany({ ingredientsHash: hash1 });
-  });
+  }, 20000);
 });

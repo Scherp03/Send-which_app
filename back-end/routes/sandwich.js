@@ -127,6 +127,48 @@ router.post('/', createSandwich);
  */
 router.get('/:id', getSandwich);
 
-// router.get('/', getAllSandwiches);
+/**
+ * @openapi
+ * api/v1/sandwich:
+ *   get:
+ *     summary: Fetch all sandwiches
+ *     description: Fetch all data of all the sandwiches
+ *     tags:
+ *       - Sandwich Management
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     responses:
+ *       '200':
+ *         description: "OK: Sandwitches are returned."
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: bool
+ *                   example: true
+ *                 sandwichIngredientsID:
+ *                   type: [ObjectId]
+ *                   example: "[{_id: new ObjectId(6691ad83afe4e4a000518667), breadType: Integral, ingredientsID: [new ObjectId(6691ad83afe4e4a000518664)], price: 5, __v: 0}]"
+ *       '404':
+ *         description: "Not Found: There are no sandwiches in the database."
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: bool
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "No sandwich was found in the database"
+ *       '500':
+ *         description: "Internal Server Error: The server encountered an unexpected condition that prevented it from fulfilling the request."
+ */
+router.get('/', getAllSandwiches);
 
 export default router;

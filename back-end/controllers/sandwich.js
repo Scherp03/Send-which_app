@@ -75,24 +75,25 @@ export const getSandwich = async (req, res, next) => {
 };
 
 export const getAllSandwiches = async (req, res, next) => {
-  //   res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
-  //   try {
-  //     const { id } = req.params;
-  //     const user = await UserModel.findById(id);
-  //     if (!user)
-  //       return res
-  //         .status(404)
-  //         .json({ success: false, message: `User not found` });
-  //     res.status(200).json({
-  //       success: true,
-  //       firstName: user.firstName,
-  //       lastName: user.lastName,
-  //     });
-  //   } catch (err) {
-  //     console.log(err.message);
-  //     if (!err.statusCode) {
-  //       err.statusCode = 500;
-  //     }
-  //     next(err);
-  //   }
+  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  try {
+    // Fetch all sandwiches from the database
+    const sandwiches = await SandwichModel.find({});
+    if (!sandwiches) {
+      return res.status(404).json({
+        success: false,
+        message: 'No sandwich was found in the database',
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      sandwiches: sandwiches,
+    });
+  } catch (err) {
+    console.log(err.message);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
 };
