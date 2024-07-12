@@ -7,7 +7,7 @@ const googleUrl =
 // Get url to redirect to google
 describe('POST /api/v1/request', () => {
   test('Should respond with 200 status code and a message', async () => {
-    const response = await request(app).post('/api/v1/request');
+    const response = await request(app).post('/api/v1/requestgoogle');
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual(
       expect.objectContaining({

@@ -8,3 +8,5 @@ export const Roles = {
   ADMIN: 'Admin',
   OWNER: 'Owner',
 };
+
+export default Roles;

@@ -1,4 +1,4 @@
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 import Ingredient from './ingredient.js';
 
 // Sandwich schema with basic content used for statistics
@@ -32,15 +32,15 @@ statSchema.methods.setHash = async function () {
     console.log('Error in ingredientsHash: ' + error);
   }
   this.ingredientsHash = hash;
+  await this.save();
+  return hash;
 };
 
 // Find bestseller
 // Use n=1 for the actual bestseller, otherwise get a list
 
-// TBD
+// TBD?
 statSchema.statics.findBestSeller = function (resultsNumber) {
-  // return this.findOne().sort({timesSold: -1}).limit(resultsNumber);
-
   return this.where({}).sort({ timesSold: -1 }).limit(resultsNumber);
 };
 
