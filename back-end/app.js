@@ -8,6 +8,7 @@ import authRouter from './routes/auth.js';
 import userRouter from './routes/user.js';
 import oauthRouter from './routes/oauth.js';
 import requestGoogleRouter from './routes/requestGoogle.js';
+import sandwichRouter from './routes/sandwich.js'
 /* Routes */
 const app = express();
 
@@ -29,6 +30,8 @@ app.use('/api/v1/users', userRouter);
 app.use('/api/v1/auth', authRouter);
 app.use('/oauth', oauthRouter);
 app.use('/api/v1/requestgoogle', requestGoogleRouter);
+app.use('/api/v1/sandwich', sandwichRouter);
+
 /* Quick check if it's working */
 app.get('/', (req, res) => {
   res.status(200).send('Welcome to homepage!');
