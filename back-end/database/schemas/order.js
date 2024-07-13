@@ -4,7 +4,7 @@ import Sandwich from './sandwich.js';
 // Order schema
 const orderSchema = new mongoose.Schema({
   userID: mongoose.Schema.Types.ObjectId,
-  content: [mongoose.Schema.Types.ObjectId],
+  content: mongoose.Schema.Types.ObjectId,
   total: Number,
   status: String,
   date: Date,
@@ -15,17 +15,14 @@ const orderSchema = new mongoose.Schema({
 // Get price based on the prices of the sandwiches
 orderSchema.methods.calculatePrice = async function () {
   this.total = 0;
-  for (let i = 0; i < this.content.length; i++) {
-    let sandwich = await Sandwich.findById(this.content[i]);
-    if (sandwich) {
-      let temporaryPrice = await sandwich.calculatePrice();
-      this.total += temporaryPrice;
-    } else {
-      console.log(
-        'Error in calculatePrice: Sandwich not found for ID ' + this.content[i],
-      );
-      break;
-    }
+  let sandwich = await Sandwich.findById(this.content);
+  if (sandwich) {
+    let temporaryPrice = await sandwich.calculatePrice();
+    this.total += temporaryPrice;
+  } else {
+    console.log(
+      'Error in calculatePrice: Sandwich not found for ID ' + this.content[i],
+    );
   }
   await this.save();
   return this.total;
