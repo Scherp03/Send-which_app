@@ -4,7 +4,7 @@
       <q-card-section>
         <div class="text-h6">Account Settings</div>
       </q-card-section>
-      
+
       <q-card-section class="q-gutter-md">
         <q-form @submit.prevent="submitForm">
           <div class="q-layout">
@@ -17,6 +17,7 @@
                 filled
                 clearable
                 class="q-mb-md"
+                :class="{ changed: username !== originalValues.username }"
               />
               <q-input
                 v-if="showEmail"
@@ -26,6 +27,7 @@
                 filled
                 clearable
                 class="q-mb-md"
+                :class="{ changed: email !== originalValues.email }"
               />
               <q-input
                 v-if="showFirstName"
@@ -34,6 +36,7 @@
                 filled
                 clearable
                 class="q-mb-md"
+                :class="{ changed: firstName !== originalValues.firstName }"
               />
             </div>
             <div class="q-column" style="width:50px"> </div>
@@ -46,29 +49,29 @@
                 filled
                 clearable
                 class="q-mb-md"
+                :class="{ changed: lastName !== originalValues.lastName }"
               />
               <q-input
                 v-if="showPassword"
                 v-model="password"
+                :type="passwordVisible ? 'text' : 'password'"
                 label="Password"
-                type="password"
                 filled
                 clearable
                 class="q-mb-md"
-              />
-              <q-uploader
-                url="http://localhost:3000/upload"
-                v-if="showIcon"
-                v-model="icon"
-                label="Upload Icon"
-                accept="image/*"
-                filled
-                @rejected="onFileRejected"
-                class="q-mb-md"
-              />
+                :class="{ changed: password !== '' }"
+              >
+                <template v-slot:append>
+                  <q-icon
+                    :name="passwordVisible ? 'visibility_off' : 'visibility'"
+                    class="cursor-pointer"
+                    @click="togglePasswordVisibility"
+                  />
+                </template>
+              </q-input>
             </div>
           </div>
-          
+
           <div class="q-mt-md q-flex q-justify-end">
             <q-btn label="Save Changes" type="submit" color="primary" />
           </div>
@@ -79,15 +82,16 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import { useQuasar } from 'quasar';
+import axios from 'axios';
 
 const username = ref('');
 const email = ref('');
 const firstName = ref('');
 const lastName = ref('');
 const password = ref('');
-const icon = ref([]);
+const passwordVisible = ref(false);
 const $q = useQuasar();
 
 const showUsername = ref(true);
@@ -95,26 +99,99 @@ const showEmail = ref(true);
 const showFirstName = ref(true);
 const showLastName = ref(true);
 const showPassword = ref(true);
-const showIcon = ref(true);
 
-const submitForm = () => {
-  // Handle form submission logic as needed
-  $q.notify({
-    type: 'positive',
-    message: 'Account settings updated successfully!'
-  });
+const originalValues = reactive({
+  username: '',
+  email: '',
+  firstName: '',
+  lastName: ''
+});
+
+const fetchUserDataUrl = id => `http://localhost:3000/api/v1/users/${id}`;
+
+onMounted(async () => {
+  try {
+    const response = await axios.get(fetchUserDataUrl(localStorage.getItem('id')), {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+    });
+    username.value = response.data.username;
+    email.value = response.data.email;
+    firstName.value = response.data.firstName;
+    lastName.value = response.data.lastName;
+    password.value = 'temporary-password';  // Do not pre-fill the password field for security reasons
+
+    // Set original values
+    originalValues.username = response.data.username;
+    originalValues.email = response.data.email;
+    originalValues.firstName = response.data.firstName;
+    originalValues.lastName = response.data.lastName;
+  } catch (error) {
+    $q.notify({
+      type: 'negative',
+      message: 'Error fetching user data',
+    });
+    console.error('Error fetching user data:', error);
+  }
+});
+
+const togglePasswordVisibility = () => {
+  passwordVisible.value = !passwordVisible.value;
 };
 
-const onFileRejected = (file) => {
-  $q.notify({
-    type: 'negative',
-    message: `File "${file.name}" was rejected. Please upload a valid image file.`
-  });
+const submitForm = async () => {
+  const updatedData = {
+    username: username.value,
+    email: email.value,
+    firstName: firstName.value,
+    lastName: lastName.value,
+    password: password.value,
+  };
+
+  console.log('Updating user data:', updatedData);
+  console.log('User ID:', localStorage.getItem('id'));
+
+  try {
+    const response = await fetch(fetchUserDataUrl(localStorage.getItem('id')), {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem('token')}` // Add authorization header
+      },
+      body: JSON.stringify(updatedData),
+    });
+
+    const status = await response.json();
+    console.log('Server response:', status); // Log the full server response for debugging
+
+    if (response.ok) {
+      $q.notify({
+        type: 'positive',
+        message: 'Account settings updated successfully!',
+      });
+
+      // Update original values after successful save
+      originalValues.username = username.value;
+      originalValues.email = email.value;
+      originalValues.firstName = firstName.value;
+      originalValues.lastName = lastName.value;
+      password.value = ''; // Clear the password field after saving
+    } else {
+      throw new Error(status.message || 'Error updating account settings');
+    }
+  } catch (error) {
+    $q.notify({
+      type: 'negative',
+      message: error.message || 'Error updating account settings',
+    });
+    console.error('Error updating account settings:', error);
+  }
 };
+
 </script>
 
 <style scoped>
-/* Custom styles */
 .q-layout {
   display: flex;
   justify-content: space-between;
@@ -130,5 +207,9 @@ const onFileRejected = (file) => {
 
 .q-mt-md {
   margin-top: 20px; /* Medium margin top for the button */
+}
+
+.changed {
+  background-color: yellow;
 }
 </style>

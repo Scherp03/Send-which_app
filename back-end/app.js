@@ -17,7 +17,7 @@ const app = express();
 app.use(
   cors({
     origin: 'http://localhost:9000',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],  //ADDED PATCH
     allowedHeaders: [
       'Content-Type',
       'Authorization',
