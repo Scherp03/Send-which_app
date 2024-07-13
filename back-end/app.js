@@ -10,6 +10,7 @@ import oauthRouter from './routes/oauth.js';
 import requestRouter from './routes/request.js';
 import requestPaypalRouter from './routes/requestPaypal.js';
 import paymentRouter from './routes/payment.js'
+import ingredientRouter from './routes/ingredient.js'
 /* Routes */
 const app = express();
 
@@ -32,6 +33,8 @@ app.use('/api/v1/auth', authRouter);
 
 app.use('/api/v1/paypal', requestPaypalRouter);
 app.use('/payment', paymentRouter);
+
+app.use('/api/v1/ingredients', ingredientRouter)
 
 
 app.use('/oauth', oauthRouter);

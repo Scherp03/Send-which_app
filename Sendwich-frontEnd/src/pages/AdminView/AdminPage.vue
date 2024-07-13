@@ -123,22 +123,22 @@ export default {
       ingredients.value.splice(index, 1);
     };
 
-    const fetchOrders = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/api/orders');
-        orders.value = response.data;
-      } catch (error) {
-        console.error('Error fetching orders:', error);
-        $q.notify({
-          type: 'negative',
-          message: 'Error fetching orders',
-        });
-      }
-    };
+    // const fetchOrders = async () => {
+    //   try {
+    //     const response = await axios.get('http://localhost:3000/api/orders'); //change
+    //     orders.value = response.data;
+    //   } catch (error) {
+    //     console.error('Error fetching orders:', error);
+    //     $q.notify({
+    //       type: 'negative',
+    //       message: 'Error fetching orders',
+    //     });
+    //   }
+    // };
 
     const submitIngredients = async () => {
       try {
-        const response = await axios.post('http://localhost:3000/api/ingredients', ingredients.value);
+        const response = await axios.post('http://localhost:3000/api/v1/ingredients/add', ingredients.value);
         $q.notify({
           type: 'positive',
           message: 'Ingredients submitted successfully',
@@ -153,9 +153,9 @@ export default {
       }
     };
 
-    onMounted(() => {
-      fetchOrders();
-    });
+    // onMounted(() => {
+    //   fetchOrders();
+    // });
 
     return {
       newIngredient,

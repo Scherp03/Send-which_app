@@ -1,65 +1,41 @@
 <template>
   <div class="q-pa-md">
     <q-stepper v-model="step" ref="stepper" animated active-color="purple">
-      <q-step :name="1" prefix="1" title="Select campaign settings">
+      <q-step :name="1" prefix="1" title="Select your ingredients">
         <q-scroll-area
           :thumb-style="thumbStyle"
           :bar-style="barStyle"
           style="height: 350px; background-color: whitesmoke; border-radius: 2px; border: 2px solid #73ad21; border-color: black;"
         >
-          <div>
-            <q-checkbox
-              v-model="selection"
-              val="Salad"
-              label="Salad"
-              color="green"
-              style="border-radius: 2px; border-bottom: 1px solid #73ad21; border-color: black; width: 100%; height: 50px;"
-            />
-          </div>
-          <div style="height: 5px"></div>
-          <div>
-            <q-checkbox
-              v-model="selection"
-              val="Tomato"
-              label="Tomato"
-              color="green"
-              style="border-radius: 2px; border-bottom: 1px solid #73ad21; border-top: 1px solid #73ad21; border-color: black; width: 100%; height: 50px;"
-            />
-          </div>
-          <div style="height: 5px"></div>
-          <div>
-            <q-checkbox
-              v-model="selection"
-              val="Meat"
-              label="Meat"
-              color="green"
-              style="border-radius: 2px; border-bottom: 1px solid #73ad21; border-top: 1px solid #73ad21; border-color: black; width: 100%; height: 50px;"
-            />
-          </div>
-          <div style="height: 5px"></div>
-          <div>
-            <q-checkbox
-              v-model="selection"
-              val="Mayonese"
-              label="Mayonese"
-              color="green"
-              style="border-radius: 2px; border-bottom: 1px solid #73ad21; border-top: 1px solid #73ad21; border-color: black; width: 100%; height: 50px;"
-            />
-          </div>
-          <div style="height: 5px"></div>
-          <div>
-            <q-checkbox
-              v-model="selection"
-              val="Cheese"
-              label="Cheese"
-              color="green"
-              style="border-bottom: 1px solid #73ad21; border-top: 1px solid #73ad21; border-color: black; width: 100%; height: 50px;"
-            />
+         <div v-if="loading" class="loading-message">Loading...</div>
+          <div v-else>
+            <div
+              v-for="ingredient in ingredients"
+              :key="ingredient.id"
+              class="checkbox-container"
+            >
+              <q-checkbox
+                v-model="selection"
+                :val="ingredient"
+                :label="`${ingredient.name} - €${ingredient.price.toFixed(2)}`"
+                color="green"
+                style="
+                  border-radius: 2px;
+                  border-bottom: 1px solid #73ad21;
+                  border-color: black;
+                  width: 100%;
+                  height: 50px;
+                "
+                checked-icon="check_circle"
+                unchecked-icon="check"
+                class="custom-checkbox"
+              />
+            </div>
           </div>
         </q-scroll-area>
       </q-step>
 
-      <q-step :name="2" prefix="2" title="Create an ad group" caption="Optional">
+      <q-step :name="2" prefix="2" title="Select a time slot">
         <time-slot-selector style="height: 250px" />
       </q-step>
 
@@ -80,7 +56,7 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import TimeSlotSelector from '../pages/TimeSlotSelectorPage.vue';
 import axios from 'axios';
 import { useQuasar } from 'quasar';
@@ -92,6 +68,23 @@ export default {
     const router = useRouter();
     const step = ref(1);
     const selection = ref([]);
+    const ingredients = ref([]);
+    const loading = ref(true);
+
+    const fetchIngredients = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/v1/ingredients');
+        ingredients.value = response.data.ingredients;
+      } catch (error) {
+        console.error('Error fetching ingredients:', error);
+      } finally {
+        loading.value = false;
+      }
+    };
+
+    onMounted(async () => {
+      await fetchIngredients();
+    });
 
     const thumbStyle = {
       right: '4px',
@@ -163,6 +156,8 @@ export default {
       disableContinue,
       placeOrder,
       cancelOrder,
+      ingredients,
+      loading,
     };
   },
   components: {

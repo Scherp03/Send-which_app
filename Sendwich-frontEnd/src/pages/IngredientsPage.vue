@@ -25,23 +25,30 @@
             border-color: black;
           "
         >
-          <div v-for="ingredient in ingredients" :key="ingredient" class="checkbox-container">
-            <q-checkbox
-              v-model="selection"
-              :val="ingredient"
-              :label="ingredient"
-              color="green"
-              style="
-                border-radius: 2px;
-                border-bottom: 1px solid #73ad21;
-                border-color: black;
-                width: 100%;
-                height: 50px;
-              "
-              checked-icon="check_circle"
-              unchecked-icon="check"
-              class="custom-checkbox"
-            />
+          <div v-if="loading" class="loading-message">Loading...</div>
+          <div v-else>
+            <div
+              v-for="ingredient in ingredients"
+              :key="ingredient.id"
+              class="checkbox-container"
+            >
+              <q-checkbox
+                v-model="selection"
+                :val="ingredient"
+                :label="`${ingredient.name} - €${ingredient.price.toFixed(2)}`"
+                color="green"
+                style="
+                  border-radius: 2px;
+                  border-bottom: 1px solid #73ad21;
+                  border-color: black;
+                  width: 100%;
+                  height: 50px;
+                "
+                checked-icon="check_circle"
+                unchecked-icon="check"
+                class="custom-checkbox"
+              />
+            </div>
           </div>
         </q-scroll-area>
         <br />
@@ -55,7 +62,7 @@
           bg-color="white"
           type="submit"
           label="Order"
-          @click="placeOrder()"
+          @click="placeOrder"
         />
         <q-btn
           style="width: 30%; height: 10%"
@@ -65,7 +72,7 @@
           bg-color="white"
           type="submit"
           label="Cancel"
-          @click="cancelOrder()"
+          @click="cancelOrder"
         />
       </div>
     </div>
@@ -73,39 +80,46 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
 
 export default {
   setup() {
-    const ingredients = [
-      "Salad",
-      "Tomato",
-      "Meat",
-      "Mayonese",
-      "Cheese",
-      "Ham",
-      "Turkey",
-      "Lettuce",
-      "Onion",
-      "Pickles",
-    ];
+    const ingredients = ref([]);
     const selection = ref([]);
+    const loading = ref(true);
+
+    const fetchIngredients = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/v1/ingredients');
+        ingredients.value = response.data.ingredients;
+      } catch (error) {
+        console.error('Error fetching ingredients:', error);
+      } finally {
+        loading.value = false;
+      }
+    };
+
+    onMounted(async () => {
+      await fetchIngredients();
+    });
 
     return {
       selection,
       ingredients,
+      loading,
       thumbStyle: {
-        right: "4px",
-        borderRadius: "5px",
-        backgroundColor: "#027be3",
-        width: "5px",
+        right: '4px',
+        borderRadius: '5px',
+        backgroundColor: '#027be3',
+        width: '5px',
         opacity: 0.75,
       },
       barStyle: {
-        right: "2px",
-        borderRadius: "7px",
-        backgroundColor: "#027be3",
-        width: "9px",
+        right: '2px',
+        borderRadius: '7px',
+        backgroundColor: '#027be3',
+        width: '9px',
         opacity: 0.2,
       },
     };
@@ -113,24 +127,24 @@ export default {
   methods: {
     async placeOrder() {
       try {
-        if (this.selection.length == 0) {
+        if (this.selection.length === 0) {
           this.$q.notify({
-            type: "negative",
-            message: "Error, there are no ingredients selected.",
+            type: 'negative',
+            message: 'Error, there are no ingredients selected.',
           });
           console.log("Can't place order, there are no ingredients selected.");
         } else {
           console.log(this.selection);
           this.$q.notify({
-            type: "positive",
-            message: "Order placed successfully.",
+            type: 'positive',
+            message: 'Order placed successfully.',
           });
-          this.$router.push("/");
+          this.$router.push('/');
         }
       } catch (error) {
         this.$q.notify({
-          type: "negative",
-          message: "Error, something went wrong 😭",
+          type: 'negative',
+          message: 'Error, something went wrong 😭',
         });
       }
     },
@@ -161,5 +175,12 @@ export default {
 /* Change label color when checkbox is checked */
 .custom-checkbox .q-checkbox__inner--checked + .q-checkbox__label {
   color: green !important;
+}
+
+.loading-message {
+  text-align: center;
+  padding: 20px;
+  font-size: 18px;
+  color: #333;
 }
 </style>
