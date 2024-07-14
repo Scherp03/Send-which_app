@@ -47,7 +47,7 @@ describe('Order', () => {
       breadType: 'White',
       ingredientsID: [ingredient1._id, ingredient2._id],
     });
-    await Sandwich.insertMany(sandwich1);
+    await sandwich1.save();
     let order1 = new Order({
       content: sandwich1._id,
       price: 0,
@@ -57,8 +57,8 @@ describe('Order', () => {
     expect(realPrice).toBe(expectedPrice);
 
     await Ingredient.deleteMany({ tags: 'toBeDeleted' });
-    await Sandwich.deleteMany({ _id: { $in: sandwich1._id } });
-  }, 20000);
+    await Sandwich.deleteMany({ _id: sandwich1._id });
+  });
 });
 
 // Function 2: addOrderStatistics
@@ -88,11 +88,7 @@ describe('Order', () => {
       breadType: 'White',
       ingredientsID: [ingredient1._id, ingredient2._id],
     });
-    let sandwich2 = new Sandwich({
-      breadType: 'Large',
-      ingredientsID: [ingredient2._id, ingredient3._id],
-    });
-    await Sandwich.insertMany(sandwich1);
+    await sandwich1.save();
     let order1 = new Order({
       content: sandwich1._id,
       price: 0,
@@ -112,5 +108,5 @@ describe('Order', () => {
     await Ingredient.deleteMany({ tags: 'toBeDeleted' });
     await Sandwich.deleteMany({ _id: sandwich1._id });
     await StatSandwich.deleteMany({ ingredientsHash: hash1 });
-  }, 20000);
+  });
 });
