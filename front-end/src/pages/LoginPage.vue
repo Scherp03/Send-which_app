@@ -91,7 +91,7 @@ const onsubmit = async () => {
 };
 
 const signInWithGoogle = async () => {
-  const response =await axios.post('http://localhost:3000/api/v1/request');
+  const response =await axios.post('http://localhost:3000/api/v1/requestgoogle');
 
   const popup = window.open(response.data.url, '_blank', 'width=500,height=600');
   
