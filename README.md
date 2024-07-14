@@ -9,22 +9,7 @@ Repository for the 2024 Software Engineering project
 - Tomè Andrea
 - Zini Tommaso
 
-## Build the entire application
-
-From root directory
-
-```bash
-# Run The Application
-npm run start
-
-# Run The Application Initializing Database
-npm run start:initdb
-
-# Run Tests
-npm run tests
-```
-
-## Backend build Setup
+## Server build Setup
 
 Enter the back-end directory and run the following commands
 
