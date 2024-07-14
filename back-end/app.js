@@ -6,6 +6,8 @@ import cors from 'cors';
 
 import authRouter from './routes/auth.js';
 import userRouter from './routes/user.js';
+import requestPaypalRouter from './routes/requestPaypal.js';
+import paymentRouter from './routes/payment.js';
 import oauthRouter from './routes/oauth.js';
 import requestGoogleRouter from './routes/requestGoogle.js';
 /* Routes */
