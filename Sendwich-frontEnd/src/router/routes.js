@@ -32,7 +32,14 @@ const routes = [
      
     ],
   },
-
+  {
+    path: "/orderSuccess",
+    component: () => import("layouts/OrderSuccessLayout.vue"),
+    children: [
+      { path: "", component: () => import("pages/OrderSuccessPage.vue") },
+     
+    ],
+  },
 
   // Always leave this as last one,
   // but you can also remove it

@@ -11,7 +11,7 @@
               font-weight: bold;
             "
           >
-            SELECT THE INGREDIENTS FOR YOUR SANDWICH
+            LIST OF INGREDIENTS FOR THE SANDWICH
           </div>
         </transition>
         <q-scroll-area
@@ -30,50 +30,12 @@
             <div
               v-for="ingredient in ingredients"
               :key="ingredient.id"
-              class="checkbox-container"
+              class="ingredient-item"
             >
-              <q-checkbox
-                v-model="selection"
-                :val="ingredient"
-                :label="`${ingredient.name} - €${ingredient.price.toFixed(2)}`"
-                color="green"
-                style="
-                  border-radius: 2px;
-                  border-bottom: 1px solid #73ad21;
-                  border-color: black;
-                  width: 100%;
-                  height: 50px;
-                "
-                checked-icon="check_circle"
-                unchecked-icon="check"
-                class="custom-checkbox"
-              />
+              {{ ingredient.name }} - €{{ ingredient.price.toFixed(2) }}
             </div>
           </div>
         </q-scroll-area>
-        <br />
-        <br />
-        <br />
-        <q-btn
-          style="width: 30%; height: 10%"
-          class="fixed-bottom-right"
-          push
-          color="black"
-          bg-color="white"
-          type="submit"
-          label="Order"
-          @click="placeOrder"
-        />
-        <q-btn
-          style="width: 30%; height: 10%"
-          class="fixed-bottom-left"
-          push
-          color="red"
-          bg-color="white"
-          type="submit"
-          label="Cancel"
-          @click="cancelOrder"
-        />
       </div>
     </div>
   </q-page>
@@ -86,7 +48,6 @@ import axios from 'axios';
 export default {
   setup() {
     const ingredients = ref([]);
-    const selection = ref([]);
     const loading = ref(true);
 
     const fetchIngredients = async () => {
@@ -105,7 +66,6 @@ export default {
     });
 
     return {
-      selection,
       ingredients,
       loading,
       thumbStyle: {
@@ -124,57 +84,15 @@ export default {
       },
     };
   },
-  methods: {
-    async placeOrder() {
-      try {
-        if (this.selection.length === 0) {
-          this.$q.notify({
-            type: 'negative',
-            message: 'Error, there are no ingredients selected.',
-          });
-          console.log("Can't place order, there are no ingredients selected.");
-        } else {
-          console.log(this.selection);
-          this.$q.notify({
-            type: 'positive',
-            message: 'Order placed successfully.',
-          });
-          this.$router.push('/');
-        }
-      } catch (error) {
-        this.$q.notify({
-          type: 'negative',
-          message: 'Error, something went wrong 😭',
-        });
-      }
-    },
-    cancelOrder() {
-      this.selection = [];
-    },
-  },
 };
 </script>
 
 <style>
-.checkbox-container {
-  margin-bottom: 5px;
-}
-
-.custom-checkbox .q-checkbox__inner--checked .q-checkbox__bg {
-  background-color: #73ad21 !important;
-}
-
-.custom-checkbox .q-checkbox__inner--focus .q-checkbox__bg {
-  border-color: #73ad21 !important;
-}
-
-.custom-checkbox .q-checkbox__inner--hover .q-checkbox__bg {
-  border-color: #73ad21 !important;
-}
-
-/* Change label color when checkbox is checked */
-.custom-checkbox .q-checkbox__inner--checked + .q-checkbox__label {
-  color: green !important;
+.ingredient-item {
+  padding: 10px;
+  border-bottom: 1px solid #73ad21;
+  color: black;
+  font-size: 16px;
 }
 
 .loading-message {

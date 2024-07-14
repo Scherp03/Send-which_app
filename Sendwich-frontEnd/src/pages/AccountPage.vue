@@ -120,7 +120,6 @@ onMounted(async () => {
     email.value = response.data.email;
     firstName.value = response.data.firstName;
     lastName.value = response.data.lastName;
-    password.value = 'temporary-password';  // Do not pre-fill the password field for security reasons
 
     // Set original values
     originalValues.username = response.data.username;
@@ -141,29 +140,39 @@ const togglePasswordVisibility = () => {
 };
 
 const submitForm = async () => {
-  const updatedData = {
-    username: username.value,
-    email: email.value,
-    firstName: firstName.value,
-    lastName: lastName.value,
-    password: password.value,
-  };
+  const updatedData = {};
+
+  // Check each field and add it to updatedData if it has changed
+  if (username.value !== originalValues.username) {
+    updatedData.username = username.value;
+  }
+  if (email.value !== originalValues.email) {
+    updatedData.email = email.value;
+  }
+  if (firstName.value !== originalValues.firstName) {
+    updatedData.firstName = firstName.value;
+  }
+  if (lastName.value !== originalValues.lastName) {
+    updatedData.lastName = lastName.value;
+  }
+  if (password.value !== '') {
+    updatedData.password = password.value;
+  }
 
   console.log('Updating user data:', updatedData);
-  console.log('User ID:', localStorage.getItem('id'));
 
   try {
     const response = await fetch(fetchUserDataUrl(localStorage.getItem('id')), {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem('token')}` // Add authorization header
+        "Authorization": `Bearer ${localStorage.getItem('token')}`
       },
       body: JSON.stringify(updatedData),
     });
 
     const status = await response.json();
-    console.log('Server response:', status); // Log the full server response for debugging
+    console.log('Server response:', status);
 
     if (response.ok) {
       $q.notify({
@@ -172,11 +181,21 @@ const submitForm = async () => {
       });
 
       // Update original values after successful save
-      originalValues.username = username.value;
-      originalValues.email = email.value;
-      originalValues.firstName = firstName.value;
-      originalValues.lastName = lastName.value;
-      password.value = ''; // Clear the password field after saving
+      if (updatedData.username) {
+        originalValues.username = updatedData.username;
+      }
+      if (updatedData.email) {
+        originalValues.email = updatedData.email;
+      }
+      if (updatedData.firstName) {
+        originalValues.firstName = updatedData.firstName;
+      }
+      if (updatedData.lastName) {
+        originalValues.lastName = updatedData.lastName;
+      }
+      if (updatedData.password) {
+        password.value = ''; // Clear the password field after saving
+      }
     } else {
       throw new Error(status.message || 'Error updating account settings');
     }

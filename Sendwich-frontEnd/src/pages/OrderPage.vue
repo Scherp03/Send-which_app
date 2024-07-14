@@ -128,7 +128,7 @@ export default {
                 message: message,
               });
             }, 5000);
-            router.push('/'); // Or the appropriate route based on your app logic
+            router.push('/orderSuccess'); // Or the appropriate route based on your app logic
           } else {
             $q.notify({
               type: 'negative',
