@@ -32,8 +32,8 @@ export const createOrder = async (req, res) => {
   try {
     const accessToken = await generateAccessToken();
 
-    //const price = req.body.totalprice
-    const price = 10.0;
+    const price = req.body.totalprice
+    //const price = 10.0;
     const response = await axios({
       url: process.env.PAYPAL_BASE_URL + '/v2/checkout/orders',
       method: 'post',
