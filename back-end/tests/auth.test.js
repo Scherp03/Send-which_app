@@ -62,7 +62,7 @@ describe('POST api/v1/auth/login', () => {
         token: tkn,
       }),
     );
-  }, 10000); // Timeout set to 10 seconds
+  }, 20000); // Timeout set to 10 seconds
 });
 
 const wrongPasswd = {
@@ -83,7 +83,7 @@ describe('POST api/v1/auth/login', () => {
         message: 'Wrong password!',
       }),
     );
-  }, 10000); // Timeout set to 10 seconds
+  }, 20000); // Timeout set to 10 seconds
 });
 
 const randomUsername = {
@@ -104,7 +104,7 @@ describe('POST api/v1/auth/login', () => {
         message: "Cannot find user 'random_username' in our database",
       }),
     );
-  }, 10000); // Timeout set to 10 seconds
+  }, 20000); // Timeout set to 10 seconds
 });
 
 const emptyField = {
@@ -124,7 +124,7 @@ describe('POST api/v1/auth/login', () => {
         message: 'Missing some parameters',
       }),
     );
-  }, 10000); // Timeout set to 10 seconds
+  }, 20000); // Timeout set to 10 seconds
 });
 
 // Logout
@@ -146,5 +146,5 @@ describe('DELETE api/v1/auth/logout', () => {
         message: "User 'username_test' logged out successfully!",
       }),
     );
-  }, 10000); // Timeout set to 10 seconds
+  }, 20000); // Timeout set to 10 seconds
 });

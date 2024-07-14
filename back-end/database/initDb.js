@@ -1,6 +1,7 @@
 import User from './schemas/user.js';
 import UserType from './schemas/userType.js';
 import Ingredient from './schemas/ingredient.js';
+import Sandwich from './schemas/sandwich.js';
 import { Permissions, Roles } from '../../shared/userTypeDefinitions.js';
 import bcrypt from 'bcryptjs';
 
@@ -79,6 +80,8 @@ export const initDb = async () => {
       quantity: '100',
     },
   ];
+
+  await Sandwich.deleteMany({});
 
   // reset and populate the database
   await User.deleteMany({});

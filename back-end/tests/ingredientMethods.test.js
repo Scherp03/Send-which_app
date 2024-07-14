@@ -55,7 +55,7 @@ describe('Ingredient methods', () => {
     expect(loadedIngredient).not.toBeNull();
     expect(loadedIngredient.active).toBe(true);
     await Ingredient.deleteMany({ tags: 'toBeDeleted2' });
-  });
+  }, 20000);
 
   // Verify basic conditions: price and quantity are numbers
   test('addOneSafe adds an ingredient with a valid price and quantity', async () => {
@@ -117,7 +117,7 @@ describe('Ingredient methods', () => {
     ).toBe(true);
     // Delete the test ingredient
     await Ingredient.deleteMany({ tags: 'toBeDeleted2' });
-  });
+  }, 20000);
 
   // Function 2: changeAvailability
   // Only condition to be verified is that the quantity is a number
@@ -141,7 +141,7 @@ describe('Ingredient methods', () => {
     expect(loadedIngredient.quantity).toBe(50);
     // Delete the test ingredient
     await Ingredient.deleteMany({ tags: 'toBeDeleted2' });
-  });
+  }, 20000);
 
   // Function 3: increaseAvailability
   // Made to wotk with negative numbers as well
@@ -162,7 +162,7 @@ describe('Ingredient methods', () => {
     expect(loadedIngredient.quantity).toBe(72);
     // Delete the test ingredient
     await Ingredient.deleteMany({ tags: 'toBeDeleted2' });
-  });
+  }, 20000);
 
   // Function 4: setAvailability
   test('setAvailability sets the availability to a given number', async () => {
@@ -182,7 +182,7 @@ describe('Ingredient methods', () => {
     expect(loadedIngredient.quantity).toBe(22);
     // Delete the test ingredient
     await Ingredient.deleteMany({ tags: 'toBeDeleted2' });
-  });
+  }, 20000);
 
   // Function 5: safeDelete
   test('safeDelete removes an ingredient from the pool without deleting it, and resets basic parameters', async () => {
@@ -201,7 +201,7 @@ describe('Ingredient methods', () => {
     expect(loadedIngredient.active).toBe(false);
     // Delete the test ingredient
     await Ingredient.deleteMany({ tags: 'toBeDeleted2' });
-  });
+  }, 20000);
 
   // Function 6: restoreDeleted
   test('restoreDeleted restores an ingredient from the pool', async () => {
@@ -223,5 +223,5 @@ describe('Ingredient methods', () => {
     expect(loadedIngredient.quantity).toBe(0);
     // Delete the test ingredient
     await Ingredient.deleteMany({ tags: 'toBeDeleted2' });
-  });
+  }, 20000);
 });

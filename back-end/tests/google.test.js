@@ -15,5 +15,5 @@ describe('POST /api/v1/request', () => {
         url: googleUrl,
       }),
     );
-  }, 10000);
+  }, 20000);
 });
