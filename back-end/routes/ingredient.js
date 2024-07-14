@@ -6,13 +6,13 @@ import {
   increaseAvailability,
   deleteIngredient,
   restoreDeleted,
-  getIngredientList,
+  getIngredients,
   getIngredient,
 } from '../controllers/ingredient.js';
 
 const router = express.Router();
 
-router.get('/', getIngredientList);
+router.get('/', getIngredients);
 
 router.get('/:id', getIngredient);
 

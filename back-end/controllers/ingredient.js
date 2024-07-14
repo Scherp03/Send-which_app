@@ -1,22 +1,5 @@
 import Ingredient from '../database/schemas/ingredient.js';
 
-// getIngredients
-// Delivers the whole list of ingreients
-export const getIngredients = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
-  try {
-    // find() gets all the documents
-    let allIngredients = await Ingredient.find({ active: true });
-    return res.status(200).json({ success: true, ingredients: allIngredients });
-  } catch (err) {
-    console.log(err.message);
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-  }
-};
-
 // addIngredient: Add a new ingredient to the database
 // Insert one ingredients only if all parameters are met
 export const addIngredient = async (req, res, next) => {
@@ -90,16 +73,17 @@ export const setAvailability = async (req, res, next) => {
     }
     // After these tests, suppose that the input is valid.
     // Find the ingredient and test it;
-    let foundIngredient = Ingredient.findOne({ _id: req.body._id });
+    let foundIngredient = await Ingredient.findOne({ _id: req.body._id });
     if (!foundIngredient) {
       return res
         .status(404)
         .json({ success: false, message: 'Ingredient not found' });
     }
     foundIngredient.quantity = newAvailability;
+    await foundIngredient.save();
     return res
       .status(200)
-      .json({ success: true, message: 'Availability changed' });
+      .json({ success: true, message: 'Availability updated' });
   } catch (err) {
     console.log(err.message);
     if (!err.statusCode) {
@@ -127,13 +111,15 @@ export const increaseAvailability = async (req, res, next) => {
         .status(400)
         .json({ success: false, message: 'Quantity is not valid' });
     }
-    let foundIngredient = Ingredient.findOne({ _id: req.body._id });
+    let foundIngredient = await Ingredient.findOne({ _id: req.body._id });
     if (!foundIngredient) {
       return res
         .status(404)
         .json({ success: false, message: 'Ingredient not found' });
     }
-    foundIngredient.quantity = newAvailability;
+    // If it is valid, add the quantity
+    foundIngredient.quantity += newAvailability;
+    await foundIngredient.save();
     return res
       .status(200)
       .json({ success: true, message: 'Availability updated' });
@@ -152,13 +138,13 @@ export const increaseAvailability = async (req, res, next) => {
 export const deleteIngredient = async (req, res, next) => {
   res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
   try {
-    let foundIngredient = await Ingredient.findById(req.body._id);
+    let foundIngredient = await Ingredient.findOne({ _id: req.body._id });
     if (!foundIngredient) {
       return res
         .status(404)
         .json({ success: false, message: 'Ingredient not found' });
     }
-    if (foundIngredient.safeDelete()) {
+    if (await foundIngredient.safeDelete()) {
       return res
         .status(200)
         .json({ success: true, message: 'Ingredient deleted' });
@@ -195,6 +181,7 @@ export const restoreDeleted = async (req, res, next) => {
         .json({ success: false, message: 'Ingredient already active' });
     }
     foundIngredient.active = true;
+    await foundIngredient.save();
     return res
       .status(200)
       .json({ success: true, message: 'Ingredient restored' });
@@ -207,25 +194,29 @@ export const restoreDeleted = async (req, res, next) => {
   }
 };
 
-//
-export const getIngredientList = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
-  try {
-    let allIngredients = await Ingredient.find({ active: true });
-    return res.status(200).json({ success: true, ingredients: allIngredients });
-  } catch (err) {
-    console.log(err.message);
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-  }
-};
+// export const getIngredientList = async (req, res, next) => {
+//   res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+//   try {
+//     let allIngredients = await Ingredient.find({ active: true });
+//     if (!allIngredients) {
+//       return res
+//         .status(404)
+//         .json({ success: false, message: 'No ingredients found' });
+//     }
+//     return res.status(200).json({ success: true, ingredients: allIngredients });
+//   } catch (err) {
+//     console.log(err.message);
+//     if (!err.statusCode) {
+//       err.statusCode = 500;
+//     }
+//     next(err);
+//   }
+// };
 
 export const getIngredient = async (req, res, next) => {
   res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
   try {
-    let foundIngredient = Ingredient.findById(req.params.id);
+    let foundIngredient = await Ingredient.findById(req.params.id);
     if (foundIngredient) {
       return res
         .status(200)
@@ -235,6 +226,23 @@ export const getIngredient = async (req, res, next) => {
         .status(404)
         .json({ success: false, message: 'Ingredient not found' });
     }
+  } catch (err) {
+    console.log(err.message);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+// getIngredients
+// Delivers the whole list of ingreients
+export const getIngredients = async (req, res, next) => {
+  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  try {
+    // find() gets all the documents
+    let allIngredients = await Ingredient.find({ active: true });
+    return res.status(200).json({ success: true, ingredients: allIngredients });
   } catch (err) {
     console.log(err.message);
     if (!err.statusCode) {
