@@ -31,6 +31,8 @@ app.use('/api/v1/users', userRouter);
 app.use('/api/v1/auth', authRouter);
 app.use('/oauth', oauthRouter);
 app.use('/api/v1/requestgoogle', requestGoogleRouter);
+app.use('/api/v1/paypal', requestPaypalRouter);
+app.use('/payment', paymentRouter);
 /* Quick check if it's working */
 app.get('/', (req, res) => {
   res.status(200).send('Welcome to homepage!');
