@@ -19,8 +19,12 @@ npm install
 # Install Dependencies For Development
 npm install --include=dev
 
-# Run Server Initializing Database
+# Run Server Initializing And Populating The Database
+# The database collections are populated with mock data
 npm run dev:init
+
+# Before running the application for the first time, initialize the database
+
 # Run Server
 npm run dev
 
@@ -33,5 +37,11 @@ npm run test
 Enter the front-end directory and run the following commands
 
 ```bash
+# Install Dependencies
+npm install
+# Install Dependencies For Development
+npm install --include=dev
 
+# Run application
+npm run dev
 ```

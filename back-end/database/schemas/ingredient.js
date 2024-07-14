@@ -82,7 +82,7 @@ ingredientSchema.statics.restoreDeleted = async function (restoredName) {
   });
   // Fail if ingredient not found
   if (!ingredient) {
-    console.log('Failed to activate: Ingredient not found: ' + restoredName);
+    // console.log('Failed to activate: Ingredient not found: ' + restoredName);
     return false;
   }
   // Fail if ingredient is already active

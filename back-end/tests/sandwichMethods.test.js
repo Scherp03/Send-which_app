@@ -2,24 +2,18 @@ import mongoose from 'mongoose';
 import Sandwich from '../database/schemas/sandwich';
 import Ingredient from '../database/schemas/ingredient';
 import StatSandwich from '../database/schemas/statisticSandwich';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-const dbUri = process.env.DB_URI;
-const clientOptions = {
-  serverApi: { version: '1', strict: true, deprecationErrors: true },
-};
 
 beforeAll(async () => {
-  await mongoose.connect(dbUri, clientOptions);
+  const dbUri =
+    'mongodb+srv://WritingPurposeUser:FpKwCBXmZh7uSvfA@test1.sdy9unk.mongodb.net/Test_Jest1?retryWrites=true&w=majority';
+  await mongoose.connect(dbUri);
   await populateDatabase();
-});
+}, 20000);
 
 afterAll(async () => {
   await Ingredient.deleteMany({ tags: 'toBeDeleted1' });
   await mongoose.connection.close();
-});
+}, 20000);
 
 // Function to have a database with some basic ingredients and a sandwich
 async function populateDatabase() {

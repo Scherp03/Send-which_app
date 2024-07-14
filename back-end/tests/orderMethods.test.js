@@ -1,24 +1,19 @@
 import mongoose from 'mongoose';
 import Ingredient from '../database/schemas/ingredient';
 import Order from '../database/schemas/order';
-import dotenv from 'dotenv';
 import Sandwich from '../database/schemas/sandwich';
 import StatSandwich from '../database/schemas/statisticSandwich';
 
-dotenv.config();
-
-const dbUri = process.env.DB_URI;
-const clientOptions = {
-  serverApi: { version: '1', strict: true, deprecationErrors: true },
-};
-
 beforeAll(async () => {
-  await mongoose.connect(dbUri, clientOptions);
-});
+  const dbUri =
+    'mongodb+srv://WritingPurposeUser:FpKwCBXmZh7uSvfA@test1.sdy9unk.mongodb.net/Test_Jest2?retryWrites=true&w=majority';
+  await mongoose.connect(dbUri);
+}, 20000);
 
 afterAll(async () => {
+  await Ingredient.deleteMany({ tags: 'toBeDeleted' });
   await mongoose.connection.close();
-});
+}, 20000);
 
 describe('Order', () => {
   // Function 1: calculatePrice
@@ -104,9 +99,7 @@ describe('Order', () => {
     });
 
     expect(stat1.timesSold).toBe(1);
-
-    await Ingredient.deleteMany({ tags: 'toBeDeleted' });
-    await Sandwich.deleteMany({ _id: sandwich1._id });
-    await StatSandwich.deleteMany({ ingredientsHash: hash1 });
+    await Sandwich.deleteOne({ _id: sandwich1._id });
+    // await StatSandwich.deleteOne({ ingredientsHash: hash1 });
   });
 });

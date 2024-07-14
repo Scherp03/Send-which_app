@@ -1,22 +1,19 @@
 import mongoose from 'mongoose';
 import Ingredient from '../database/schemas/ingredient.js';
-import dotenv from 'dotenv';
 import app from '../app.js';
 import request from 'supertest';
 
-dotenv.config();
-
-const dbUri = process.env.DB_URI;
-
 beforeAll(async () => {
+  const dbUri =
+    'mongodb+srv://WritingPurposeUser:FpKwCBXmZh7uSvfA@test1.sdy9unk.mongodb.net/Test_Jest1?retryWrites=true&w=majority';
   await mongoose.connect(dbUri);
   await populateDatabase();
-});
+}, 20000);
 
 afterAll(async () => {
   await Ingredient.deleteMany({ tags: 'toBeDeleted3' });
   await mongoose.connection.close();
-});
+}, 20000);
 
 describe('GET api/v1/ingredients', () => {
   // test getIngredients

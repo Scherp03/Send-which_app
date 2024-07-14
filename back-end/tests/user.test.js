@@ -1,28 +1,17 @@
 import app from '../app.js';
 import request from 'supertest';
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import User from '../database/schemas/user.js';
-
-dotenv.config();
-
-if (!process.env.DB_URI) {
-  throw new Error(
-    'Test suite stopped beacuse necessary URI environmental variable for MongoDB connection is missing',
-  );
-}
-const dbUri = process.env.DB_URI;
 
 beforeAll(async () => {
+  const dbUri =
+    'mongodb+srv://WritingPurposeUser:FpKwCBXmZh7uSvfA@test1.sdy9unk.mongodb.net/Test_Jest2?retryWrites=true&w=majority';
   await mongoose.connect(dbUri);
-  // console.log(`Database \'${process.env.DB_NAME}\' connected for testing!`);
-});
+}, 20000);
 
 // no need to delete the user created since it's done by the test
 afterAll(async () => {
   await mongoose.connection.close();
-  // console.log('Database connection closed');
-});
+}, 20000);
 
 //Create new user correctly
 describe('POST /api/v1/users', () => {

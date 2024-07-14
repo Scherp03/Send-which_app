@@ -1,21 +1,16 @@
 import mongoose from 'mongoose';
 import Ingredient from '../database/schemas/ingredient';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-const uri = process.env.DB_URI;
-const clientOptions = {
-  serverApi: { version: '1', strict: true, deprecationErrors: true },
-};
 
 beforeAll(async () => {
-  await mongoose.connect(uri, clientOptions);
-});
+  const uri =
+    'mongodb+srv://WritingPurposeUser:FpKwCBXmZh7uSvfA@test1.sdy9unk.mongodb.net/Test_Jest2?retryWrites=true&w=majority';
+  await mongoose.connect(uri);
+}, 20000);
 
 afterAll(async () => {
+  await Ingredient.deleteMany({ tags: 'toBeDeleted2' });
   await mongoose.connection.close();
-});
+}, 20000);
 
 describe('Ingredient methods', () => {
   // Function 1: addOneSafe
@@ -222,6 +217,5 @@ describe('Ingredient methods', () => {
     expect(loadedIngredient.active).toBe(true);
     expect(loadedIngredient.quantity).toBe(0);
     // Delete the test ingredient
-    await Ingredient.deleteMany({ tags: 'toBeDeleted2' });
   }, 20000);
 });
