@@ -16,7 +16,26 @@ export const createSandwich = async (req, res, next) => {
     // calculate and add price
     await newSandwich.calculatePrice();
 
-    // // Check the sandwich existancewith gethash
+    // Check the sandwich existance with hashing
+    let hash = await newSandwich.getHash();
+    let duplicateSandwich = await SandwichModel.findOne({ hash: hash });
+
+    if (
+      duplicateSandwich &&
+      newSandwich.breadType === duplicateSandwich.breadtype
+    ) {
+      await duplicateSandwich.calculatePrice();
+      return res.status(201).json({
+        // Changed to 201: created
+        success: true,
+        sandwichID: duplicateSandwich._id,
+        sandwichIngredientsID: duplicateSandwich.ingredientsID,
+        sandwichPrice: newSandwich.price,
+        sandwichBread: duplicateSandwich.breadType,
+      });
+    }
+    // else:
+
     // let hash = await newSandwich.getHash();
 
     // if (/* already exist */) {
@@ -41,6 +60,7 @@ export const createSandwich = async (req, res, next) => {
       sandwichID: sandwichCreated._id,
       sandwichIngredientsID: sandwichCreated.ingredientsID,
       sandwichPrice: sandwichCreated.price,
+      sandwichBread: sandwichCreated.breadType,
     });
   } catch (err) {
     console.log(err.message);
