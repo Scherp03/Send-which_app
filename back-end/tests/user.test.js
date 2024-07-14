@@ -88,6 +88,8 @@ describe('GET /api/v1/users', () => {
         success: true,
         firstName: 'John',
         lastName: 'Doe',
+        username: 'ermeio94',
+        email: 'john.doe@gmail.com',
       }),
     );
   }, 20000);

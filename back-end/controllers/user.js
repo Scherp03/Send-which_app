@@ -77,6 +77,8 @@ export const getUser = async (req, res, next) => {
       success: true,
       firstName: user.firstName,
       lastName: user.lastName,
+      username: user.username,
+      email: user.email,
     });
   } catch (err) {
     console.log(err.message);
