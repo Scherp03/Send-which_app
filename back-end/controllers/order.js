@@ -9,8 +9,9 @@ import mongoose from 'mongoose';
     try {
       if (
         !req.body.userID ||
-        !req.body.slotID ||
+        !req.body.slot ||
         !req.body.content||
+        !req.body.status||
         !req.body.total ||
         !req.body.date
       ) {
@@ -21,9 +22,10 @@ import mongoose from 'mongoose';
       let newOrder = new OrderModel({
 
         userID: req.body.userID,
-        slotID: req.body.slotID,
+        slot: req.body.slot,
         content: req.body.content,
         total: req.body.total,
+        status: req.body.status,
         date: req.body.date,
        });
       
@@ -101,7 +103,7 @@ import mongoose from 'mongoose';
     }
   };
   export const viewToDo = async (req, res, next) => {
-    /*res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+    res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
     try {
       const toDoOrders = await OrderModel.find({ status: 'toDo' });
       return res.status(200).json({
@@ -114,5 +116,5 @@ import mongoose from 'mongoose';
         err.statusCode = 500;
       }
       next(err);
-    }*/
+    }
   };
