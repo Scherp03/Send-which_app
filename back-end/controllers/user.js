@@ -77,8 +77,6 @@ export const getUser = async (req, res, next) => {
       success: true,
       firstName: user.firstName,
       lastName: user.lastName,
-      email: user.email,        /////////////TO REMOVE
-      username: user.username   ////////////TO REMOVE
     });
   } catch (err) {
     console.log(err.message);

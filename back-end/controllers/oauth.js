@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
 import { OAuth2Client } from 'google-auth-library';
-import fetch from 'node-fetch';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import axios from 'axios';
 import UserModel from '../database/schemas/user.js';
 import UserTypeModel from '../database/schemas/userType.js';
 import { Roles } from '../../shared/userTypeDefinitions.js';
@@ -27,10 +27,16 @@ export const oauth = async (req, res, next) => {
 
     const oauthToken = oAuth2Client.credentials.access_token;
 
-    const response = await fetch(
+    // const response = await fetch(
+    //   `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${oauthToken}`,
+    // );
+    // const userData = await response.json();
+
+    const response = await axios.post(
       `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${oauthToken}`,
     );
-    const userData = await response.json();
+
+    const userData = response.data;
 
     const user = await UserModel.findOne({ email: userData.email });
     // if the account was already created, then just login

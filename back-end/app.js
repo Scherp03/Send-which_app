@@ -6,18 +6,19 @@ import cors from 'cors';
 
 import authRouter from './routes/auth.js';
 import userRouter from './routes/user.js';
-import oauthRouter from './routes/oauth.js';
-import requestRouter from './routes/request.js';
 import requestPaypalRouter from './routes/requestPaypal.js';
-import paymentRouter from './routes/payment.js'
-import ingredientRouter from './routes/ingredient.js'
+import paymentRouter from './routes/payment.js';
+import oauthRouter from './routes/oauth.js';
+import requestGoogleRouter from './routes/requestGoogle.js';
+import ingredientRouter from './routes/ingredient.js';
+import sandwichRouter from './routes/sandwich.js';
 /* Routes */
 const app = express();
 
 app.use(
   cors({
     origin: 'http://localhost:9000',
-    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],  //ADDED PATCH
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: [
       'Content-Type',
       'Authorization',
@@ -30,16 +31,12 @@ app.use(bodyParser.json());
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/auth', authRouter);
-
-app.use('/api/v1/paypal', requestPaypalRouter);
-app.use('/payment', paymentRouter);
-
-app.use('/api/v1/ingredients', ingredientRouter)
-
-
 app.use('/oauth', oauthRouter);
-app.use('/api/v1/request', requestRouter);
-
+app.use('/api/v1/requestgoogle', requestGoogleRouter);
+app.use('/api/v1/paypal', requestPaypalRouter);
+app.use('/payment', paymentRouter);
+app.use('/api/v1/sandwich', sandwichRouter);
+app.use('/api/v1/ingredients', ingredientRouter);
 /* Quick check if it's working */
 app.get('/', (req, res) => {
   res.status(200).send('Welcome to homepage!');
@@ -55,7 +52,7 @@ const swaggerOptions = {
       version: '1.0.0',
     },
   },
-  apis: ['./back-end/routes/*.js'],
+  apis: ['./routes/*.js'],
 };
 
 const swaggerSpecs = swaggerJsdoc(swaggerOptions);

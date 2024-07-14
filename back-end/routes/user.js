@@ -119,7 +119,7 @@ router.post('/', createUser);
  * @openapi
  * api/v1/users/:id:
  *   get:
- *     summary: Fetch account data
+ *     summary: Fetch account data => name and surname
  *     description: Fetch all data of the account
  *     tags:
  *       - User Registration and Account Management
@@ -146,9 +146,12 @@ router.post('/', createUser);
  *                 success:
  *                   type: bool
  *                   example: true
- *                 message:
+ *                 firstName:
  *                   type: string
- *                   example: "User modified successfully"
+ *                   example: "MyName"
+ *                 lastName:
+ *                   type: string
+ *                   example: "MySurname"
  *       '403':
  *         description: "Not Found: The user does not have the needed rights"
  *         content:

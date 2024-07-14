@@ -6,4 +6,4 @@ const router = express.Router();
 router.get('/', capturePayment);
 router.get('/cancel-order', cancelOrder);
 
-export default router;
+export default router;

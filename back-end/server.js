@@ -6,28 +6,21 @@ import initDb from './database/initDb.js';
 dotenv.config();
 
 /* Ensure environment variables are correctly loaded */
-const { DB_CREDENTIALS, DB_HOST, DB_NAME } = process.env;
 
-if (!DB_CREDENTIALS || !DB_HOST || !DB_NAME) {
+if (!process.env.DB_URI) {
   console.error(
-    'Missing necessary environment variables for MongoDB connection',
+    'Missing necessary URI environmental variable for MongoDB connection',
   );
   process.exit(1);
 }
-const uri='mongodb://localhost:27017/myapp'
+
 /* MongoDB credentials */
-const dbUri =
-  'mongodb+srv://' +
-  process.env.DB_CREDENTIALS +
-  '@' +
-  process.env.DB_HOST +
-  '/' +
-  process.env.DB_NAME +
-  '?retryWrites=true&w=majority';
+const dbUri = process.env.DB_URI;
 const clientOptions = {
   serverApi: { version: '1', strict: true, deprecationErrors: true },
 };
 
+const uri= "mongodb://localhost:27017/myapp" //TO change
 const PORT = process.env.PORT || 3000;
 
 /* Run server */
@@ -35,7 +28,7 @@ app.listen(PORT, async () => {
   console.log('Wait for database connection...');
   try {
     /* Database connection */
-    const db = await mongoose.connect(uri, clientOptions);   //to change
+    const db = await mongoose.connect(uri, clientOptions);
     console.log('Connected to mongoDB successfully!');
 
     if (process.argv.includes('--init-db')) {

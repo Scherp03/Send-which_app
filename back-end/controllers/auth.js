@@ -6,8 +6,6 @@ import UserTypeModel from '../database/schemas/userType.js';
 export const login = async (req, res, next) => {
   res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
   try {
-    console.log(req.body.username),
-    console.log(req.body.password)
     if (!req.body.username || !req.body.password) {
       return res
         .status(400)
@@ -21,7 +19,7 @@ export const login = async (req, res, next) => {
       });
     if (await bcrypt.compare(req.body.password, user.password)) {
       // if the password is correct, generate JWT token
-      const userType = await UserTypeModel.findOne({ role: user.userType }); 
+      const userType = await UserTypeModel.findOne({ role: user.userType });
       const payload = {
         username: req.body.username,
         role: userType.role,
@@ -33,12 +31,11 @@ export const login = async (req, res, next) => {
         process.env.ACCESS_TOKEN_SECRET,
         options,
       );
-      res.status(200).json({
+      return res.status(200).json({
         success: true,
         message: 'Welcome to your account, ' + user.username + '!',
         id: user._id,
         token: access_key,
-        payload:payload,/////////TORemove
       });
     } else {
       return res

@@ -1,13 +1,14 @@
 import express from 'express';
-import { createOrder } from '../controllers/requestPaypal.js';
+import { request } from '../controllers/requestGoogle.js';
 
 const router = express.Router();
+
 /**
  * @openapi
- * api/v1/paypal:
+ * api/v1/request:
  *   post:
- *     summary: PayPal Payment 
- *     description: Fetch the url to redirect to paypal payment page
+ *     summary: Google authentication url
+ *     description: Fetch the url to redirect to google sign in page
  *     tags:
  *       - Authentication
  *     produces:
@@ -30,8 +31,8 @@ const router = express.Router();
  *                   example: true
  *                 url:
  *                   type: string
- *                   example: "https://api-m.sandbox.paypal.com..."
- */
-router.post('/pay', createOrder);
+ *                   example: "https://accounts.google.com/o/oauth2/v2/auth?access..."
+ */
+router.post('/', request);
 
 export default router;

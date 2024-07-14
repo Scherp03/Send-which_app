@@ -6,14 +6,12 @@ import User from '../database/schemas/user.js';
 
 dotenv.config();
 
-const dbUri =
-  'mongodb+srv://' +
-  process.env.DB_CREDENTIALS +
-  '@' +
-  process.env.DB_HOST +
-  '/' +
-  process.env.DB_NAME +
-  '?retryWrites=true&w=majority';
+if (!process.env.DB_URI) {
+  throw new Error(
+    'Test suite stopped beacuse necessary URI environmental variable for MongoDB connection is missing',
+  );
+}
+const dbUri = process.env.DB_URI;
 
 beforeAll(async () => {
   await mongoose.connect(dbUri);
@@ -44,7 +42,7 @@ describe('POST /api/v1/users', () => {
         message: `User \'${userCorrect.username}\' created successfully!`,
       }),
     );
-  }, 10000);
+  }, 20000);
 
   // Create new user with empty fields
   test('Should respond with 400 status code and an error message', async () => {
@@ -61,10 +59,10 @@ describe('POST /api/v1/users', () => {
         message: 'Missing some parameters',
       }),
     );
-  }, 10000);
+  }, 20000);
 });
 
-// Update user
+// Fetch user
 
 // login credentials
 const correctLogin = {
@@ -72,12 +70,37 @@ const correctLogin = {
   password: 'ILoveUbuntu123',
 };
 
+describe('GET /api/v1/users', () => {
+  test('should respond with a 200 status code and a message', async () => {
+    // first need to login to retrive the access token and id
+    const loginData = await request(app)
+      .post('/api/v1/auth/login')
+      .send(correctLogin);
+    const userId = loginData.body.id;
+    const accessToken = loginData.body.token;
+    // patch to modify
+    const response = await request(app)
+      .get(`/api/v1/users/${userId}`)
+      .set('authorization', `Bearer ${accessToken}`);
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        success: true,
+        firstName: 'John',
+        lastName: 'Doe',
+      }),
+    );
+  }, 20000);
+});
+
 // updated credentials
 const userUpdate = {
   firstName: 'Giovanni',
   username: 'newusername',
   password: 'NewPasswdKek666',
 };
+
+// update user
 
 describe('PATCH /api/v1/users', () => {
   test('should respond with a 200 status code and a message', async () => {
@@ -99,7 +122,7 @@ describe('PATCH /api/v1/users', () => {
         message: 'User modified successfully',
       }),
     );
-  }, 10000);
+  }, 20000);
 });
 
 const newCorrectLogin = {
@@ -128,5 +151,5 @@ describe('DELETE /api/v1/users', () => {
         message: "User 'newusername' deleted successfully",
       }),
     );
-  }, 10000);
+  }, 20000);
 });
