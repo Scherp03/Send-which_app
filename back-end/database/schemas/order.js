@@ -4,8 +4,8 @@ import Sandwich from './sandwich.js';
 // Order schema
 const orderSchema = new mongoose.Schema({
   userID: mongoose.Schema.Types.ObjectId,
+  slotID: mongoose.Schema.Types.ObjectId,
   content: mongoose.Schema.Types.ObjectId,
-  slot: Number,
   total: Number,
   status: String,
   date: Date,

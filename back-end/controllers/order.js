@@ -1,3 +1,4 @@
+import { update } from 'tar';
 import OrderModel from '../database/schemas/order.js';
 
 import UserModel from '../database/schemas/user.js';
@@ -9,7 +10,7 @@ import mongoose from 'mongoose';
     try {
       if (
         !req.body.userID ||
-        !req.body.slot ||
+        !req.body.slotID ||
         !req.body.content||
         !req.body.status||
         !req.body.total ||
@@ -22,7 +23,7 @@ import mongoose from 'mongoose';
       let newOrder = new OrderModel({
 
         userID: req.body.userID,
-        slot: req.body.slot,
+        slotID: req.body.slotID,
         content: req.body.content,
         total: req.body.total,
         status: req.body.status,
@@ -118,3 +119,41 @@ import mongoose from 'mongoose';
       next(err);
     }
   };
+
+  export const changeStatus = async (req, res, next) => {
+    res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+    try{
+      const { id } = req.params;
+      if (!id) {
+        return res.status(400).json({ success: false, message: 'Order ID is required' });
+      }
+      
+      const order = await OrderModel.findById(id);
+      if (!order) {
+        
+        return res.
+        status(404).
+        json({ success: false, message: 'Order not found' });
+      }
+      const result = await OrderModel.updateOne(
+        { _id: id, status: 'toDo' }, 
+        { $set: { status: 'completed' } } 
+      );
+  
+      if (result.nModified === 0) {
+        return res.status(404).json({ success: false, message: 'Order not found or already completed' });
+      }
+  
+      return res.status(200).json({
+        success: true,
+        message: 'Order status updated to completed',
+      });
+    }
+    catch (err) {
+      console.log(err.message);
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    }
+  }
