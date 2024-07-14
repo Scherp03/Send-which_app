@@ -103,3 +103,76 @@ describe('GET /api/v1/sandwich', () => {
     );
   }, 20000);
 });
+
+// Create a new sandwich
+describe('POST /api/v1/sandwich', () => {
+  test('should fail to create a new sandwich if a parameter is missing', async () => {
+    // Add ingredients
+    let ingredient1 = new Ingredient({
+      name: 'Tomato5',
+      price: 0.5,
+      quantity: 10,
+      tags: ['vegetarian', 'vegan', 'toBeDeleted5'],
+    });
+    let ingredient2 = new Ingredient({
+      name: 'Cheese5',
+      price: 1,
+      quantity: 20,
+      tags: ['vegetarian', 'lactose', 'toBeDeleted5'],
+    });
+    await Ingredient.insertMany([ingredient1, ingredient2]);
+
+    // Test if one parameter is missing
+    let response1 = await request(app)
+      .post('/api/v1/sandwich')
+      .send({
+        // breadType: 'White5',
+        ingredientsID: [ingredient1._id, ingredient2._id],
+      });
+    expect(response1.statusCode).toBe(400);
+    expect(response1.body.success).toBe(false);
+  });
+
+  test('Should respond with a 201 status code if all tests pass', async () => {
+    // Test with all parameters, different from another sandwich
+    let ingredient1 = await Ingredient.findOne({ name: 'Tomato5' });
+    let ingredient2 = await Ingredient.findOne({ name: 'Cheese5' });
+    let response2 = await request(app)
+      .post('/api/v1/sandwich')
+      .send({
+        breadType: 'White5',
+        ingredientsID: [ingredient1._id, ingredient2._id],
+      });
+    expect(response2.statusCode).toBe(200);
+    expect(response2.body.success).toBe(true);
+    // Use price and bread to verify if the sandwich is the same or equivalent
+    expect(response2.body.sandwichPrice).toBe(
+      2 + ingredient1.price + ingredient2.price,
+    );
+    expect(response2.body.sandwichBread).toBe('White5');
+  });
+
+  test('Should respond with a 201 status code if all tests pass AND the sandwich already exists', async () => {
+    let ingredient1 = await Ingredient.findOne({ name: 'Tomato5' });
+    let ingredient2 = await Ingredient.findOne({ name: 'Cheese5' });
+    let response3 = await request(app)
+      .post('/api/v1/sandwich')
+      .send({
+        breadType: 'White5',
+        ingredientsID: [ingredient1._id, ingredient2._id],
+      });
+
+    expect(response3.statusCode).toBe(200);
+    expect(response3.body.success).toBe(true);
+    // Use price and bread to verify if the sandwich is the same or equivalent
+    expect(response3.body.sandwichPrice).toBe(
+      2 + ingredient1.price + ingredient2.price,
+    );
+    expect(response3.body.sandwichBread).toBe('White5');
+
+    // Delete everything that was creted in these tests
+    let sandwich1 = Sandwich.findOne({ breadType: 'White5' });
+    await Ingredient.deleteMany({ tags: 'toBeDeleted5' });
+    await Sandwich.deleteOne({ _id: sandwich1._id });
+  });
+});
