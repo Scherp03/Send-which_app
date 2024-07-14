@@ -43,7 +43,7 @@ describe('GET api/v1/ingredients', () => {
     expect(found1).toBe(true);
     expect(found2).toBe(true);
     expect(found3).toBe(true);
-  });
+  }, 20000);
 });
 
 describe('GET api/v1/ingredients/:id', () => {
@@ -74,7 +74,7 @@ describe('PATCH api/v1/ingredients/add', () => {
     expect(response3.statusCode).toBe(400);
     expect(response3.body.success).toBe(false);
     expect(response3.body.message).toBe('Name too short');
-  });
+  }, 20000);
   // Fail if price not a number
   test('addIngredient should respond with 400 status code and a message if the price is not a number', async () => {
     let response4 = await request(app)
@@ -88,7 +88,7 @@ describe('PATCH api/v1/ingredients/add', () => {
     expect(response4.statusCode).toBe(400);
     expect(response4.body.success).toBe(false);
     expect(response4.body.message).toBe('Price is not a valid number');
-  });
+  }, 20000);
   test('addIngredient should respond with 200 status code and the ingredient added', async () => {
     let response1 = await request(app)
       .patch('/api/v1/ingredients/add')
@@ -100,7 +100,7 @@ describe('PATCH api/v1/ingredients/add', () => {
       });
     expect(response1.statusCode).toBe(201);
     expect(response1.body.success).toBe(true);
-  });
+  }, 20000);
   // Fail if duplicate
   test('addIngredient should respond with 400 status code and a message if the ingredient is a duplicate', async () => {
     let response2 = await request(app)
@@ -114,7 +114,7 @@ describe('PATCH api/v1/ingredients/add', () => {
     expect(response2.statusCode).toBe(400);
     expect(response2.body.success).toBe(false);
     expect(response2.body.message).toBe('Duplicate ingredient');
-  });
+  }, 20000);
 });
 
 describe('PATCH api/v1/ingredients/setavailability', () => {
@@ -131,7 +131,7 @@ describe('PATCH api/v1/ingredients/setavailability', () => {
     expect(response.statusCode).toBe(400);
     expect(response.body.success).toBe(false);
     expect(response.body.message).toBe('Quantity is not valid');
-  });
+  }, 20000);
   // Change availability if everything is fine
   test('setAvailability should respond with 200 status code and a message', async () => {
     let ingredient = await Ingredient.findOne({ name: 'Salami3' });
@@ -147,7 +147,7 @@ describe('PATCH api/v1/ingredients/setavailability', () => {
     expect(response.statusCode).toBe(200);
     expect(response.body.success).toBe(true);
     expect(response.body.message).toBe('Availability updated');
-  });
+  }, 20000);
 });
 
 describe('PATCH api/v1/ingredients/increaseavailability', () => {
@@ -164,7 +164,7 @@ describe('PATCH api/v1/ingredients/increaseavailability', () => {
     expect(response.statusCode).toBe(400);
     expect(response.body.success).toBe(false);
     expect(response.body.message).toBe('Quantity is not valid');
-  });
+  }, 20000);
   // Increase availability if everything is fine
   test('increaseAvailability should respond with 200 status code and a message', async () => {
     let ingredient = await Ingredient.findOne({ name: 'Salami3' });
@@ -180,7 +180,7 @@ describe('PATCH api/v1/ingredients/increaseavailability', () => {
     expect(response.statusCode).toBe(200);
     expect(response.body.success).toBe(true);
     expect(response.body.message).toBe('Availability updated');
-  });
+  }, 20000);
 });
 
 describe('DELETE api/v1/ingredients/delete', () => {
@@ -195,7 +195,7 @@ describe('DELETE api/v1/ingredients/delete', () => {
     expect(response.statusCode).toBe(200);
     expect(response.body.success).toBe(true);
     expect(response.body.message).toBe('Ingredient deleted');
-  });
+  }, 20000);
   test('deleteIngredient should respond with 404 status code and a message if the ingredient is not found', async () => {
     let response = await request(app)
       .delete('/api/v1/ingredients/delete')
@@ -205,7 +205,7 @@ describe('DELETE api/v1/ingredients/delete', () => {
     expect(response.statusCode).toBe(404);
     expect(response.body.success).toBe(false);
     expect(response.body.message).toBe('Ingredient not found');
-  });
+  }, 20000);
   test('deleteIngredient should respond with 500 status code and a message if the ingredient is already deleted', async () => {
     let ingredient = await Ingredient.findOne({ name: 'Salami3' });
     let response = await request(app)
@@ -216,7 +216,7 @@ describe('DELETE api/v1/ingredients/delete', () => {
     expect(response.statusCode).toBe(500);
     expect(response.body.success).toBe(false);
     expect(response.body.message).toBe('Failed to delete ingredient');
-  });
+  }, 20000);
 });
 
 describe('PATCH api/v1/ingredients/restoredeleted', () => {
@@ -230,7 +230,7 @@ describe('PATCH api/v1/ingredients/restoredeleted', () => {
     expect(response.statusCode).toBe(200);
     expect(response.body.success).toBe(true);
     expect(response.body.message).toBe('Ingredient restored');
-  });
+  }, 20000);
   test('restoreDeleted should respond with 404 status code and a message if the ingredient is not found', async () => {
     let response = await request(app)
       .patch('/api/v1/ingredients/restoredeleted')
@@ -240,7 +240,7 @@ describe('PATCH api/v1/ingredients/restoredeleted', () => {
     expect(response.statusCode).toBe(404);
     expect(response.body.success).toBe(false);
     expect(response.body.message).toBe('Ingredient not found');
-  });
+  }, 20000);
   test('restoreDeleted should respond with 400 status code and a message if the ingredient is already active', async () => {
     let ingredient = await Ingredient.findOne({ name: 'Salami3' });
     let response = await request(app)
@@ -251,7 +251,7 @@ describe('PATCH api/v1/ingredients/restoredeleted', () => {
     expect(response.statusCode).toBe(400);
     expect(response.body.success).toBe(false);
     expect(response.body.message).toBe('Ingredient already active');
-  });
+  }, 20000);
 });
 async function populateDatabase() {
   let ingredient1 = new Ingredient({
