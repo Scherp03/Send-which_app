@@ -43,7 +43,6 @@ describe('Order', () => {
       ingredientsID: [ingredient1._id, ingredient2._id],
     });
     await Sandwich.insertMany(sandwich1);
-    await Sandwich.insertMany(sandwich1);
     let order1 = new Order({
       content: sandwich1._id,
       total: 0,
@@ -51,7 +50,6 @@ describe('Order', () => {
       date: '2024-07-14T10:00:00Z',
     });
     let realPrice = await order1.calculatePrice();
-    let expectedPrice = 2 + 0.5 + 1;
     let expectedPrice = 2 + 0.5 + 1;
     expect(realPrice).toBe(expectedPrice);
 
@@ -92,7 +90,6 @@ describe('Order', () => {
       breadType: 'Large',
       ingredientsID: [ingredient2._id, ingredient3._id],
     });
-    await Sandwich.insertMany(sandwich1);
     await Sandwich.insertMany(sandwich1);
     let order1 = new Order({
       content: sandwich1._id,

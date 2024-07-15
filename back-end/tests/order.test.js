@@ -8,17 +8,12 @@ import User from '../database/schemas/user.js';
 
 dotenv.config();
 
-if (!process.env.DB_URI) {
-  throw new Error(
-    'Test suite stopped beacuse necessary URI environmental variable for MongoDB connection is missing',
-  );
-}
-const dbUri = process.env.DB_URI;
-
 beforeAll(async () => {
-  
+  const dbUri =
+    'mongodb+srv://WritingPurposeUser:FpKwCBXmZh7uSvfA@test1.sdy9unk.mongodb.net/Test_Jest1?retryWrites=true&w=majority';
+
   await mongoose.connect(dbUri);
-  10000;
+ 
   const userid= new mongoose.Types.ObjectId();
   const slotid= new mongoose.Types.ObjectId();
   const content= new mongoose.Types.ObjectId();
@@ -31,7 +26,7 @@ beforeAll(async () => {
     date: "2024-07-14T10:00:00Z"
   });
   await Order.create(testorder);
-}, );
+}, 20000);
 
 afterAll(async () => {
   
