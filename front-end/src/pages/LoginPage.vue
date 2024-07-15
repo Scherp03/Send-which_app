@@ -59,6 +59,8 @@ const onsubmit = async () => {
       password: password.value,
     };
    
+   
+    
      const response = await fetch(`http://localhost:3000/api/v1/auth/login`, {
           method: "POST",
           headers: {
@@ -122,7 +124,7 @@ const signInWithGoogle = async () => {
       setTimeout(() => {
         $q.notify({
         progress: true,
-        type: 'warning',
+        type: 'positive',
         message: message,
       });
       },5000)

@@ -72,13 +72,12 @@
         <q-stepper-navigation>
           <q-btn class="q-ml-sm" v-if="step == 3" color="green" bg-color="white" label="Pay" @click="placeOrder" />
           <q-btn v-if="step < 3" :disable="disableContinue" @click="$refs.stepper.next()" color="deep-orange" label="Continue" />
-           <q-btn class="q-ml-sm" v-if="step == 1" color="red" bg-color="white" label="Cancel" @click="cancelOrder" />
+          <q-btn class="q-ml-sm" v-if="step == 1" color="red" bg-color="white" label="Cancel" @click="cancelOrder" />
+          <q-btn v-if="step == 1" flat  bg-color="green" color="green" @click="saveSandwich" label="Save Sandwich" class="q-ml-sm" />
           <q-btn v-if="step > 1" flat color="deep-orange" @click="$refs.stepper.previous()" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
       </template>
     </q-stepper>
-
-    
   </div>
 </template>
 
@@ -99,6 +98,7 @@ export default {
     const breadTypes = ['White Bread', 'Whole Grain', 'Sourdough', 'Rye Bread', 'Multigrain'];
     const selectedBread = ref(null);
     const loading = ref(true);
+    const sandwichSaved = ref(false); // Flag to track if sandwich has been saved
 
     const fetchIngredients = async () => {
       try {
@@ -132,7 +132,7 @@ export default {
     };
 
     const disableContinue = computed(() => {
-      return selectedBread.value === null || selection.value.length === 0;
+      return selectedBread.value === null || selection.value.length === 0 || !sandwichSaved.value;
     });
 
     const placeOrder = async () => {
@@ -185,6 +185,9 @@ export default {
        console.log('Sandwich Data:', sandwichData);
 
        await axios.post('http://localhost:3000/api/v1/sandwich', sandwichData);
+
+       // Set sandwichSaved to true after successfully saving sandwich data
+       sandwichSaved.value = true;
      } catch (error) {
        $q.notify({
          type: 'negative',
@@ -195,18 +198,18 @@ export default {
      }
    };
 
-    // const handleContinue = async () => {
-    //   try {
-    //     await sendOrderData();
-    //     this.$refs.stepper.next();
-    //   } catch (error) {
-    //     console.error('Failed to continue to next step:', error);
-    //   }
-    // };
+    const saveSandwich = async () => {
+      try {
+        await sendOrderData();
+      } catch (error) {
+        console.error('Error saving sandwich:', error);
+      }
+    };
 
     const cancelOrder = () => {
       selection.value = [];
       selectedBread.value = null;
+      sandwichSaved.value = false; // Reset sandwichSaved flag on cancel
     };
 
     // Computed property to get details of selected ingredients
@@ -223,7 +226,7 @@ export default {
       disableContinue,
       placeOrder,
       cancelOrder,
-      //handleContinue,
+      saveSandwich,
       ingredients,
       breadTypes,
       loading,

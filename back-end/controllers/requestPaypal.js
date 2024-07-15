@@ -7,7 +7,7 @@ async function generateAccessToken() {
   try {
     const response = await axios({
       url: process.env.PAYPAL_BASE_URL + '/v1/oauth2/token',
-      method: 'POST',
+      method: 'post',
       data: 'grant_type=client_credentials',
       auth: {
         username: process.env.PAYPAL_CLIENT_ID,

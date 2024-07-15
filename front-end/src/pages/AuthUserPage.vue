@@ -56,10 +56,7 @@ onMounted(async () => {
     });
     firstName.value = response.data.firstName;
   } catch (error) {
-    $q.notify({
-      type: 'negative',
-      message: 'Error fetching user data',
-    });
+    
     console.error('Error fetching user data:', error);
   }
 });
