@@ -16,8 +16,9 @@ if (!process.env.DB_URI) {
 const dbUri = process.env.DB_URI;
 
 beforeAll(async () => {
+  
   await mongoose.connect(dbUri);
-
+  10000;
   const userid= new mongoose.Types.ObjectId();
   const slotid= new mongoose.Types.ObjectId();
   const content= new mongoose.Types.ObjectId();
@@ -30,7 +31,7 @@ beforeAll(async () => {
     date: "2024-07-14T10:00:00Z"
   });
   await Order.create(testorder);
-}, 10000);
+}, );
 
 afterAll(async () => {
   
