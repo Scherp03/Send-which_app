@@ -5,7 +5,7 @@ import request from 'supertest';
 
 beforeAll(async () => {
   const dbUri =
-    'mongodb+srv://WritingPurposeUser:FpKwCBXmZh7uSvfA@test1.sdy9unk.mongodb.net/Test_Jest1?retryWrites=true&w=majority';
+    'mongodb+srv://WritingPurposeUser:FpKwCBXmZh7uSvfA@test1.sdy9unk.mongodb.net/Test_Jest2?retryWrites=true&w=majority';
   await mongoose.connect(dbUri);
   await populateDatabase();
 }, 20000);
