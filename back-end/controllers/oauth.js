@@ -13,7 +13,7 @@ export const oauth = async (req, res, next) => {
   const code = req.query.code;
 
   try {
-    const redirectURL = 'http://127.0.0.1:3000/oauth';
+    const redirectURL = 'https://send-which-app.onrender.com/oauth';
     const oAuth2Client = new OAuth2Client(
       process.env.CLIENT_ID,
       process.env.CLIENT_SECRET,
