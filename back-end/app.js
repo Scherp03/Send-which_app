@@ -9,6 +9,7 @@ import userRouter from './routes/user.js';
 import requestPaypalRouter from './routes/requestPaypal.js';
 import paymentRouter from './routes/payment.js';
 import oauthRouter from './routes/oauth.js';
+import orderRouter from './routes/order.js';
 import requestGoogleRouter from './routes/requestGoogle.js';
 import ingredientRouter from './routes/ingredient.js';
 import sandwichRouter from './routes/sandwich.js';
@@ -31,6 +32,7 @@ app.use(bodyParser.json());
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/order', orderRouter);
 app.use('/oauth', oauthRouter);
 app.use('/api/v1/requestgoogle', requestGoogleRouter);
 app.use('/api/v1/paypal', requestPaypalRouter);
