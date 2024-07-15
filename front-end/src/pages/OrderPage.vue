@@ -71,7 +71,7 @@
       <template v-slot:navigation>
         <q-stepper-navigation>
           <q-btn class="q-ml-sm" v-if="step == 3" color="green" bg-color="white" label="Pay" @click="placeOrder" />
-          <q-btn v-if="step < 3" :disable="disableContinue" @click="$refs.stepper.next();" color="deep-orange" label="Continue" />
+          <q-btn v-if="step < 3" :disable="disableContinue" @click="$refs.stepper.next()" color="deep-orange" label="Continue" />
            <q-btn class="q-ml-sm" v-if="step == 1" color="red" bg-color="white" label="Cancel" @click="cancelOrder" />
           <q-btn v-if="step > 1" flat color="deep-orange" @click="$refs.stepper.previous()" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>

@@ -13,7 +13,7 @@
 
         <q-toolbar-title v-show="false"> Sendwhich App </q-toolbar-title>
         <q-btn flat label="Home" to="/" />
-        <q-btn flat label="Settings" to="/settings" />
+        
         <q-btn flat label="Contact" to="/contacts" />
         <q-btn flat label="Ingredients" to="/ingredients" />
 

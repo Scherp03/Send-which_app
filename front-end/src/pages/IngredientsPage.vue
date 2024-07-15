@@ -25,6 +25,16 @@
             border-color: black;
           "
         >
+         <div v-if="loadingBreads" class="loading-message">Loading bread types...</div>
+          <div v-else>
+            <div
+              v-for="bread in breads"
+              :key="bread"
+              class="ingredient-item"
+            >
+              {{ bread }} - €2.00
+            </div>
+          </div>
           <div v-if="loading" class="loading-message">Loading...</div>
           <div v-else>
             <div
@@ -49,6 +59,14 @@ export default {
   setup() {
     const ingredients = ref([]);
     const loading = ref(true);
+    const breads = ref([
+      "Whole Wheat",
+      "Rye",
+      "Sourdough",
+      "Multigrain",
+      "Baguette",
+      "Ciabatta"
+    ]);
 
     const fetchIngredients = async () => {
       try {
@@ -68,6 +86,7 @@ export default {
     return {
       ingredients,
       loading,
+      breads,
       thumbStyle: {
         right: '4px',
         borderRadius: '5px',
