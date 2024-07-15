@@ -16,17 +16,17 @@ const orderSchema = new mongoose.Schema({
 // Get price based on the prices of the sandwiches
 orderSchema.methods.calculatePrice = async function () {
   this.total = 0;
-  
-    let sandwich = await Sandwich.findById(this.content);
-    if (sandwich) {
-      let temporaryPrice = await sandwich.calculatePrice();
-      this.total += temporaryPrice;
-    } else {
-      console.log(
-        'Error in calculatePrice: Sandwich not found for ID ' + this.content,
-      );
-    }
-  
+
+  let sandwich = await Sandwich.findById(this.content);
+  if (sandwich) {
+    let temporaryPrice = await sandwich.calculatePrice();
+    this.total += temporaryPrice;
+  } else {
+    console.log(
+      'Error in calculatePrice: Sandwich not found for ID ' + this.content,
+    );
+  }
+
   await this.save();
   return this.total;
 };
@@ -52,12 +52,11 @@ orderSchema.methods.addOrderStatistics = async function () {
     sandwich.addStatistic();
   } else {
     console.log(
-      'Error in addOrderStatistics: Sandwich not found for ID ' +
-        this.content,
+      'Error in addOrderStatistics: Sandwich not found for ID ' + this.content,
     );
     return false;
   }
-  return true;
+  return true;
 };
 
 // Export the models

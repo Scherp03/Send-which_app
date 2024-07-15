@@ -1,5 +1,11 @@
 import express from 'express';
-import { createOrder,viewAllOrders,viewOrder, viewStatus, changeStatus } from '../controllers/order.js';
+import {
+  createOrder,
+  viewAllOrders,
+  viewOrder,
+  viewStatus,
+  changeStatus,
+} from '../controllers/order.js';
 
 const router = express.Router();
 /**
@@ -514,6 +520,5 @@ router.patch('/:id', changeStatus);
  *       '500':
  *         description: "Internal Server Error: An unexpected condition prevented the request from being fulfilled."
  */
-
 
 export default router;
