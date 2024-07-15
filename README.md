@@ -2,7 +2,7 @@
 
 Repository for the 2024 Software Engineering project
 
-## Project members
+## Project Members
 
 - Carpella Luca
 - Eccel Niccolò
@@ -21,9 +21,13 @@ The frontend interacts with the backend API's hosted at https://send-which-app.o
 The frontend application is deployed on Netlify. Any changes to the 'main' branch will trigger an automatic deployment.
 Try out the application at ..........
 
-# Run the application locally:
+# API Documentation
 
-## Server build Setup
+The API's documentation is always available at https://send-which-app.onrender.com/api-docs
+
+# Run The Application Locally:
+
+## Server Build Setup
 
 Enter the back-end directory and run the following commands
 
@@ -46,7 +50,7 @@ npm run dev
 npm run test
 ```
 
-## Frontend build Setup
+## Frontend Build Setup
 
 Enter the front-end directory and run the following commands
 
