@@ -3,7 +3,7 @@ import UserType from './schemas/userType.js';
 import Ingredient from './schemas/ingredient.js';
 import Sandwich from './schemas/sandwich.js';
 import Slot from './schemas/slot.js';
-import axios from "axios";
+import axios from 'axios';
 import { Permissions, Roles } from '../../shared/userTypeDefinitions.js';
 import bcrypt from 'bcryptjs';
 

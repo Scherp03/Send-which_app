@@ -22,7 +22,7 @@ beforeAll(async () => {
     content: content,
     total: 20.0,
     status: 'toDo',
-    date: new Date()
+    date: new Date(),
   });
   testorder.date.setUTCHours(testorder.date.getUTCHours() + 1);
   await Order.create(testorder);
@@ -158,7 +158,7 @@ describe('POST /api/v1/order', () => {
       status: 'failed',
       date: new Date(),
     });
-    
+
     expect(response1.statusCode).toBe(400);
     expect(response1.body.success).toBe(false);
   }, 20000);
@@ -173,7 +173,7 @@ describe('POST /api/v1/order', () => {
       status: 'failed',
       date: new Date(),
     });
-    
+
     expect(response1.statusCode).toBe(401);
     expect(response1.body.success).toBe(false);
   }, 20000);
