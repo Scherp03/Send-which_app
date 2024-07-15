@@ -51,8 +51,8 @@ describe('Order', () => {
     let expectedPrice = 2 + 0.5 + 1;
     expect(realPrice).toBe(expectedPrice);
 
-    await Ingredient.deleteMany({ tags: 'toBeDeleted' });
-    await Sandwich.deleteMany({ _id: sandwich1._id });
+    await Sandwich.deleteOne({ _id: sandwich1._id });
+    await Order.deleteOne({ _id: order1._id });
   });
 });
 
@@ -60,25 +60,8 @@ describe('Order', () => {
 describe('Order', () => {
   test('addOrderStatistics adds statistics for all sandwiches in the order', async () => {
     // Add basic data
-    let ingredient1 = new Ingredient({
-      name: 'Tomato',
-      price: 0.5,
-      quantity: 10,
-      tags: ['vegetarian', 'vegan', 'toBeDeleted'],
-    });
-    let ingredient2 = new Ingredient({
-      name: 'Cheese',
-      price: 1,
-      quantity: 20,
-      tags: ['vegetarian', 'lactose', 'toBeDeleted'],
-    });
-    let ingredient3 = new Ingredient({
-      name: 'Ham',
-      price: 2,
-      quantity: 50,
-      tags: ['meat', 'toBeDeleted'],
-    });
-    await Ingredient.insertMany([ingredient1, ingredient2, ingredient3]);
+    let ingredient1 = await Ingredient.findOne({ name: 'Tomato' });
+    let ingredient2 = await Ingredient.findOne({ name: 'Cheese' });
     let sandwich1 = new Sandwich({
       breadType: 'White',
       ingredientsID: [ingredient1._id, ingredient2._id],
@@ -100,6 +83,6 @@ describe('Order', () => {
 
     expect(stat1.timesSold).toBe(1);
     await Sandwich.deleteOne({ _id: sandwich1._id });
-    // await StatSandwich.deleteOne({ ingredientsHash: hash1 });
+    await StatSandwich.deleteOne({ ingredientsHash: hash1 });
   });
 });
