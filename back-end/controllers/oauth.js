@@ -43,15 +43,48 @@ export const oauth = async (req, res, next) => {
     if (!user) {
       // create crypted password
       const hashedPassword = await bcrypt.hash('temporary-password', 10);
-      const data = {
+      const data = new UserModel({
         firstName: userData.given_name,
         lastName: userData.family_name,
         username: userData.given_name + userData.family_name,
         email: userData.email,
         password: hashedPassword,
         userType: Roles.USER,
-      };
+      });
       await UserModel.create(data);
+
+      // user to login
+      const loginUser = await UserModel.findOne({ email: userData.email });
+
+      // generate JWT token
+      const userType = await UserTypeModel.findOne({
+        role: loginUser.userType,
+      });
+      const payload = {
+        username: req.body.username,
+        role: userType.role,
+        permissions: userType.permissions,
+      };
+      const options = { expiresIn: '8h' };
+      const access_key = jwt.sign(
+        payload,
+        process.env.ACCESS_TOKEN_SECRET,
+        options,
+      );
+      const responseData = {
+        success: true,
+        message: `Welcome ${loginUser.username}! Your current password is: <temporary-password>. Change it ASAP`,
+        id: loginUser._id,
+        token: access_key,
+      };
+
+      const script = `
+    <script>
+      window.opener.postMessage(${JSON.stringify(responseData)}, '*');
+      window.close();
+    </script>
+  `;
+      return res.send(script);
     }
     // user to login
     const loginUser = await UserModel.findOne({ email: userData.email });
@@ -71,7 +104,7 @@ export const oauth = async (req, res, next) => {
     );
     const responseData = {
       success: true,
-      message: `Welcome ${loginUser.username}! Your current password is: <temporary-password>. Change it ASAP`,
+      message: `Welcome to your account, ${loginUser.username}!`,
       id: loginUser._id,
       token: access_key,
     };
@@ -82,7 +115,7 @@ export const oauth = async (req, res, next) => {
       window.close();
     </script>
   `;
-    res.send(script);
+    return res.send(script);
   } catch (err) {
     res.redirect(303, 'http://localhost:9000/#');
     console.log('Error logging in with OAuth2 user: ', err);
