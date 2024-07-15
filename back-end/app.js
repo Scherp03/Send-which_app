@@ -12,6 +12,7 @@ import oauthRouter from './routes/oauth.js';
 import requestGoogleRouter from './routes/requestGoogle.js';
 import ingredientRouter from './routes/ingredient.js';
 import sandwichRouter from './routes/sandwich.js';
+import orderRouter from './routes/order.js';
 /* Routes */
 const app = express();
 
@@ -37,6 +38,7 @@ app.use('/api/v1/paypal', requestPaypalRouter);
 app.use('/payment', paymentRouter);
 app.use('/api/v1/sandwich', sandwichRouter);
 app.use('/api/v1/ingredients', ingredientRouter);
+app.use('/api/v1/order', orderRouter);
 /* Quick check if it's working */
 app.get('/', (req, res) => {
   res.status(200).send('Welcome to homepage!');
