@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 // Slot schema
 const slotSchema = new mongoose.Schema({
   time: Date,
-  maxSandwiches: number,
-  duration: number,
+  maxSandwiches: Number,
+  duration: Number,
 });
-
-export default slotSchema;
+const Slot = mongoose.model('Slot', slotSchema);
+export default Slot;

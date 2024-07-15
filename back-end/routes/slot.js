@@ -1,6 +1,6 @@
 import express from 'express';
 
-import populateSlots from '../controllers/slot.js';
+import { populateSlots, getSlots } from '../controllers/slot.js';
 
 const router = express.Router();
 
