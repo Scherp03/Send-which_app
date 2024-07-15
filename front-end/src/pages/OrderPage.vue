@@ -70,27 +70,15 @@
 
       <template v-slot:navigation>
         <q-stepper-navigation>
-          <q-btn class="q-ml-sm" v-if="step == 1" color="red" bg-color="white" label="Cancel" @click="cancelOrder" />
           <q-btn class="q-ml-sm" v-if="step == 3" color="green" bg-color="white" label="Pay" @click="placeOrder" />
-          <q-btn v-if="step < 3" :disable="disableContinue" @click="handleContinue" color="deep-orange" label="Continue" />
+          <q-btn v-if="step < 3" :disable="disableContinue" @click="$refs.stepper.next();" color="deep-orange" label="Continue" />
+           <q-btn class="q-ml-sm" v-if="step == 1" color="red" bg-color="white" label="Cancel" @click="cancelOrder" />
           <q-btn v-if="step > 1" flat color="deep-orange" @click="$refs.stepper.previous()" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
       </template>
     </q-stepper>
 
-    <div v-if="selectedIngredients.length > 0" class="q-mt-lg">
-      <h2>Selected Ingredients:</h2>
-      <ul>
-        <li v-for="ingredient in selectedIngredients" :key="ingredient._id">
-          <div>{{ ingredient.name }}</div>
-          <div>Description: {{ ingredient.description }}</div>
-          <div>Price: €{{ ingredient.price.toFixed(2) }}</div>
-          <div>Quantity: {{ ingredient.quantity }}</div>
-          <div>Tags: {{ ingredient.tags.join(', ') }}</div>
-          <div> ID: {{ingredient._id}}</div>
-        </li>
-      </ul>
-    </div>
+    
   </div>
 </template>
 
@@ -207,14 +195,14 @@ export default {
      }
    };
 
-    const handleContinue = async () => {
-      try {
-        await sendOrderData();
-        $refs.stepper.next();
-      } catch (error) {
-        console.error('Failed to continue to next step:', error);
-      }
-    };
+    // const handleContinue = async () => {
+    //   try {
+    //     await sendOrderData();
+    //     this.$refs.stepper.next();
+    //   } catch (error) {
+    //     console.error('Failed to continue to next step:', error);
+    //   }
+    // };
 
     const cancelOrder = () => {
       selection.value = [];
@@ -235,7 +223,7 @@ export default {
       disableContinue,
       placeOrder,
       cancelOrder,
-      handleContinue,
+      //handleContinue,
       ingredients,
       breadTypes,
       loading,

@@ -33,12 +33,23 @@
                         filled
                         class="q-mb-sm"
                       />
-                      <q-chip-input
-                        v-model="newIngredient.tags"
-                        label="Tags"
+                      <q-input
+                        v-model="tagInput"
+                        label="Tags (press enter to add)"
                         filled
                         class="q-mb-sm"
+                        @keyup.enter="addTag"
                       />
+                      <div v-if="newIngredient.tags.length" class="q-mb-sm">
+                        <q-chip
+                          v-for="(tag, index) in newIngredient.tags"
+                          :key="index"
+                          removable
+                          @remove="removeTag(index)"
+                        >
+                          {{ tag }}
+                        </q-chip>
+                      </div>
                       <q-input
                         v-model="newIngredient.quantity"
                         label="Quantity"
@@ -104,7 +115,14 @@
                           clickable
                           v-ripple
                         >
-                          <q-item-section>{{ order.name }}</q-item-section>
+                          <q-item-section>
+                            <div><strong>Order ID:</strong> {{ order.orderId }}</div>
+                            <div><strong>Slot ID:</strong> {{ order.slotID }}</div>
+                            <div><strong>Content:</strong> {{ order.content }}</div>
+                            <div><strong>Total:</strong> €{{ order.total }}</div>
+                            <div><strong>Status:</strong> {{ order.status }}</div>
+                            <div><strong>Date:</strong> {{ order.date }}</div>
+                          </q-item-section>
                         </q-item>
                       </q-list>
                     </q-card-section>
@@ -119,6 +137,7 @@
   </q-page>
 </template>
 
+
 <script>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
@@ -128,6 +147,7 @@ export default {
   setup() {
     const $q = useQuasar();
     const newIngredient = ref({ name: '', price: '', description: '', tags: ['sandwich-app'], quantity: 100 });
+    const tagInput = ref('');
     const ingredients = ref([]);
     const orders = ref([]);
 
@@ -165,17 +185,50 @@ export default {
       }
     };
 
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/v1/order');
+        if (response.data.success) {
+          orders.value = response.data.orders;
+        }
+      } catch (error) {
+        $q.notify({
+          type: 'negative',
+          message: 'Error fetching orders',
+        });
+      }
+    };
+
+    const addTag = () => {
+      if (tagInput.value) {
+        newIngredient.value.tags.push(tagInput.value);
+        tagInput.value = '';
+      }
+    };
+
+    const removeTag = (index) => {
+      newIngredient.value.tags.splice(index, 1);
+    };
+
+    onMounted(() => {
+      fetchOrders();
+    });
+
     return {
       newIngredient,
+      tagInput,
       ingredients,
       orders,
       addIngredient,
       removeIngredient,
       submitIngredients,
+      addTag,
+      removeTag,
     };
   },
 };
 </script>
+
 
 <style scoped>
 .row {
@@ -203,7 +256,7 @@ export default {
   width: 100%;
 }
 
-.q-input, .q-chip-input {
+.q-input {
   width: 100%;
 }
 </style>
