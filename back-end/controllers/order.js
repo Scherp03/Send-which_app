@@ -130,12 +130,10 @@ export const viewStatus = async (req, res, next) => {
     }
     const StatusOrders = await OrderModel.find({ status: status });
     if (StatusOrders.length === 0) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: `Orders with status ${status} not found`,
-        });
+      return res.status(404).json({
+        success: false,
+        message: `Orders with status ${status} not found`,
+      });
     }
 
     return res.status(200).json({

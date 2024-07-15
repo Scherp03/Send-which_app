@@ -54,18 +54,18 @@ export const getSlots = async (req, res, next) => {
     if (slots.length === 0) {
       return res
         .status(404)
-        .json({ success: false,
-        message: 'No slots found' });
+        .json({ success: false, message: 'No slots found' });
     }
-    return res.status(200).json({ 
+    return res.status(200).json({
       success: true,
-        slots: slots.map(slot => ({
-          _id: slot._id,
-          time: slot.time.toDateString(),
-          maxSandwiches: slot.maxSandwiches,
-          duration: slot.duration
-        }))
-  })} catch (err) {
+      slots: slots.map((slot) => ({
+        _id: slot._id,
+        time: slot.time.toDateString(),
+        maxSandwiches: slot.maxSandwiches,
+        duration: slot.duration,
+      })),
+    });
+  } catch (err) {
     console.log(err.message);
     if (!err.statusCode) {
       err.statusCode = 500;

@@ -31,7 +31,7 @@ describe('POST api/v1/slots', () => {
       success: true,
       message: 'Slots added',
     });
-  },20000) ;
+  }, 20000);
 });
 
 //Fetch data of all slots
@@ -39,15 +39,14 @@ describe('GET api/v1/slots', () => {
   test('It should respond with 201 and a message', async () => {
     const slot = await Slot.find();
 
-    const response = await request(app)
-      .get('/api/v1/slots');
+    const response = await request(app).get('/api/v1/slots');
     expect(response.statusCode).toBe(200);
     expect(response.body.success).toBe(true);
 
-      for(let i=0; i<response.body.slots.length;i++){
-        expect(response.body.slots[i]._id.toString()).toEqual(slot[i]._id.toString());
-  }   
-    }, 20000);
-  });
-
- 
+    for (let i = 0; i < response.body.slots.length; i++) {
+      expect(response.body.slots[i]._id.toString()).toEqual(
+        slot[i]._id.toString(),
+      );
+    }
+  }, 20000);
+});
