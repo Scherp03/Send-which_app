@@ -47,6 +47,8 @@ import mongoose from 'mongoose';
       }
       return res.status(200).json({
         success:true,
+        userID:Order.userID
+
       })
     
     } catch (err) {
@@ -76,7 +78,12 @@ import mongoose from 'mongoose';
   
       return res.status(200).json({
         success: true,
-        order,
+        orderId: order._id.toString(),
+        slotID: order.slotID,
+        content: order.content,
+        total: order.total,
+        status: order.status,
+        date: order.date.toDateString()
       });
     } catch (err) {
       console.log(err.message);
@@ -91,10 +98,25 @@ import mongoose from 'mongoose';
     res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
     try {
       const orders = await OrderModel.find();
+      if (orders.length === 0) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "No order found" 
+        });
+      }
+  
       return res.status(200).json({
         success: true,
-        orders,
-      });
+        orders: orders.map(order => ({
+          
+          orderId: order._id,
+          slotID: order.slotID,
+          content: order.content,
+          total: order.total,
+          status: order.status,
+          date: order.date.toDateString()
+        }))
+        });
     } catch (err) {
       console.log(err.message);
       if (!err.statusCode) {
@@ -103,13 +125,30 @@ import mongoose from 'mongoose';
       next(err);
     }
   };
-  export const viewToDo = async (req, res, next) => {
+  export const viewStatus = async (req, res, next) => {
     res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+    
     try {
-      const toDoOrders = await OrderModel.find({ status: 'toDo' });
-      return res.status(200).json({
-        success: true,
-        orders: toDoOrders,
+      const { status } = req.params;
+      if (!status) {
+        return res.status(400).json({ success: false, message: 'Status is required' });
+      }
+      const StatusOrders = await OrderModel.find({ status: "toDo" });
+    if (StatusOrders.length === 0) {
+      return res.status(404).json({ success: false, message: `Orders with status ${status} not found` });
+    }
+
+    return res.status(200).json({
+      success: true,
+      orders: StatusOrders.map(order => ({
+        
+        orderId: order._id.toString(),
+        slotID: order.slotID.toString(),
+        content: order.content.toString(),
+        total: order.total,
+        status: order.status,
+        //date: order.date.toDateString()
+      }))
       });
     } catch (err) {
       console.log(err.message);
@@ -128,25 +167,34 @@ import mongoose from 'mongoose';
         return res.status(400).json({ success: false, message: 'Order ID is required' });
       }
       
-      const order = await OrderModel.findById(id);
+      let order = await OrderModel.findById(id);
       if (!order) {
         
         return res.
         status(404).
         json({ success: false, message: 'Order not found' });
       }
+
+      if (order.status === 'completed') {
+              return res.status(401).json({ success: false, message: 'Order already completed' });
+            }
+
       const result = await OrderModel.updateOne(
         { _id: id, status: 'toDo' }, 
         { $set: { status: 'completed' } } 
       );
   
-      if (result.nModified === 0) {
-        return res.status(404).json({ success: false, message: 'Order not found or already completed' });
-      }
+      order = await OrderModel.findById(id);
   
       return res.status(200).json({
         success: true,
         message: 'Order status updated to completed',
+        orderId: order._id.toString(),
+        slotID: order.slotID,
+        content: order.content,
+        total: order.total,
+        status: order.status,
+        date: order.date.toDateString()
       });
     }
     catch (err) {
