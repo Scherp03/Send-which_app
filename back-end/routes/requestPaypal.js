@@ -6,7 +6,7 @@ const router = express.Router();
  * @openapi
  * api/v1/paypal:
  *   post:
- *     summary: PayPal Payment 
+ *     summary: PayPal Payment
  *     description: Fetch the url to redirect to paypal payment page
  *     tags:
  *       - Authentication
@@ -31,7 +31,7 @@ const router = express.Router();
  *                 url:
  *                   type: string
  *                   example: "https://api-m.sandbox.paypal.com..."
- */
+ */
 router.post('/pay', createOrder);
 
 export default router;
