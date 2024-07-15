@@ -37,11 +37,13 @@ import { ref } from 'vue';
 import axios from 'axios';
 import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
+import  {jwtDecode}  from 'jwt-decode';
 
 const username = ref('');
 const password = ref('');
 const $q = useQuasar();
 const router = useRouter();
+
 
 const onsubmit = async () => {
    if (!username.value || !password.value) {
@@ -60,17 +62,20 @@ const onsubmit = async () => {
     const response = await axios.post('http://localhost:3000/api/v1/auth/login', data);
 
     if (response.data.success) {
-      const userType = response.data.payload.role; // Assuming userType is part of the response
-
+  
       $q.notify({
         type: 'positive',
         message: response.data.message,
       });
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('id', response.data.id);
-      localStorage.setItem('userType', userType);
+    
+      const token = localStorage.getItem('token');
+      const decodedPayload = jwtDecode(token); 
+      
+      localStorage.setItem('userType', decodedPayload.role);
 
-      if (userType === 'Admin') {
+      if (localStorage.getItem('userType') === 'Admin') {
         router.push('/admin'); // Route to admin page if user is an admin
       } else {
         router.push('/auth'); // Route to a different page if user is not an admin

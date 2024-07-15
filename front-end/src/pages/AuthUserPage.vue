@@ -134,7 +134,7 @@ onUnmounted(() => {
 
 /* Styling for the first name */
 .first-name {
-  color: red;
+  color: white;
   font-weight: bolder;
 }
 </style>

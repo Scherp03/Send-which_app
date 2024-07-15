@@ -39,7 +39,7 @@
                 :class="{ changed: firstName !== originalValues.firstName }"
               />
             </div>
-            <div class="q-column" style="width:50px"> </div>
+            <div class="q-column" style="width:50px"></div>
             <!-- Right Column -->
             <div class="q-column">
               <q-input
@@ -85,7 +85,9 @@
 import { ref, reactive, onMounted } from 'vue';
 import { useQuasar } from 'quasar';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
+// Reactive references for form fields
 const username = ref('');
 const email = ref('');
 const firstName = ref('');
@@ -93,13 +95,16 @@ const lastName = ref('');
 const password = ref('');
 const passwordVisible = ref(false);
 const $q = useQuasar();
+const router = useRouter();
 
+// Toggle display of form fields
 const showUsername = ref(true);
 const showEmail = ref(true);
 const showFirstName = ref(true);
 const showLastName = ref(true);
 const showPassword = ref(true);
 
+// Original values for comparison
 const originalValues = reactive({
   username: '',
   email: '',
@@ -107,15 +112,17 @@ const originalValues = reactive({
   lastName: ''
 });
 
+// Fetch user data from API
 const fetchUserDataUrl = id => `http://localhost:3000/api/v1/users/${id}`;
 
-onMounted(async () => {
+const fetchUserData = async () => {
   try {
     const response = await axios.get(fetchUserDataUrl(localStorage.getItem('id')), {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('token'),
       },
     });
+    // Populate form fields with fetched data
     username.value = response.data.username;
     email.value = response.data.email;
     firstName.value = response.data.firstName;
@@ -133,12 +140,16 @@ onMounted(async () => {
     });
     console.error('Error fetching user data:', error);
   }
-});
+};
 
+onMounted(fetchUserData);
+
+// Toggle password visibility
 const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value;
 };
 
+// Submit form data to API
 const submitForm = async () => {
   const updatedData = {};
 
@@ -162,42 +173,29 @@ const submitForm = async () => {
   console.log('Updating user data:', updatedData);
 
   try {
-    const response = await fetch(fetchUserDataUrl(localStorage.getItem('id')), {
-      method: "PATCH",
+    const response = await axios.patch(fetchUserDataUrl(localStorage.getItem('id')), updatedData, {
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${localStorage.getItem('token')}`
-      },
-      body: JSON.stringify(updatedData),
+      }
     });
 
-    const status = await response.json();
-    console.log('Server response:', status);
-
-    if (response.ok) {
+    if (response.status === 200) {
       $q.notify({
         type: 'positive',
         message: 'Account settings updated successfully!',
       });
+      
+      // Fetch user data again to update original values
+      await fetchUserData();
 
-      // Update original values after successful save
-      if (updatedData.username) {
-        originalValues.username = updatedData.username;
-      }
-      if (updatedData.email) {
-        originalValues.email = updatedData.email;
-      }
-      if (updatedData.firstName) {
-        originalValues.firstName = updatedData.firstName;
-      }
-      if (updatedData.lastName) {
-        originalValues.lastName = updatedData.lastName;
-      }
-      if (updatedData.password) {
-        password.value = ''; // Clear the password field after saving
-      }
+      // Clear the password field after saving
+      if (updatedData.password) password.value = '';
+      localStorage.clear();
+      // Optional: Redirect to another page after saving
+      router.push('/login');
     } else {
-      throw new Error(status.message || 'Error updating account settings');
+      throw new Error(response.data.message || 'Error updating account settings');
     }
   } catch (error) {
     $q.notify({
@@ -207,7 +205,6 @@ const submitForm = async () => {
     console.error('Error updating account settings:', error);
   }
 };
-
 </script>
 
 <style scoped>

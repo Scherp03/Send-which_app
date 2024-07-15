@@ -7,16 +7,41 @@
           :bar-style="barStyle"
           style="height: 350px; background-color: whitesmoke; border-radius: 2px; border: 2px solid #73ad21; border-color: black;"
         >
-         <div v-if="loading" class="loading-message">Loading...</div>
+          <div v-if="loading" class="loading-message">Loading...</div>
           <div v-else>
+            <div class="text-h6">Select Bread Type</div>
+            <div
+              v-for="breadType in breadTypes"
+              :key="breadType"
+              class="checkbox-container"
+            >
+              <q-radio
+                v-model="selectedBread"
+                :val="breadType"
+                :label="`${breadType} - €2.00`"
+                color="green"
+                style="
+                  border-radius: 2px;
+                  border-bottom: 1px solid #73ad21;
+                  border-color: black;
+                  width: 100%;
+                  height: 50px;
+                "
+                checked-icon="radio_button_checked"
+                unchecked-icon="radio_button_unchecked"
+                class="custom-radio"
+              />
+            </div>
+            
+            <div class="q-mt-md text-h6">Select Ingredients</div>
             <div
               v-for="ingredient in ingredients"
-              :key="ingredient.id"
+              :key="ingredient._id"
               class="checkbox-container"
             >
               <q-checkbox
                 v-model="selection"
-                :val="ingredient"
+                :val="ingredient._id"
                 :label="`${ingredient.name} - €${ingredient.price.toFixed(2)}`"
                 color="green"
                 style="
@@ -45,13 +70,27 @@
 
       <template v-slot:navigation>
         <q-stepper-navigation>
-          <q-btn class="q-ml-sm" v-if="step==1" color="red" bg-color="white" label="Cancel" @click="cancelOrder" />
-          <q-btn class="q-ml-sm" v-if="step==3" color="green" bg-color="white" label="Pay" @click="placeOrder" />
-          <q-btn v-if="step<3" :disable="disableContinue" @click="$refs.stepper.next()" color="deep-orange" label="Continue" />
+          <q-btn class="q-ml-sm" v-if="step == 1" color="red" bg-color="white" label="Cancel" @click="cancelOrder" />
+          <q-btn class="q-ml-sm" v-if="step == 3" color="green" bg-color="white" label="Pay" @click="placeOrder" />
+          <q-btn v-if="step < 3" :disable="disableContinue" @click="handleContinue" color="deep-orange" label="Continue" />
           <q-btn v-if="step > 1" flat color="deep-orange" @click="$refs.stepper.previous()" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
       </template>
     </q-stepper>
+
+    <div v-if="selectedIngredients.length > 0" class="q-mt-lg">
+      <h2>Selected Ingredients:</h2>
+      <ul>
+        <li v-for="ingredient in selectedIngredients" :key="ingredient._id">
+          <div>{{ ingredient.name }}</div>
+          <div>Description: {{ ingredient.description }}</div>
+          <div>Price: €{{ ingredient.price.toFixed(2) }}</div>
+          <div>Quantity: {{ ingredient.quantity }}</div>
+          <div>Tags: {{ ingredient.tags.join(', ') }}</div>
+          <div> ID: {{ingredient._id}}</div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -69,6 +108,8 @@ export default {
     const step = ref(1);
     const selection = ref([]);
     const ingredients = ref([]);
+    const breadTypes = ['White Bread', 'Whole Grain', 'Sourdough', 'Rye Bread', 'Multigrain'];
+    const selectedBread = ref(null);
     const loading = ref(true);
 
     const fetchIngredients = async () => {
@@ -103,7 +144,7 @@ export default {
     };
 
     const disableContinue = computed(() => {
-      return selection.value.length === 0;
+      return selectedBread.value === null || selection.value.length === 0;
     });
 
     const placeOrder = async () => {
@@ -144,20 +185,61 @@ export default {
       }
     };
 
+   const sendOrderData = async () => {
+     try {
+       const sandwichData = {
+         breadType: selectedBread.value,
+         ingredientsID: selection.value, // Sending selected ingredient IDs
+       };
+
+       console.log('Selected Bread:', selectedBread.value);
+       console.log('Selected Ingredient IDs:', selection.value);
+       console.log('Sandwich Data:', sandwichData);
+
+       await axios.post('http://localhost:3000/api/v1/sandwich', sandwichData);
+     } catch (error) {
+       $q.notify({
+         type: 'negative',
+         message: 'Failed to send order data',
+       });
+       console.error('Error sending order data:', error);
+       throw error;
+     }
+   };
+
+    const handleContinue = async () => {
+      try {
+        await sendOrderData();
+        $refs.stepper.next();
+      } catch (error) {
+        console.error('Failed to continue to next step:', error);
+      }
+    };
+
     const cancelOrder = () => {
       selection.value = [];
+      selectedBread.value = null;
     };
+
+    // Computed property to get details of selected ingredients
+    const selectedIngredients = computed(() => {
+      return ingredients.value.filter(ingredient => selection.value.includes(ingredient._id));
+    });
 
     return {
       step,
       selection,
+      selectedBread,
       thumbStyle,
       barStyle,
       disableContinue,
       placeOrder,
       cancelOrder,
+      handleContinue,
       ingredients,
+      breadTypes,
       loading,
+      selectedIngredients,
     };
   },
   components: {
@@ -165,3 +247,28 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.loading-message {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.checkbox-container {
+  margin-bottom: 10px;
+}
+
+.custom-checkbox,
+.custom-radio {
+  width: 100%;
+}
+
+.q-mt-md {
+  margin-top: 20px;
+}
+
+.text-h6 {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+</style>
