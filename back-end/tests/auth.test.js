@@ -1,23 +1,13 @@
 import app from '../app.js';
 import request from 'supertest';
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import User from '../database/schemas/user.js';
 import { Roles } from '../../shared/userTypeDefinitions.js';
-import UserTypeModel from '../database/schemas/userType.js';
-
-dotenv.config();
-
-if (!process.env.DB_URI) {
-  throw new Error(
-    'Test suite stopped beacuse necessary URI environmental variable for MongoDB connection is missing',
-  );
-}
-const dbUri = process.env.DB_URI;
 
 beforeAll(async () => {
+  const dbUri =
+    'mongodb+srv://WritingPurposeUser:FpKwCBXmZh7uSvfA@test1.sdy9unk.mongodb.net/Test_Jest1?retryWrites=true&w=majority';
   await mongoose.connect(dbUri);
   // console.log(`Database \'${process.env.DB_NAME}\' connected for testing!`);
 
@@ -32,13 +22,13 @@ beforeAll(async () => {
     userType: Roles.USER,
   };
   await User.create(mockUser);
-});
+}, 20000);
 
 afterAll(async () => {
   await User.deleteOne({ username: 'username_test' });
   await mongoose.connection.close();
   // console.log('Database connection closed');
-});
+}, 20000);
 
 const correctLogin = {
   username: 'username_test',

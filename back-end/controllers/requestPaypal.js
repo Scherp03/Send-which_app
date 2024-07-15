@@ -32,7 +32,7 @@ export const createOrder = async (req, res) => {
   try {
     const accessToken = await generateAccessToken();
 
-    //const price = req.body.totalprice
+    //const price = req.body.totalprice;
     const price = 10.0;
     const response = await axios({
       url: process.env.PAYPAL_BASE_URL + '/v2/checkout/orders',
@@ -77,7 +77,7 @@ export const createOrder = async (req, res) => {
         },
       }),
     });
-    
+
     return res.status(200).json({
       success: true,
       url: response.data.links.find((link) => link.rel === 'approve').href,
@@ -93,5 +93,3 @@ export const createOrder = async (req, res) => {
     });
   }
 };
-
-

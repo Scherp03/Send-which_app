@@ -1,24 +1,19 @@
 import mongoose from 'mongoose';
 import Ingredient from '../database/schemas/ingredient';
 import Order from '../database/schemas/order';
-import dotenv from 'dotenv';
 import Sandwich from '../database/schemas/sandwich';
 import StatSandwich from '../database/schemas/statisticSandwich';
 
-dotenv.config();
-
-const dbUri = process.env.DB_URI;
-const clientOptions = {
-  serverApi: { version: '1', strict: true, deprecationErrors: true },
-};
-
 beforeAll(async () => {
-  await mongoose.connect(dbUri, clientOptions);
-});
+  const dbUri =
+    'mongodb+srv://WritingPurposeUser:FpKwCBXmZh7uSvfA@test1.sdy9unk.mongodb.net/Test_Jest2?retryWrites=true&w=majority';
+  await mongoose.connect(dbUri);
+}, 20000);
 
 afterAll(async () => {
+  await Ingredient.deleteMany({ tags: 'toBeDeleted' });
   await mongoose.connection.close();
-});
+}, 20000);
 
 describe('Order', () => {
   // Function 1: calculatePrice
@@ -50,15 +45,18 @@ describe('Order', () => {
     await sandwich1.save();
     let order1 = new Order({
       content: sandwich1._id,
-      price: 0,
+      total: 0,
+      status: 'completed',
+      date: '2024-07-14T10:00:00Z',
     });
     let realPrice = await order1.calculatePrice();
     let expectedPrice = 2 + 0.5 + 1;
     expect(realPrice).toBe(expectedPrice);
 
     await Ingredient.deleteMany({ tags: 'toBeDeleted' });
-    await Sandwich.deleteMany({ _id: sandwich1._id });
-  });
+    await Sandwich.deleteOne({ _id: { $in: sandwich1._id } });
+    await Order.deleteOne({ _id: { $in: order1._id } });
+  }, 20000);
 });
 
 // Function 2: addOrderStatistics
@@ -91,7 +89,9 @@ describe('Order', () => {
     await sandwich1.save();
     let order1 = new Order({
       content: sandwich1._id,
-      price: 0,
+      total: 0,
+      status: 'completed',
+      date: '2024-07-14T10:00:00Z',
     });
 
     let hash1 = await sandwich1.getHash();

@@ -158,7 +158,7 @@ router.get('/:id', getIngredient);
 /**
  * @openapi
  * /ingredients:
- *   post:
+ *   patch:
  *     summary: Add a new ingredient
  *     description: Add a new ingredient with a unique name, valid price, and quantity.
  *     tags:
@@ -242,12 +242,12 @@ router.get('/:id', getIngredient);
  *                   type: string
  *                   example: "Internal server error"
  */
-router.post('/add', addIngredient);
+router.patch('/add', addIngredient);
 
 /**
  * @openapi
  * /ingredients/availability:
- *   post:
+ *   patch:
  *     summary: Set the availability of an ingredient
  *     description: Set the availability quantity for a specific ingredient.
  *     tags:
@@ -329,12 +329,12 @@ router.post('/add', addIngredient);
  *                   type: string
  *                   example: "Internal server error"
  */
-router.put('/setavailability', setAvailability);
+router.patch('/setavailability', setAvailability);
 
 /**
  * @openapi
  * /ingredients/increase-availability:
- *   post:
+ *   patch:
  *     summary: Increase the availability of an ingredient
  *     description: Increase the availability quantity for a specific ingredient.
  *     tags:
@@ -416,7 +416,7 @@ router.put('/setavailability', setAvailability);
  *                   type: string
  *                   example: "Internal server error"
  */
-router.put('/increaseavailability', increaseAvailability);
+router.patch('/increaseavailability', increaseAvailability);
 
 /**
  * @openapi
@@ -490,7 +490,7 @@ router.delete('/delete', deleteIngredient);
 /**
  * @openapi
  * /ingredients/restore:
- *   post:
+ *   path:
  *     summary: Restore a deleted ingredient
  *     description: Restore an ingredient that was previously deleted, making it active again.
  *     tags:
@@ -567,6 +567,6 @@ router.delete('/delete', deleteIngredient);
  *                   type: string
  *                   example: "Internal server error"
  */
-router.put('/restoredeleted', restoreDeleted);
+router.patch('/restoredeleted', restoreDeleted);
 
 export default router;

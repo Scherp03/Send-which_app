@@ -2,29 +2,32 @@
 
 Repository for the 2024 Software Engineering project
 
-## Project members
+## Project Members
 
 - Carpella Luca
 - Eccel Niccolò
 - Tomè Andrea
 - Zini Tommaso
 
-## Build the entire application
+# Deployment
 
-From root directory
+## Backend
 
-```bash
-# Run The Application
-npm run start
+The backend server is deployed on Render. Any changes to the 'main' branch will trigger an automatic deployment.
+The frontend interacts with the backend API's hosted at https://send-which-app.onrender.com
 
-# Run The Application Initializing Database
-npm run start:initdb
+## Frontend
 
-# Run Tests
-npm run tests
-```
+The frontend application is deployed on Netlify. Any changes to the 'main' branch will trigger an automatic deployment.
+Try out the application at ..........
 
-## Backend build Setup
+# API Documentation
+
+The API's documentation is always available at https://send-which-app.onrender.com/api-docs
+
+# Run The Application Locally:
+
+## Server Build Setup
 
 Enter the back-end directory and run the following commands
 
@@ -34,8 +37,12 @@ npm install
 # Install Dependencies For Development
 npm install --include=dev
 
-# Run Server Initializing Database
+# Run Server Initializing And Populating The Database
+# The database collections are populated with mock data
 npm run dev:init
+
+# Before running the application for the first time, initialize the database
+
 # Run Server
 npm run dev
 
@@ -43,10 +50,22 @@ npm run dev
 npm run test
 ```
 
-## Frontend build Setup
+## Frontend Build Setup
 
 Enter the front-end directory and run the following commands
 
 ```bash
+# Install Dependencies
+npm install
+# Install Dependencies For Development
+npm install --include=dev
 
+# Run application
+npm run dev
 ```
+
+## Technologies Used
+
+- **Backend**: [Node.js](https://nodejs.org/), [Express](https://expressjs.com/)
+- **Frontend**: [Vue.js](https://vuejs.org/), [Quasar](https://quasar.dev/)
+- **Database**: [MongoDb](https://www.mongodb.com/)

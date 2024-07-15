@@ -1,22 +1,19 @@
 import mongoose from 'mongoose';
 import Ingredient from '../database/schemas/ingredient.js';
-import dotenv from 'dotenv';
 import app from '../app.js';
 import request from 'supertest';
 
-dotenv.config();
-
-const dbUri = process.env.DB_URI;
-
 beforeAll(async () => {
+  const dbUri =
+    'mongodb+srv://WritingPurposeUser:FpKwCBXmZh7uSvfA@test1.sdy9unk.mongodb.net/Test_Jest2?retryWrites=true&w=majority';
   await mongoose.connect(dbUri);
   await populateDatabase();
-});
+}, 20000);
 
 afterAll(async () => {
   await Ingredient.deleteMany({ tags: 'toBeDeleted3' });
   await mongoose.connection.close();
-});
+}, 20000);
 
 describe('GET api/v1/ingredients', () => {
   // test getIngredients
@@ -43,7 +40,7 @@ describe('GET api/v1/ingredients', () => {
     expect(found1).toBe(true);
     expect(found2).toBe(true);
     expect(found3).toBe(true);
-  });
+  }, 20000);
 });
 
 describe('GET api/v1/ingredients/:id', () => {
@@ -59,12 +56,12 @@ describe('GET api/v1/ingredients/:id', () => {
   });
 });
 
-describe('POST api/v1/ingredients/add', () => {
+describe('PATCH api/v1/ingredients/add', () => {
   // test addIngredient
   // Fail if name too short
   test('addIngredient should respond with 400 status code and a message if the name is too short', async () => {
     let response3 = await request(app)
-      .post('/api/v1/ingredients/add')
+      .patch('/api/v1/ingredients/add')
       .send({
         name: 'Sa',
         price: 1.2,
@@ -74,11 +71,11 @@ describe('POST api/v1/ingredients/add', () => {
     expect(response3.statusCode).toBe(400);
     expect(response3.body.success).toBe(false);
     expect(response3.body.message).toBe('Name too short');
-  });
+  }, 20000);
   // Fail if price not a number
   test('addIngredient should respond with 400 status code and a message if the price is not a number', async () => {
     let response4 = await request(app)
-      .post('/api/v1/ingredients/add')
+      .patch('/api/v1/ingredients/add')
       .send({
         name: 'Salami3',
         price: 'not a number',
@@ -88,10 +85,10 @@ describe('POST api/v1/ingredients/add', () => {
     expect(response4.statusCode).toBe(400);
     expect(response4.body.success).toBe(false);
     expect(response4.body.message).toBe('Price is not a valid number');
-  });
+  }, 20000);
   test('addIngredient should respond with 200 status code and the ingredient added', async () => {
     let response1 = await request(app)
-      .post('/api/v1/ingredients/add')
+      .patch('/api/v1/ingredients/add')
       .send({
         name: 'Salami3',
         price: 1.2,
@@ -100,11 +97,11 @@ describe('POST api/v1/ingredients/add', () => {
       });
     expect(response1.statusCode).toBe(201);
     expect(response1.body.success).toBe(true);
-  });
+  }, 20000);
   // Fail if duplicate
   test('addIngredient should respond with 400 status code and a message if the ingredient is a duplicate', async () => {
     let response2 = await request(app)
-      .post('/api/v1/ingredients/add')
+      .patch('/api/v1/ingredients/add')
       .send({
         name: 'Salami3',
         price: 1.2,
@@ -114,16 +111,16 @@ describe('POST api/v1/ingredients/add', () => {
     expect(response2.statusCode).toBe(400);
     expect(response2.body.success).toBe(false);
     expect(response2.body.message).toBe('Duplicate ingredient');
-  });
+  }, 20000);
 });
 
-describe('PUT api/v1/ingredients/setavailability', () => {
+describe('PATCH api/v1/ingredients/setavailability', () => {
   // test setAvailability
   // Fail if availability not a number
   test('setAvailability should respond with 400 status code and a message if the availability is not a number', async () => {
     let ingredient = await Ingredient.findOne({ name: 'Tomato3' });
     let response = await request(app)
-      .put('/api/v1/ingredients/setavailability')
+      .patch('/api/v1/ingredients/setavailability')
       .send({
         id: ingredient._id,
         availability: 'not a number',
@@ -131,13 +128,13 @@ describe('PUT api/v1/ingredients/setavailability', () => {
     expect(response.statusCode).toBe(400);
     expect(response.body.success).toBe(false);
     expect(response.body.message).toBe('Quantity is not valid');
-  });
+  }, 20000);
   // Change availability if everything is fine
   test('setAvailability should respond with 200 status code and a message', async () => {
     let ingredient = await Ingredient.findOne({ name: 'Salami3' });
     expect(ingredient.quantity).toBe(300);
     let response = await request(app)
-      .put('/api/v1/ingredients/setavailability')
+      .patch('/api/v1/ingredients/setavailability')
       .send({
         _id: ingredient._id,
         availability: 22,
@@ -147,16 +144,16 @@ describe('PUT api/v1/ingredients/setavailability', () => {
     expect(response.statusCode).toBe(200);
     expect(response.body.success).toBe(true);
     expect(response.body.message).toBe('Availability updated');
-  });
+  }, 20000);
 });
 
-describe('PUT api/v1/ingredients/increaseavailability', () => {
+describe('PATCH api/v1/ingredients/increaseavailability', () => {
   // test increaseAvailability
   // Fail if availability not a number
   test('increaseAvailability should respond with 400 status code and a message if the availability is not a number', async () => {
     let ingredient = await Ingredient.findOne({ name: 'Tomato3' });
     let response = await request(app)
-      .put('/api/v1/ingredients/increaseavailability')
+      .patch('/api/v1/ingredients/increaseavailability')
       .send({
         id: ingredient._id,
         availability: 'not a number',
@@ -164,13 +161,13 @@ describe('PUT api/v1/ingredients/increaseavailability', () => {
     expect(response.statusCode).toBe(400);
     expect(response.body.success).toBe(false);
     expect(response.body.message).toBe('Quantity is not valid');
-  });
+  }, 20000);
   // Increase availability if everything is fine
   test('increaseAvailability should respond with 200 status code and a message', async () => {
     let ingredient = await Ingredient.findOne({ name: 'Salami3' });
     expect(ingredient.quantity).toBe(22);
     let response = await request(app)
-      .put('/api/v1/ingredients/increaseavailability')
+      .patch('/api/v1/ingredients/increaseavailability')
       .send({
         _id: ingredient._id,
         availability: 5,
@@ -180,7 +177,7 @@ describe('PUT api/v1/ingredients/increaseavailability', () => {
     expect(response.statusCode).toBe(200);
     expect(response.body.success).toBe(true);
     expect(response.body.message).toBe('Availability updated');
-  });
+  }, 20000);
 });
 
 describe('DELETE api/v1/ingredients/delete', () => {
@@ -195,7 +192,7 @@ describe('DELETE api/v1/ingredients/delete', () => {
     expect(response.statusCode).toBe(200);
     expect(response.body.success).toBe(true);
     expect(response.body.message).toBe('Ingredient deleted');
-  });
+  }, 20000);
   test('deleteIngredient should respond with 404 status code and a message if the ingredient is not found', async () => {
     let response = await request(app)
       .delete('/api/v1/ingredients/delete')
@@ -205,7 +202,7 @@ describe('DELETE api/v1/ingredients/delete', () => {
     expect(response.statusCode).toBe(404);
     expect(response.body.success).toBe(false);
     expect(response.body.message).toBe('Ingredient not found');
-  });
+  }, 20000);
   test('deleteIngredient should respond with 500 status code and a message if the ingredient is already deleted', async () => {
     let ingredient = await Ingredient.findOne({ name: 'Salami3' });
     let response = await request(app)
@@ -216,42 +213,42 @@ describe('DELETE api/v1/ingredients/delete', () => {
     expect(response.statusCode).toBe(500);
     expect(response.body.success).toBe(false);
     expect(response.body.message).toBe('Failed to delete ingredient');
-  });
+  }, 20000);
 });
 
-describe('PUT api/v1/ingredients/restoredeleted', () => {
+describe('PATCH api/v1/ingredients/restoredeleted', () => {
   test('restoreDeleted should respond with 200 status code and a message', async () => {
     let ingredient = await Ingredient.findOne({ name: 'Salami3' });
     let response = await request(app)
-      .put('/api/v1/ingredients/restoredeleted')
+      .patch('/api/v1/ingredients/restoredeleted')
       .send({
         name: ingredient.name,
       });
     expect(response.statusCode).toBe(200);
     expect(response.body.success).toBe(true);
     expect(response.body.message).toBe('Ingredient restored');
-  });
+  }, 20000);
   test('restoreDeleted should respond with 404 status code and a message if the ingredient is not found', async () => {
     let response = await request(app)
-      .put('/api/v1/ingredients/restoredeleted')
+      .patch('/api/v1/ingredients/restoredeleted')
       .send({
         name: 'not found',
       });
     expect(response.statusCode).toBe(404);
     expect(response.body.success).toBe(false);
     expect(response.body.message).toBe('Ingredient not found');
-  });
+  }, 20000);
   test('restoreDeleted should respond with 400 status code and a message if the ingredient is already active', async () => {
     let ingredient = await Ingredient.findOne({ name: 'Salami3' });
     let response = await request(app)
-      .put('/api/v1/ingredients/restoredeleted')
+      .patch('/api/v1/ingredients/restoredeleted')
       .send({
         name: ingredient.name,
       });
     expect(response.statusCode).toBe(400);
     expect(response.body.success).toBe(false);
     expect(response.body.message).toBe('Ingredient already active');
-  });
+  }, 20000);
 });
 async function populateDatabase() {
   let ingredient1 = new Ingredient({

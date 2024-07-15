@@ -7,8 +7,8 @@ import bcrypt from 'bcryptjs';
 
 export const initDb = async () => {
   // create crypted password
-  const mockHashedPassword = await bcrypt.hash('mockpswd', 10);
-  const LucaHashedPassword = await bcrypt.hash('lessgoski03', 10);
+  const userHashedPassword = await bcrypt.hash('User2024', 10);
+  const adminHashedPassword = await bcrypt.hash('Admin2024', 10);
 
   /* initialize all collections */
 
@@ -27,16 +27,16 @@ export const initDb = async () => {
       firstName: 'mockName',
       lastName: 'mockSurname',
       username: 'mockUsername',
-      email: 'mockEmail@something',
-      password: mockHashedPassword,
+      email: 'mock.user@something.net',
+      password: userHashedPassword,
       userType: Roles.USER,
     },
     {
-      firstName: 'Luca',
-      lastName: 'Carpella',
-      username: 'scherp03',
-      email: 'luca.carpella@gmail.com',
-      password: LucaHashedPassword,
+      firstName: 'mockName',
+      lastName: 'mockSurname',
+      username: 'mockAdmin',
+      email: 'mock.admin@something.net',
+      password: adminHashedPassword,
       userType: Roles.ADMIN,
     },
   ];
