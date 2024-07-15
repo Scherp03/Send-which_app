@@ -13,12 +13,12 @@ Repository for the 2024 Software Engineering project
 
 ## Backend
 
-The backend server is deployed on Render. Any changes to the main branch will trigger an automatic deployment.
-The frontend interacts withe backend API hosted at https://send-which-app.onrender.com
+The backend server is deployed on Render. Any changes to the 'main' branch will trigger an automatic deployment.
+The frontend interacts with the backend API's hosted at https://send-which-app.onrender.com
 
 ## Frontend
 
-The frontend application is deployed on Netlify. Any changes to the main branch will trigger an automatic deployment.
+The frontend application is deployed on Netlify. Any changes to the 'main' branch will trigger an automatic deployment.
 Try out the application at ..........
 
 # Run the application locally:

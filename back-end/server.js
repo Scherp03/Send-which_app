@@ -20,10 +20,10 @@ const clientOptions = {
   serverApi: { version: '1', strict: true, deprecationErrors: true },
 };
 
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
 /* Run server */
-app.listen(PORT, async () => {
+app.listen(port, async () => {
   console.log('Wait for database connection...');
   try {
     /* Database connection */
@@ -34,8 +34,8 @@ app.listen(PORT, async () => {
       // function that populates db
       await initDb();
     }
-    console.log(`Server running on port: http://localhost:${PORT}`);
-    console.log(`Read API documentation: http://localhost:${PORT}/api-docs`);
+    console.log(`Server running on port: ${process.env.BASE_URL}`);
+    console.log(`Read API documentation: ${process.env.BASE_URL}/api-docs`);
   } catch (err) {
     console.error('Could not connect to mongoDB!', err);
     process.exit(1);

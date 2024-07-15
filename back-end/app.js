@@ -39,7 +39,7 @@ app.use('/api/v1/sandwich', sandwichRouter);
 app.use('/api/v1/ingredients', ingredientRouter);
 /* Quick check if it's working */
 app.get('/', (req, res) => {
-  res.status(200).send('Welcome to homepage!');
+  res.status(200).send('The Server is running!');
 });
 
 /* Swagger setup */
