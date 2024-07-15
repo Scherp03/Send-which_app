@@ -3,6 +3,7 @@ import request from 'supertest';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import Order from '../database/schemas/order.js';
+import User from '../database/schemas/user.js';
 
 
 dotenv.config();
@@ -33,7 +34,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   
-  await Order.deleteMany({});
+  
   await mongoose.connection.close();
 });
 
@@ -42,23 +43,31 @@ afterAll(async () => {
 describe('POST /api/v1/order', () => {
   test('Should respond with 200 status code and a message', async () => {
     
-    
+    const testUser= new User({
+      password: "password",
+      userType: "User",
+      email: "email",
+      username: "username",
+      lastName: "lastname",
+      firstName: "firstname"
+    })
+  
+    const user = await User.create(testUser);
     let order ={
-        userID: '66911534bfdb6baef71e8c8d',
+        userID: user._id,
         slotID: new mongoose.Types.ObjectId(),
         content: new mongoose.Types.ObjectId(),
         total: 100.00,
         status:'toDo',
         date: '2024-07-14T15:00:00.000+00:00'
     };
+    
     const response = await request(app).post('/api/v1/order/').send(order);
     expect(response.statusCode).toBe(200);
-    expect(response.body).toEqual(
-      expect.objectContaining({
-        success: true,
-        userID:'66911534bfdb6baef71e8c8d'
-      }),
-    );
+    expect(response.body.success).toBe(true);
+    expect(response.body.userID.toString()).toEqual(user._id.toString());
+   
+    await User.deleteOne({_id: user._id});
   }, 20000);
 });
 
@@ -67,6 +76,7 @@ describe('GET /api/v1/order/:id', () => {
   test('should respond with a 200 status code and a message', async () => {
     // retrive the order created at the beginning
     const order = await Order.findOne({total :20.00 });
+    
 
     const response = await request(app).get(`/api/v1/order/${order._id}`);
     expect(response.statusCode).toBe(200);
@@ -87,16 +97,18 @@ describe('GET /api/v1/order/:id', () => {
 //Fetch data of all orders
 describe('GET /api/v1/order', () => {
   test('should respond with a 200 status code and a message', async () => {
+
+    const order = await Order.find();
+
     const response = await request(app).get(`/api/v1/order`);
     expect(response.statusCode).toBe(200);
-    expect(response.body).toEqual(
-      expect.objectContaining({
-        success: true,
-      }),
-    );
+    
+    for(let i=0; i<response.body.orders.lenght;i++){
+          expect(response.body.orders[i]._id).toEqual(order[i]._id);
+    }
   }, 20000);
 });
-/*
+
 //Fetch data of a given status
 describe('GET /api/v1/order/status/:status', () => {
     test('should respond with a 200 status code and a message', async () => {
@@ -104,30 +116,22 @@ describe('GET /api/v1/order/status/:status', () => {
         const order = await Order.find({ status: "toDo" });
         
 
-
-    const response = await request(app).get(`/api/v1/order/status/${order.status}`);
+    const response = await request(app).get(`/api/v1/order/status/toDo`);
       expect(response.statusCode).toBe(200);
       expect(response.body).toEqual(
         expect.objectContaining({
             success: true,
-            orders: [
-                {
-                  orderId: order._id, 
-                  slotID: order.slotID,
-                  content: order.content,
-                  total: order.total,
-                  status: 'toDo',
-                  //date: order.date.toDateString() 
-                }
-              ]
           })
         );
+        for(let i=0; i<response.body.orders.lenght;i++){
+          expect(response.body.orders[i].status).toEqual('toDo');
+        }
       }, 20000);
     });
-*/
 
 
-//Updatestatus of a single order
+
+//Update status of a single order
 describe('PATCH /api/v1/order/:id', () => {
     test('should respond with a 200 status code and a message', async () => {
       // retrive the order created at the beginning
@@ -163,10 +167,13 @@ describe('POST /api/v1/order', () => {
         slotID: new mongoose.Types.ObjectId,
         content: new mongoose.Types.ObjectId,
         //total: 100.00,
-        status:"toDo",
+        status:"failed",
         date: "2024-07-14T10:00:00Z"
       });
     expect(response1.statusCode).toBe(400);
     expect(response1.body.success).toBe(false);
+    await Order.deleteMany({});
   });
+  
 });
+

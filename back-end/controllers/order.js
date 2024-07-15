@@ -133,9 +133,11 @@ import mongoose from 'mongoose';
       if (!status) {
         return res.status(400).json({ success: false, message: 'Status is required' });
       }
-      const StatusOrders = await OrderModel.find({ status: "toDo" });
+      const StatusOrders = await OrderModel.find({ status: status });
     if (StatusOrders.length === 0) {
-      return res.status(404).json({ success: false, message: `Orders with status ${status} not found` });
+      return res.status(404).json({ success: false, 
+        message: `Orders with status ${status} not found` 
+      });
     }
 
     return res.status(200).json({
@@ -147,7 +149,7 @@ import mongoose from 'mongoose';
         content: order.content.toString(),
         total: order.total,
         status: order.status,
-        //date: order.date.toDateString()
+        date: order.date.toDateString()
       }))
       });
     } catch (err) {

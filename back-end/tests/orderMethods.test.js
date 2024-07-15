@@ -50,7 +50,9 @@ describe('Order', () => {
     await Sandwich.insertMany(sandwich1);
     let order1 = new Order({
       content: sandwich1._id,
-      price: 0,
+      total: 0,
+      status:"completed",
+      date:"2024-07-14T10:00:00Z"
     });
     let realPrice = await order1.calculatePrice();
     let expectedPrice = 2 + 0.5 + 1;
@@ -95,7 +97,9 @@ describe('Order', () => {
     await Sandwich.insertMany(sandwich1);
     let order1 = new Order({
       content: sandwich1._id,
-      price: 0,
+      total: 0,
+      status: "completed",
+      date:"2024-07-14T10:00:00Z"
     });
 
     let hash1 = await sandwich1.getHash();
