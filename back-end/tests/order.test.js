@@ -30,11 +30,11 @@ beforeAll(async () => {
     date: "2024-07-14T10:00:00Z"
   });
   await Order.create(testorder);
-});
+}, 10000);
 
 afterAll(async () => {
   
-  
+  await Order.deleteMany({});
   await mongoose.connection.close();
 });
 
@@ -58,7 +58,7 @@ describe('POST /api/v1/order', () => {
         slotID: new mongoose.Types.ObjectId(),
         content: new mongoose.Types.ObjectId(),
         total: 100.00,
-        status:'toDo',
+        status:'completed',
         date: '2024-07-14T15:00:00.000+00:00'
     };
     
@@ -116,7 +116,7 @@ describe('GET /api/v1/order/status/:status', () => {
         const order = await Order.find({ status: "toDo" });
         
 
-    const response = await request(app).get(`/api/v1/order/status/toDo`);
+    const response = await request(app).get(`/api/v1/order/status/${order[0].status}`);
       expect(response.statusCode).toBe(200);
       expect(response.body).toEqual(
         expect.objectContaining({
@@ -172,8 +172,72 @@ describe('POST /api/v1/order', () => {
       });
     expect(response1.statusCode).toBe(400);
     expect(response1.body.success).toBe(false);
-    await Order.deleteMany({});
-  });
+    
+  },20000 );
   
+  test('should fail to create a new order if UserID does not exist', async () => {
+    
+
+    // Test if User ID doe not exist
+    let response1 = await request(app)
+      .post('/api/v1/order')
+      .send({
+        userID: new mongoose.Types.ObjectId,
+        slotID: new mongoose.Types.ObjectId,
+        content: new mongoose.Types.ObjectId,
+        total: 100.00,
+        status:"failed",
+        date: "2024-07-14T10:00:00Z"
+      });
+    expect(response1.statusCode).toBe(401);
+    expect(response1.body.success).toBe(false);
+    await Order.deleteMany({});
+  }, 20000);
+
 });
 
+// get a single order by id
+describe('GET /api/v1/order/:id', () => {
+  test('should respond with a 200 status code and a message', async () => {
+    // test if id does not exist
+    const orderid = new mongoose.Types.ObjectId()
+    
+
+    const response = await request(app).get(`/api/v1/order/${orderid}`);
+    expect(response.statusCode).toBe(404);
+    expect(response.body.success).toBe(false);
+  }, 20000);
+});
+
+
+//Fetch data of a given status
+describe('GET /api/v1/order/status/:status', () => {
+  test('should respond with a 200 status code and a message', async () => {
+      // test if the status does not exist
+      const status= "it doesn't exist"
+      const order = await Order.find({ status: status });
+      
+
+  const response = await request(app).get(`/api/v1/order/status/${status}`);
+    expect(response.statusCode).toBe(404);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        success: false, 
+        message: `Orders with status ${status} not found`
+        })
+      );
+    }, 20000);
+  });
+
+  //Update status of a single order
+describe('PATCH /api/v1/order/:id', () => {
+  test('should respond with a 404 status code and a message', async () => {
+    // test if the id does not exist
+    const orderid = new mongoose.Types.ObjectId()
+
+    const response = await request(app).patch(`/api/v1/order/${orderid}`);
+    expect(response.statusCode).toBe(404);
+    expect(response.body.success).toBe(false);
+  }, 20000);
+  
+});
