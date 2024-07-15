@@ -2,17 +2,17 @@
   <q-page padding>
     <div class="q-pa-md">
       <q-form
-        style="max-width: 300px"
+        style="max-width: 300px; margin: auto;"
         @submit.prevent="onsubmit"
-        class="fixed-center"
       >
         <transition appear enter-active-class="animated fadeIn slower delay-1s">
           <div
             style="
               color: white;
               font-size: 15px;
-              font-type: Verdana;
+              font-family: Verdana;
               font-weight: bold;
+              text-align: center;
             "
           >
             PLEASE REGISTER YOURSELF
@@ -61,7 +61,7 @@
               bg-color="white"
               outlined
               v-model="username"
-              label="username"
+              label="Username"
               type="name"
               required
             />
@@ -101,13 +101,26 @@
         </transition>
 
         <br />
+        <transition appear enter-active-class="animated fadeIn slower delay-7s">
+          <div>
+            <q-input
+              style="max-width: 300px"
+              color="black"
+              bg-color="white"
+              outlined
+              v-model="confirmPassword"
+              label="Confirm Password"
+              type="password"
+              required
+            />
+          </div>
+        </transition>
+
         <br />
         <br />
-        <br />
-        <transition appear enter-active-class="animated fadeIn delay-7s">
+        <transition appear enter-active-class="animated fadeIn delay-8s">
           <q-btn
-            style="max-width: 300px; height: 10%"
-            class="fixed-bottom"
+            style="max-width: 300px; height: 10%; margin-bottom: 15px;"
             push
             color="black"
             bg-color="white"
@@ -115,10 +128,22 @@
             label="Register"
           />
         </transition>
+        
+        <transition appear enter-active-class="animated fadeIn delay-9s">
+          <q-btn
+            style="max-width: 300px; height: 10%; margin-bottom: 15px;"
+            push
+            color="red"
+            bg-color="white"
+            label="Sign Up with Google"
+            @click="signUpWithGoogle"
+          />
+        </transition>
       </q-form>
     </div>
   </q-page>
 </template>
+
 <script setup>
 defineOptions({
   data() {
@@ -128,11 +153,20 @@ defineOptions({
       username: "",
       email: "",
       password: "",
+      confirmPassword: "",
     };
   },
 
   methods: {
     async onsubmit() {
+      if (this.password !== this.confirmPassword) {
+        this.$q.notify({
+          type: "negative",
+          message: "Passwords do not match.",
+        });
+        return;
+      }
+
       try {
         const data = {
           firstName: this.firstName,
@@ -171,16 +205,41 @@ defineOptions({
       }
     },
 
-    // await axios
-    //   .post("/api/v1/users", data) //to check
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    async signUpWithGoogle() {
+  const response =await axios.post('http://localhost:3000/api/v1/requestgoogle');
 
-    // this.$router.push("/signin");
+  const popup = window.open(response.data.url, '_blank', 'width=500,height=600');
+  
+  window.addEventListener('message', (event) => {
+    console.log(event)
+    if (event.origin !== 'http://127.0.0.1:3000') {
+      // Ensure the message is coming from your server
+      return;
+    }
+
+    const { success, message, id, token } = event.data;
+    
+    if (success) {
+      
+      setTimeout(() => {
+        $q.notify({
+        progress: true,
+        type: 'warning',
+        message: message,
+      });
+      },5000)
+      
+      localStorage.setItem('token', token);
+      localStorage.setItem('id', id);
+      router.push('/auth'); // Or the appropriate route based on your app logic
+    } else {
+      $q.notify({
+        type: 'negative',
+        message: message,
+      });
+    }
+  });
+    },
   },
 });
 </script>
@@ -192,5 +251,13 @@ defineOptions({
 
 .delay-7s {
   animation-delay: 2.4s;
+}
+
+.delay-8s {
+  animation-delay: 2.865s;
+}
+
+.delay-9s {
+  animation-delay: 3.33s;
 }
 </style>

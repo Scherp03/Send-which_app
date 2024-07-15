@@ -36,7 +36,7 @@ export const login = async (req, res, next) => {
         message: 'Welcome to your account, ' + user.username + '!',
         id: user._id,
         token: access_key,
-        payload : payload,
+        payload : payload, //to remove
       });
     } else {
       return res

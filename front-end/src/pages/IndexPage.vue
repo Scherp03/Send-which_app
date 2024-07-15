@@ -5,58 +5,49 @@
       enter-active-class="animated fadeIn slower delay-0.5s repeat-2"
       leave-active-class="animated fadeOut"
     >
-      <div class="fixed-center" style="width: 100%">
+      <div class="fixed-center" style="width: 100%; text-align: center;">
+        <!-- Image placeholder -->
+        <img
+          src="../assets/Send-Which_logo-removebg-preview.png"
+          alt="App Logo"
+          style="width: 200px; height: 200px; object-fit: contain; margin-bottom: 20px;"
+        />
+
         <h1
-          class="fixed-center"
           key="Enter message"
-          style="font-weight: bolder; color: white; font-size: 300%"
+          style="font-weight: bolder; color: white; font-size: 3rem;"
         >
           WELCOME TO SEND-WHICH APP {{ firstName.charAt(0).toUpperCase() + firstName.slice(1) }}
-          
         </h1>
-        <div style="height: 400px"></div>
+        <div style="height: 100px"></div> <!-- Adjust height as needed -->
 
-        <q-btn
-          push
-          key="loginbtn"
-          color="black"
-          label="LOGIN"
-          to="/login"
-          style="left: 20%; width: 30%; height: 40px"
-        ></q-btn>
-        <q-btn
-          push
-          key="registerbtn"
-          color="green"
-          label="REGISTER"
-          to="/register"
-          style="left: 25%; width: 30%; height: 40px"
-        ></q-btn>
+        <div style="display: flex; justify-content: center;">
+          <q-btn
+            push
+            key="loginbtn"
+            color="black"
+            label="LOGIN"
+            to="/login"
+            style="width: 200px; height: 60px; font-size: 1.5rem; margin-right: 20px; margin-top: -40px;"
+          ></q-btn>
+          <q-btn
+            push
+            key="registerbtn"
+            color="green"
+            label="REGISTER"
+            to="/register"
+            style="width: 200px; height: 60px; font-size: 1.5rem; margin-top: -40px;"
+          ></q-btn>
+        </div>
       </div>
     </transition-group>
   </q-page>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { ref } from 'vue';
 
 const firstName = ref('');
-
-// const fetchDateUrl = id => `http://localhost:3000/api/v1/users/${id}`;
-
-// onMounted(async () => {
-//   try {
-//     const response = await axios.get(fetchDateUrl(localStorage.getItem('id')), {
-//       headers: {
-//         Authorization: 'Bearer ' + localStorage.getItem('token'),
-//       },
-//     });
-//     firstName.value = response.data.firstName;
-//   } catch (error) {
-//     console.error('Error fetching user data:', error);
-//   }
-// });
 </script>
 
 <style>
@@ -64,7 +55,7 @@ const firstName = ref('');
   border: 1px solid gray;
 }
 .id {
-  background-color: redS;
+  background-color: red;
 }
 .error {
   color: red;

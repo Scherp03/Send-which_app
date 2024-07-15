@@ -26,6 +26,26 @@
                         class="q-mb-sm"
                         @keyup.enter="addIngredient"
                       />
+                      <q-input
+                        v-model="newIngredient.description"
+                        label="Description"
+                        type="textarea"
+                        filled
+                        class="q-mb-sm"
+                      />
+                      <q-chip-input
+                        v-model="newIngredient.tags"
+                        label="Tags"
+                        filled
+                        class="q-mb-sm"
+                      />
+                      <q-input
+                        v-model="newIngredient.quantity"
+                        label="Quantity"
+                        type="number"
+                        filled
+                        class="q-mb-sm"
+                      />
                       <q-btn
                         icon="add"
                         color="primary"
@@ -43,7 +63,10 @@
                           v-ripple
                         >
                           <q-item-section>
-                            {{ ingredient.name }} - €{{ ingredient.price }}
+                            {{ ingredient.name }} - €{{ ingredient.price }}<br />
+                            <span>{{ ingredient.description }}</span><br />
+                            <span v-if="ingredient.tags && ingredient.tags.length">Tags: {{ ingredient.tags.join(', ') }}</span><br />
+                            <span>Quantity: {{ ingredient.quantity }}</span>
                           </q-item-section>
                           <q-item-section side>
                             <q-btn
@@ -95,6 +118,7 @@
     </q-layout>
   </q-page>
 </template>
+
 <script>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
@@ -103,14 +127,14 @@ import { useQuasar } from 'quasar';
 export default {
   setup() {
     const $q = useQuasar();
-    const newIngredient = ref({ name: '', price: '' });
+    const newIngredient = ref({ name: '', price: '', description: '', tags: ['sandwich-app'], quantity: 100 });
     const ingredients = ref([]);
     const orders = ref([]);
 
     const addIngredient = () => {
       if (newIngredient.value.name && newIngredient.value.price) {
         ingredients.value.push({ ...newIngredient.value });
-        newIngredient.value = { name: '', price: '' };
+        newIngredient.value = { name: '', price: '', description: '', tags: ['sandwich-app'], quantity: 100 };
       } else {
         $q.notify({
           type: 'warning',
@@ -123,22 +147,10 @@ export default {
       ingredients.value.splice(index, 1);
     };
 
-    // const fetchOrders = async () => {
-    //   try {
-    //     const response = await axios.get('http://localhost:3000/api/orders'); //change
-    //     orders.value = response.data;
-    //   } catch (error) {
-    //     console.error('Error fetching orders:', error);
-    //     $q.notify({
-    //       type: 'negative',
-    //       message: 'Error fetching orders',
-    //     });
-    //   }
-    // };
-
     const submitIngredients = async () => {
       try {
-        const response = await axios.post('http://localhost:3000/api/v1/ingredients/add', ingredients.value);
+        const promises = ingredients.value.map(ingredient => axios.post('http://localhost:3000/api/v1/ingredients/add', ingredient));
+        await Promise.all(promises);
         $q.notify({
           type: 'positive',
           message: 'Ingredients submitted successfully',
@@ -153,10 +165,6 @@ export default {
       }
     };
 
-    // onMounted(() => {
-    //   fetchOrders();
-    // });
-
     return {
       newIngredient,
       ingredients,
@@ -168,6 +176,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .row {
   display: flex;
@@ -194,7 +203,7 @@ export default {
   width: 100%;
 }
 
-.q-input {
+.q-input, .q-chip-input {
   width: 100%;
 }
 </style>

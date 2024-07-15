@@ -59,16 +59,23 @@ const onsubmit = async () => {
       password: password.value,
     };
    
-    const response = await axios.post('http://localhost:3000/api/v1/auth/login', data);
-
-    if (response.data.success) {
+     const response = await fetch(`http://localhost:3000/api/v1/auth/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+        const status = await response.json();
+    if (status.success) {
   
       $q.notify({
         type: 'positive',
-        message: response.data.message,
+        message: status.message,
       });
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('id', response.data.id);
+      localStorage.setItem('token', status.token);
+      localStorage.setItem('id', status.id);
+      
     
       const token = localStorage.getItem('token');
       const decodedPayload = jwtDecode(token); 
@@ -80,11 +87,12 @@ const onsubmit = async () => {
       } else {
         router.push('/auth'); // Route to a different page if user is not an admin
       }
-    } else {
+    } else if (!status.success) {
       $q.notify({
         type: 'negative',
-        message: response.data.message,
+        message: status.message,
       });
+      return
     }
   } catch (error) {
     $q.notify({

@@ -29,24 +29,7 @@
         <q-btn flat name="Register" label="Register" to="/register" />
        
 
-        <div class="q-pa-md" style="max-width: 300px; height:99px">
-  <q-list bordered class="rounded-borders">
-    <q-expansion-item
-      expand-separator
-      icon="perm_identity"
-      label="Account settings"
-      caption="Account settings"
-    >
-      <q-card>
-        <q-card-section class="center-content">
-          <q-btn to="/login" flat round>
-            <q-avatar  icon="login" color="primary" text-color="white" />
-          </q-btn>
-        </q-card-section>
-      </q-card>
-    </q-expansion-item>
-  </q-list>
-</div>
+      
       </q-toolbar>
     </q-header>
 
