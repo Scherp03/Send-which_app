@@ -192,7 +192,7 @@ describe('POST /api/v1/order', () => {
       });
     expect(response1.statusCode).toBe(401);
     expect(response1.body.success).toBe(false);
-    await Order.deleteMany({});
+    
   }, 20000);
 
 });
