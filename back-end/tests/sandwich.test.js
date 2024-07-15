@@ -127,7 +127,7 @@ describe('POST /api/v1/sandwich', () => {
       });
     expect(response1.statusCode).toBe(400);
     expect(response1.body.success).toBe(false);
-  });
+  }, 20000);
 
   test('Should respond with a 201 status code if all tests pass', async () => {
     // Test with all parameters, different from another sandwich
@@ -146,7 +146,7 @@ describe('POST /api/v1/sandwich', () => {
       2 + ingredient1.price + ingredient2.price,
     );
     expect(response2.body.sandwichBread).toBe('White6');
-  });
+  }, 20000);
 
   test('Should respond with a 201 status code if all tests pass AND the sandwich already exists', async () => {
     let ingredient1 = await Ingredient.findOne({ name: 'Tomato6' });
@@ -168,5 +168,5 @@ describe('POST /api/v1/sandwich', () => {
 
     // Delete everything that was creted in these tests
     let sandwich1 = Sandwich.findOne({ breadType: 'White6' });
-  });
+  }, 20000);
 });

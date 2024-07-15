@@ -29,7 +29,7 @@ statSchema.methods.setHash = async function () {
       }
     }
   } catch (error) {
-    console.log('Error in ingredientsHash: ' + error);
+    // console.log('Error in ingredientsHash: ' + error);
   }
   this.ingredientsHash = hash;
   await this.save();

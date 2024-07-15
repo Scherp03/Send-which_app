@@ -31,7 +31,7 @@ const router = express.Router();
  *               - bradType
  *               - ingredientsID
  *             properties:
- *               bradType:
+ *               breadType:
  *                 type: string
  *                 description: The type of the bread.
  *                 example: "White"
