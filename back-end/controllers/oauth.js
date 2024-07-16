@@ -117,7 +117,7 @@ export const oauth = async (req, res, next) => {
   `;
     return res.send(script);
   } catch (err) {
-    res.redirect(303, 'http://localhost:9000/#');
+    res.redirect(303, `${process.env.CLIENT_BASE_URL}/#`);
     console.log('Error logging in with OAuth2 user: ', err);
   }
 };

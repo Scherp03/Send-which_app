@@ -7,7 +7,7 @@ async function generateAccessToken() {
   try {
     const response = await axios({
       url: process.env.PAYPAL_BASE_URL + '/v1/oauth2/token',
-      method: 'POST',
+      method: 'post',
       data: 'grant_type=client_credentials',
       auth: {
         username: process.env.PAYPAL_CLIENT_ID,
@@ -25,7 +25,7 @@ async function generateAccessToken() {
 }
 
 export const createOrder = async (req, res) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.header('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header('Referrer-Policy', 'no-referrer-when-downgrade');
 
@@ -36,7 +36,7 @@ export const createOrder = async (req, res) => {
     //const price = 10.0;
     const response = await axios({
       url: process.env.PAYPAL_BASE_URL + '/v2/checkout/orders',
-      method: 'post',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + accessToken,

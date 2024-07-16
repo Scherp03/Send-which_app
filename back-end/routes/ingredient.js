@@ -157,7 +157,7 @@ router.get('/:id', getIngredient);
 
 /**
  * @openapi
- * /ingredients:
+ * /ingredients/add:
  *   patch:
  *     summary: Add a new ingredient
  *     description: Add a new ingredient with a unique name, valid price, and quantity.

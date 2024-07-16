@@ -19,7 +19,10 @@ const app = express();
 
 app.use(
   cors({
-    origin: ['http://localhost:9000', 'https://send-which-app.onrender.com'],
+    origin: [
+      `${process.env.CLIENT_BASE_URL}`,
+      'https://send-which-app.onrender.com',
+    ],
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: [
       'Content-Type',
