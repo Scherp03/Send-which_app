@@ -1,13 +1,13 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
-        <body>
-          <div>
-            <div class="wave"></div>
-            <div class="wave"></div>
-            <div class="wave"></div>
-          </div>
-        </body>
+      <body>
+        <div>
+          <div class="wave"></div>
+          <div class="wave"></div>
+          <div class="wave"></div>
+        </div>
+      </body>
     </q-header>
     <q-page-container>
       <router-view />
@@ -16,26 +16,17 @@
 </template>
 
 <script setup>
-
-
 import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
-import { ref, onMounted } from "vue";
-import EssentialLink from "components/EssentialLink.vue";
+import { ref, onMounted } from 'vue';
+import EssentialLink from 'components/EssentialLink.vue';
 import { route } from 'quasar/wrappers';
 
-const confirm= ref(false);
+const confirm = ref(false);
 const $q = useQuasar();
 const router = useRouter();
 
-
-
-
 const tab = ref(''); // Define the `tab` property
-
-
-
-
 </script>
 
 <style>
@@ -134,7 +125,6 @@ body {
   color: black;
 }
 ::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
-
 </style>

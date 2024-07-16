@@ -1,10 +1,10 @@
 <template>
   <div class="q-pa-md">
     <q-list bordered>
-      <q-item 
-        v-for="slot in timeSlots" 
-        :key="slot.time" 
-        clickable 
+      <q-item
+        v-for="slot in timeSlots"
+        :key="slot.time"
+        clickable
         @click="selectSlot(slot)"
         :active="slot.selected"
       >
@@ -39,7 +39,8 @@ export default {
       const slots = [];
       let startTime = new Date();
       startTime.setHours(9, 0, 0, 0); // Start at 9 AM
-      for (let i = 0; i < 20; i++) { // 20 slots from 9 AM to 2 PM, 15 minutes each
+      for (let i = 0; i < 20; i++) {
+        // 20 slots from 9 AM to 2 PM, 15 minutes each
         slots.push({
           time: date.formatDate(startTime, 'HH:mm'),
           selected: false,
@@ -54,7 +55,7 @@ export default {
     }
 
     function selectSlot(selectedSlot) {
-      timeSlots.value.forEach(slot => {
+      timeSlots.value.forEach((slot) => {
         slot.selected = slot.time === selectedSlot.time;
       });
       selectedSlot.value = selectedSlot;
@@ -77,7 +78,7 @@ export default {
 
     onUnmounted(() => {
       clearTimeout(midnightTimeout);
-       });
+    });
 
     return {
       timeSlots,

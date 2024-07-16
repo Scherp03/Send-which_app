@@ -2,9 +2,14 @@
   <q-page padding>
     <div class="q-pa-md row justify-center items-center text-center">
       <div>
-        <h1 style="color:white">Order Completed</h1>
-        <p style="color:white">Press the button to return to the home page.</p>
-        <q-btn color="primary" @click="handleLogout" label="Go to Home and Logout" class="q-mt-md" />
+        <h1 style="color: white">Order Completed</h1>
+        <p style="color: white">Press the button to return to the home page.</p>
+        <q-btn
+          color="primary"
+          @click="handleLogout"
+          label="Go to Home and Logout"
+          class="q-mt-md"
+        />
       </div>
     </div>
   </q-page>

@@ -13,7 +13,7 @@
 
         <q-toolbar-title v-show="false"> Sendwhich App </q-toolbar-title>
         <q-btn flat label="Home" to="/auth" />
-        
+
         <q-btn flat label="Contact" to="/auth/contacts" />
         <q-btn flat label="Order" to="/auth/order" />
 
@@ -25,8 +25,14 @@
           </div>
         </body>
 
-        <q-btn  flat name="Logout" color="red" label="Logout" @click="confirm = true" />
-         <q-dialog v-model="confirm" persistent>
+        <q-btn
+          flat
+          name="Logout"
+          color="red"
+          label="Logout"
+          @click="confirm = true"
+        />
+        <q-dialog v-model="confirm" persistent>
           <q-card>
             <q-card-section class="row items-center">
               <q-avatar icon="logout" color="primary" text-color="white" />
@@ -35,20 +41,24 @@
 
             <q-card-actions align="right">
               <q-btn flat label="Cancel" color="primary" v-close-popup />
-              <q-btn flat label="Logout" color="red" @click="logout" v-close-popup />
+              <q-btn
+                flat
+                label="Logout"
+                color="red"
+                @click="logout"
+                v-close-popup
+              />
             </q-card-actions>
           </q-card>
         </q-dialog>
-        
-       
 
         <div>
-    <q-btn flat round to="/auth/account">
-      <q-avatar>
-        <img src="../assets/Send-WhichLogo.svg" alt="Send-Which Logo" />
-      </q-avatar>
-    </q-btn>
-  </div>
+          <q-btn flat round to="/auth/account">
+            <q-avatar>
+              <img src="../assets/Send-WhichLogo.svg" alt="Send-Which Logo" />
+            </q-avatar>
+          </q-btn>
+        </div>
       </q-toolbar>
     </q-header>
 
@@ -89,15 +99,14 @@
 </template>
 
 <script setup>
-
 import axios from 'axios';
 import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
-import { ref, onMounted } from "vue";
-import EssentialLink from "components/EssentialLink.vue";
+import { ref, onMounted } from 'vue';
+import EssentialLink from 'components/EssentialLink.vue';
 import { route } from 'quasar/wrappers';
 
-const confirm= ref(false);
+const confirm = ref(false);
 const $q = useQuasar();
 const router = useRouter();
 
@@ -112,39 +121,38 @@ const router = useRouter();
 
 const logout = async () => {
   try {
-      localStorage.removeItem('token');
-      router.push('/login');
-      $q.notify({
+    localStorage.removeItem('token');
+    router.push('/login');
+    $q.notify({
       type: 'positive',
       message: 'You have logged out',
     });
-    }catch (error) {
+  } catch (error) {
     $q.notify({
       type: 'negative',
       message: 'An error occurred. Please try again later.',
     });
     console.error('Error:', error);
   }
-};  
+};
 
 const tab = ref(''); // Define the `tab` property
 const linksList = [
   {
-    title: "SandWichApp",
-    caption: "quasar.dev",
-    icon: "school",
-    link: "https://quasar.dev",
+    title: 'SandWichApp',
+    caption: 'quasar.dev',
+    icon: 'school',
+    link: 'https://quasar.dev',
   },
   {
-    title: "Github",
-    caption: "github.com/Send-which-app",
-    icon: "code",
-    link: "https://github.com/Scherp03/Send-which_app",
+    title: 'Github',
+    caption: 'github.com/Send-which-app',
+    icon: 'code',
+    link: 'https://github.com/Scherp03/Send-which_app',
   },
 ];
 
 const leftDrawerOpen = ref(false);
-
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
@@ -247,7 +255,6 @@ body {
   color: black;
 }
 ::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
-
 </style>

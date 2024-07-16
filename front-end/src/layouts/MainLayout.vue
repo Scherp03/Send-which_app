@@ -13,7 +13,7 @@
 
         <q-toolbar-title v-show="false"> Sendwhich App </q-toolbar-title>
         <q-btn flat label="Home" to="/" />
-        
+
         <q-btn flat label="Contact" to="/contacts" />
         <q-btn flat label="Ingredients" to="/ingredients" />
 
@@ -25,11 +25,8 @@
           </div>
         </body>
 
-        <q-btn  flat name="Login" label="Login" to="/login" />
+        <q-btn flat name="Login" label="Login" to="/login" />
         <q-btn flat name="Register" label="Register" to="/register" />
-       
-
-      
       </q-toolbar>
     </q-header>
 
@@ -70,33 +67,29 @@
 </template>
 
 <script setup>
-
 import axios from 'axios';
 import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
-import { ref, onMounted } from "vue";
-import EssentialLink from "components/EssentialLink.vue";
+import { ref, onMounted } from 'vue';
+import EssentialLink from 'components/EssentialLink.vue';
 import { route } from 'quasar/wrappers';
-
 
 const $q = useQuasar();
 const router = useRouter();
 
-
-
 const tab = ref(''); // Define the `tab` property
 const linksList = [
   {
-    title: "SandWichApp",
-    caption: "quasar.dev",
-    icon: "school",
-    link: "https://quasar.dev",
+    title: 'SandWichApp',
+    caption: 'quasar.dev',
+    icon: 'school',
+    link: 'https://quasar.dev',
   },
   {
-    title: "Github",
-    caption: "github.com/Send-which-app",
-    icon: "code",
-    link: "https://github.com/Scherp03/Send-which_app",
+    title: 'Github',
+    caption: 'github.com/Send-which-app',
+    icon: 'code',
+    link: 'https://github.com/Scherp03/Send-which_app',
   },
 ];
 
@@ -210,6 +203,6 @@ body {
 }
 
 ::-webkit-scrollbar {
-   display: none;
+  display: none;
 }
 </style>
