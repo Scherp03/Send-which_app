@@ -10,7 +10,7 @@
         <img
           src="../assets/Send-Which_logo-removebg-preview.png"
           alt="App Logo"
-          style="width: 200px; height: 200px; object-fit: contain; margin-bottom: 20px;"
+          style="width: 350px; height: 200px; object-fit: contain; margin-bottom: 20px;"
         />
 
         <h1

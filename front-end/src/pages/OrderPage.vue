@@ -1,5 +1,11 @@
 <template>
   <div class="q-pa-md">
+    <!-- Loading Overlay -->
+    <q-dialog v-model="showOverlay" persistent>
+      <q-spinner color="primary" size="50px" />
+      <div class="text-subtitle1 q-mt-md">Processing your payment...</div>
+    </q-dialog>
+
     <q-stepper v-model="step" ref="stepper" animated active-color="purple">
       <q-step :name="1" prefix="1" title="Select your ingredients">
         <q-scroll-area
@@ -80,7 +86,6 @@
     </q-stepper>
   </div>
 </template>
-
 <script>
 import { ref, computed, onMounted } from 'vue';
 import TimeSlotSelector from '../pages/TimeSlotSelectorPage.vue';
@@ -99,6 +104,7 @@ export default {
     const selectedBread = ref(null);
     const loading = ref(true);
     const sandwichSaved = ref(false); // Flag to track if sandwich has been saved
+    const showOverlay = ref(false); // Flag to control the overlay
 
     const fetchIngredients = async () => {
       try {
@@ -136,6 +142,7 @@ export default {
     });
 
     const placeOrder = async () => {
+      showOverlay.value = true; // Show overlay when payment starts
       try {
         const response = await axios.post('http://localhost:3000/api/v1/paypal/pay');
         const popup = window.open(response.data.url, '_blank', 'width=500,height=600');
@@ -164,12 +171,15 @@ export default {
               message: message,
             });
           }
+
+          showOverlay.value = false; // Hide overlay after response
         });
       } catch (error) {
         $q.notify({
           type: 'negative',
           message: 'Error, something went wrong 😭',
         });
+        showOverlay.value = false; // Hide overlay on error
       }
     };
 
@@ -231,6 +241,7 @@ export default {
       breadTypes,
       loading,
       selectedIngredients,
+      showOverlay,
     };
   },
   components: {
@@ -238,7 +249,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .loading-message {
   text-align: center;
@@ -261,5 +271,12 @@ export default {
 .text-h6 {
   font-weight: bold;
   margin-bottom: 10px;
+}
+
+.q-dialog__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 </style>

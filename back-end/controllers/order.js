@@ -10,8 +10,7 @@ export const createOrder = async (req, res, next) => {
       !req.body.slotID ||
       !req.body.content ||
       !req.body.status ||
-      !req.body.total ||
-      !req.body.date
+      !req.body.total
     ) {
       return res
         .status(400)
@@ -23,8 +22,9 @@ export const createOrder = async (req, res, next) => {
       content: req.body.content,
       total: req.body.total,
       status: req.body.status,
-      date: req.body.date,
+      date: new Date(),
     });
+    newOrder.date.setUTCHours(newOrder.date.getUTCHours() + 1);
 
     const User = await UserModel.findOne({ _id: newOrder.userID });
     if (!User) {
@@ -130,12 +130,10 @@ export const viewStatus = async (req, res, next) => {
     }
     const StatusOrders = await OrderModel.find({ status: status });
     if (StatusOrders.length === 0) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: `Orders with status ${status} not found`,
-        });
+      return res.status(404).json({
+        success: false,
+        message: `Orders with status ${status} not found`,
+      });
     }
 
     return res.status(200).json({

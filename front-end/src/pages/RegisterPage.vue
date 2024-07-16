@@ -145,6 +145,9 @@
 </template>
 
 <script setup>
+
+import axios from "axios";
+
 defineOptions({
   data() {
     return {
