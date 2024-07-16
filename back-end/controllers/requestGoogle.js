@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const request = async (req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.header('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header('Referrer-Policy', 'no-referrer-when-downgrade');
   const redirectURL = `${process.env.BASE_URL}/oauth`;

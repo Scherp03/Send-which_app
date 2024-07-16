@@ -1,9 +1,11 @@
 import UserModel from '../database/schemas/user.js';
 import bcrypt from 'bcryptjs';
 import { Permissions, Roles } from '../../shared/userTypeDefinitions.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const createUser = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.set('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   try {
     if (
       !req.body.firstName ||
@@ -63,7 +65,7 @@ export const createUser = async (req, res, next) => {
 };
 
 export const getUser = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.set('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   if (!req.decodedToken)
     return res.status(403).json({ success: false, message: `No permissions` });
   try {
@@ -90,7 +92,7 @@ export const getUser = async (req, res, next) => {
 };
 
 export const updateUser = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.set('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   try {
     if (
       !req.decodedToken
@@ -162,7 +164,7 @@ export const updateUser = async (req, res, next) => {
 };
 
 export const deleteUser = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.set('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   try {
     if (
       !req.decodedToken

@@ -25,7 +25,7 @@ async function generateAccessToken() {
 }
 
 export const createOrder = async (req, res) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.header('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header('Referrer-Policy', 'no-referrer-when-downgrade');
 

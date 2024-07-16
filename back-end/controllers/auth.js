@@ -2,9 +2,11 @@ import UserModel from '../database/schemas/user.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import UserTypeModel from '../database/schemas/userType.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const login = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.set('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   try {
     if (!req.body.username || !req.body.password) {
       return res
@@ -36,7 +38,7 @@ export const login = async (req, res, next) => {
         message: 'Welcome to your account, ' + user.username + '!',
         id: user._id,
         token: access_key,
-        payload : payload, //to remove
+        payload: payload, //to remove
       });
     } else {
       return res
@@ -53,7 +55,7 @@ export const login = async (req, res, next) => {
 };
 
 export const logout = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.set('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   try {
     if (!req.decodedToken) {
       return res

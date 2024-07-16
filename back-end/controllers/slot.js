@@ -1,7 +1,9 @@
 import Slot from '../database/schemas/slot.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const populateSlots = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.set('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   try {
     await Slot.deleteMany({});
 
@@ -48,7 +50,7 @@ export const populateSlots = async (req, res, next) => {
 };
 
 export const getSlots = async (req, res, next) => {
-  res.get('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.get('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   try {
     const slots = await Slot.find();
     if (slots.length === 0) {
@@ -77,7 +79,7 @@ export const getSlots = async (req, res, next) => {
 };
 
 export const getSlot = async (req, res, next) => {
-  res.get('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.get('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   try {
     const { id } = req.params;
     const slot = await Slot.findById(id);

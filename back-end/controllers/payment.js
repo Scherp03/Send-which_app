@@ -53,7 +53,7 @@ export const capturePayment = async (req, res) => {
   } catch (error) {
     console.error('Error during Axios request:', error); // Debugging line
     //throw error;
-    res.redirect(303, 'http://localhost:9000/#');
+    res.redirect(303, `${process.env.CLIENT_BASE_URL}/#`);
   }
 };
 

@@ -1,9 +1,10 @@
 import OrderModel from '../database/schemas/order.js';
-
 import UserModel from '../database/schemas/user.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const createOrder = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.set('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   try {
     if (
       !req.body.userID ||
@@ -54,7 +55,7 @@ export const createOrder = async (req, res, next) => {
 };
 
 export const viewOrder = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.set('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   try {
     const { id } = req.params;
     if (!id) {
@@ -89,7 +90,7 @@ export const viewOrder = async (req, res, next) => {
 };
 
 export const viewAllOrders = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.set('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   try {
     const orders = await OrderModel.find();
     if (orders.length === 0) {
@@ -119,7 +120,7 @@ export const viewAllOrders = async (req, res, next) => {
   }
 };
 export const viewStatus = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.set('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
 
   try {
     const { status } = req.params;
@@ -157,7 +158,7 @@ export const viewStatus = async (req, res, next) => {
 };
 
 export const changeStatus = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.set('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   try {
     const { id } = req.params;
     if (!id) {

@@ -16,6 +16,25 @@ const dotenv = require('dotenv');
 // Load .env file
 dotenv.config();
 
+const { URL } = require('url');
+
+// Parse the URL from the environment variable
+const baseUrl = process.env.VUE_APP_CLIENT_BASE_URL;
+let host = 'localhost';
+let port = 8080;
+let https = false;
+
+if (baseUrl) {
+  const parsedUrl = new URL(baseUrl);
+  host = parsedUrl.hostname;
+  port = parsedUrl.port
+    ? Number(parsedUrl.port)
+    : parsedUrl.protocol === 'https:'
+    ? 443
+    : 80;
+  https = parsedUrl.protocol === 'https:';
+}
+
 module.exports = configure(function (/* ctx */) {
   return {
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
@@ -62,6 +81,7 @@ module.exports = configure(function (/* ctx */) {
       // analyze: true,
       env: {
         VUE_APP_BASE_URL: process.env.VUE_APP_BASE_URL,
+        VUE_APP_CLIENT_BASE_URL: process.env.VUE_APP_CLIENT_BASE_URL,
       },
       // rawDefine: {}
       // ignorePublicFolder: true,
@@ -88,6 +108,9 @@ module.exports = configure(function (/* ctx */) {
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
     devServer: {
       // https: true
+      host,
+      port,
+      https,
       open: true, // opens browser window automatically
     },
 

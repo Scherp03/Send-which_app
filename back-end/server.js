@@ -16,7 +16,6 @@ if (!process.env.DB_URI) {
 
 /* MongoDB credentials */
 const dbUri = process.env.DB_URI;
-// const uri = "mongodb://localhost:27017/myapp"
 const clientOptions = {
   serverApi: { version: '1', strict: true, deprecationErrors: true },
 };

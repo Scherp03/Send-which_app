@@ -1,7 +1,9 @@
 import SandwichModel from '../database/schemas/sandwich.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const createSandwich = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.set('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   try {
     if (!req.body.breadType || !req.body.ingredientsID) {
       return res
@@ -72,7 +74,7 @@ export const createSandwich = async (req, res, next) => {
 };
 
 export const getSandwich = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.set('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   try {
     const { id } = req.params;
     const sandwich = await SandwichModel.findById(id);
@@ -98,7 +100,7 @@ export const getSandwich = async (req, res, next) => {
 };
 
 export const getAllSandwiches = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.set('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   try {
     // Fetch all sandwiches from the database
     const sandwiches = await SandwichModel.find({});

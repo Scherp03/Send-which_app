@@ -1,9 +1,10 @@
 import Ingredient from '../database/schemas/ingredient.js';
-
+import dotenv from 'dotenv';
+dotenv.config();
 // addIngredient: Add a new ingredient to the database
 // Insert one ingredients only if all parameters are met
 export const addIngredient = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.set('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   try {
     const newIngredient = new Ingredient({
       name: req.body.name,
@@ -58,7 +59,7 @@ export const addIngredient = async (req, res, next) => {
 // Assures that only valid quantities are used
 // Parameters required: _id, availability
 export const setAvailability = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.set('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   try {
     // Test that the input is valid
     let newAvailability = req.body.availability;
@@ -98,7 +99,7 @@ export const setAvailability = async (req, res, next) => {
 // Assures that only valid quantities are used
 // Parameters needed: _id, availability
 export const increaseAvailability = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.set('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   try {
     // Test that the input is valid
     let newAvailability = req.body.availability;
@@ -136,7 +137,7 @@ export const increaseAvailability = async (req, res, next) => {
 // Safe delete an ingredient given its _id
 // Parameters required: _id
 export const deleteIngredient = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.set('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   try {
     let foundIngredient = await Ingredient.findOne({ _id: req.body._id });
     if (!foundIngredient) {
@@ -164,7 +165,7 @@ export const deleteIngredient = async (req, res, next) => {
 // restoreDeleted
 // Restore a deleted ingredient given its name
 export const restoreDeleted = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.set('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   try {
     let restoredName = req.body.name;
     let foundIngredient = await Ingredient.findOne({
@@ -195,7 +196,7 @@ export const restoreDeleted = async (req, res, next) => {
 };
 
 // export const getIngredientList = async (req, res, next) => {
-//   res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+//   res.set('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
 //   try {
 //     let allIngredients = await Ingredient.find({ active: true });
 //     if (!allIngredients) {
@@ -214,13 +215,17 @@ export const restoreDeleted = async (req, res, next) => {
 // };
 
 export const getIngredient = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.set('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   try {
     let foundIngredient = await Ingredient.findById(req.params.id);
     if (foundIngredient) {
       return res
         .status(200)
-        .json({ success: true, ingredient: foundIngredient, name: foundIngredient.name });
+        .json({
+          success: true,
+          ingredient: foundIngredient,
+          name: foundIngredient.name,
+        });
     } else {
       return res
         .status(404)
@@ -238,7 +243,7 @@ export const getIngredient = async (req, res, next) => {
 // getIngredients
 // Delivers the whole list of ingreients
 export const getIngredients = async (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+  res.set('Access-Control-Allow-Origin', `${process.env.CLIENT_BASE_URL}`);
   try {
     // find() gets all the documents
     let allIngredients = await Ingredient.find({ active: true });
