@@ -45,8 +45,8 @@ const router = express.Router();
  *                 example: "60c72b2f9b1e8c001f8e4b8e"
  *               content:
  *                 type: string
- *                 description: "The content or details of the order."
- *                 example: "2 sandwiches, 1 drink"
+ *                 description: "The ID of the sandwich."
+ *                 example: "6695a0a69592500a1a422f6d"
  *               total:
  *                 type: number
  *                 format: float
@@ -60,7 +60,7 @@ const router = express.Router();
  *                 type: string
  *                 format: date
  *                 description: "The date when the order was placed."
- *                 example: "2024-07-15"
+ *                 example: "2024-01-01T11:30:00"
  *     responses:
  *       '200':
  *         description: "OK: The order has been successfully created."
@@ -88,8 +88,8 @@ const router = express.Router();
  *                 message:
  *                   type: string
  *                   example: "Missing some parameters"
- *       '401':
- *         description: "Unauthorized: User ID not found."
+ *       '404':
+ *         description: "Not found: User ID not found."
  *         content:
  *           application/json:
  *             schema:
@@ -152,7 +152,7 @@ router.post('/', createOrder);
  *                   example: "60c72b2f9b1e8c001f8e4b8e"
  *                 content:
  *                   type: string
- *                   example: "2 sandwiches, 1 drink"
+ *                   example: "6695a0a69592500a1a422f6d"
  *                 total:
  *                   type: number
  *                   format: float
@@ -163,7 +163,7 @@ router.post('/', createOrder);
  *                 date:
  *                   type: string
  *                   format: date
- *                   example: "2024-07-15"
+ *                   example: "Mon Jan 01 2024"
  *       '400':
  *         description: "Bad Request: The order ID is required but not provided."
  *         content:
@@ -226,7 +226,7 @@ router.get('/:id', viewOrder);
  *                         example: "60c72b2f9b1e8c001f8e4b8e"
  *                       content:
  *                         type: string
- *                         example: "2 sandwiches, 1 drink"
+ *                         example: "6695a0a69592500a1a422f6d"
  *                       total:
  *                         type: number
  *                         format: float
@@ -237,7 +237,7 @@ router.get('/:id', viewOrder);
  *                       date:
  *                         type: string
  *                         format: date
- *                         example: "2024-07-15"
+ *                         example: "Mon Jan 01 2024"
  *       '404':
  *         description: "Not Found: No orders found."
  *         content:
@@ -294,7 +294,7 @@ router.get('/', viewAllOrders);
  *                         example: "60c72b2f9b1e8c001f8e4b8e"
  *                       content:
  *                         type: string
- *                         example: "2 sandwiches, 1 drink"
+ *                         example: "6695a0a69592500a1a422f6d"
  *                       total:
  *                         type: number
  *                         format: float
@@ -305,7 +305,7 @@ router.get('/', viewAllOrders);
  *                       date:
  *                         type: string
  *                         format: date
- *                         example: "2024-07-15"
+ *                         example: "Mon Jan 01 2024"
  *       '404':
  *         description: "Not Found: No orders with the specified status found."
  *         content:
@@ -466,7 +466,7 @@ router.patch('/:id', changeStatus);
  *                   example: "60c72b2f9b1e8c001f8e4b8e"
  *                 content:
  *                   type: string
- *                   example: "2 sandwiches, 1 drink"
+ *                   example: "6695a0a69592500a1a422f6d"
  *                 total:
  *                   type: number
  *                   format: float
@@ -477,7 +477,7 @@ router.patch('/:id', changeStatus);
  *                 date:
  *                   type: string
  *                   format: date
- *                   example: "2024-07-15"
+ *                   example: "Mon Jan 01 2024"
  *       '400':
  *         description: "Bad Request: The order ID is required but not provided."
  *         content:

@@ -9,7 +9,7 @@ const router = express.Router();
  * /slots/populate:
  *   post:
  *     summary: Populate time slots
- *     description: Create and populate time slots based on the provided opening time, closing time, slot duration, and maximum number of sandwiches per slot.
+ *     description: "Create and populate time slots based on the provided opening time, closing time, slot duration, and maximum number of sandwiches per slot."
  *     tags:
  *       - Slots
  *     produces:
@@ -17,7 +17,7 @@ const router = express.Router();
  *     consumes:
  *       - application/json
  *     requestBody:
- *       description: The request body is a JSON object containing the opening time, closing time, slot duration, and maximum number of sandwiches per slot.
+ *       description: "The request body is a JSON object containing the opening time, closing time, slot duration, and maximum number of sandwiches per slot."
  *       required: true
  *       content:
  *         application/json:
@@ -30,20 +30,20 @@ const router = express.Router();
  *               - maxSandwiches
  *             properties:
  *               openingTime:
- *                 type: number
- *                 description: The opening time in minutes since midnight.
- *                 example: 480
+ *                 type: Date
+ *                 description: "The opening date."
+ *                 example: 2024-01-01T11:30:00
  *               closingTime:
- *                 type: number
- *                 description: The closing time in minutes since midnight.
- *                 example: 1080
+ *                 type: Date
+ *                 description: "The closing time in date format."
+ *                 example: 2024-01-01T11:30:00
  *               slotDuration:
  *                 type: number
- *                 description: The duration of each slot in minutes.
- *                 example: 30
+ *                 description: "The duration of each slot in date format."
+ *                 example: 2024-01-01T11:30:00
  *               maxSandwiches:
  *                 type: number
- *                 description: The maximum number of sandwiches per slot.
+ *                 description: "The maximum number of sandwiches per slot."
  *                 example: 10
  *     responses:
  *       '201':
@@ -117,17 +117,21 @@ router.post('/', populateSlots);
  *                       _id:
  *                         type: string
  *                         example: "60b8d295f1b2c342c8f0d2e4"
- *                       time:
+ *                       hours:
  *                         type: number
- *                         description: The time of the slot in minutes since midnight.
- *                         example: 480
+ *                         description: "The hour at wich the slot starts ."
+ *                         example: 12
+ *                       minutes:
+ *                         type: number
+ *                         description: "The minutes at wich the slot starts ."
+ *                         example: 15
  *                       maxSandwiches:
  *                         type: number
- *                         description: The maximum number of sandwiches for the slot.
+ *                         description: "The maximum number of sandwiches for the slot."
  *                         example: 10
  *                       duration:
  *                         type: number
- *                         description: The duration of the slot in minutes.
+ *                         description: "The duration of the slot in minutes."
  *                         example: 30
  *       '404':
  *         description: "Not Found: No slots found."

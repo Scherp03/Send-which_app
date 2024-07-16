@@ -165,8 +165,5 @@ describe('POST /api/v1/sandwich', () => {
       2 + ingredient1.price + ingredient2.price,
     );
     expect(response3.body.sandwichBread).toBe('White6');
-
-    // Delete everything that was creted in these tests
-    let sandwich1 = Sandwich.findOne({ breadType: 'White6' });
   }, 20000);
 });

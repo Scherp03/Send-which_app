@@ -22,8 +22,9 @@ beforeAll(async () => {
     content: content,
     total: 20.0,
     status: 'toDo',
-    date: '2024-07-14T10:00:00Z',
+    date: new Date(),
   });
+  testorder.date.setUTCHours(testorder.date.getUTCHours() + 1);
   await Order.create(testorder);
 }, 20000);
 
@@ -52,8 +53,9 @@ describe('POST /api/v1/order', () => {
       content: new mongoose.Types.ObjectId(),
       total: 100.0,
       status: 'completed',
-      date: '2024-07-14T15:00:00.000+00:00',
+      date: new Date(),
     };
+    order.date.setUTCHours(order.date.getUTCHours() + 1);
 
     const response = await request(app).post('/api/v1/order/').send(order);
     expect(response.statusCode).toBe(200);
@@ -154,8 +156,9 @@ describe('POST /api/v1/order', () => {
       content: new mongoose.Types.ObjectId(),
       //total: 100.00,
       status: 'failed',
-      date: '2024-07-14T10:00:00Z',
+      date: new Date(),
     });
+
     expect(response1.statusCode).toBe(400);
     expect(response1.body.success).toBe(false);
   }, 20000);
@@ -168,9 +171,10 @@ describe('POST /api/v1/order', () => {
       content: new mongoose.Types.ObjectId(),
       total: 100.0,
       status: 'failed',
-      date: '2024-07-14T10:00:00Z',
+      date: new Date(),
     });
-    expect(response1.statusCode).toBe(401);
+
+    expect(response1.statusCode).toBe(404);
     expect(response1.body.success).toBe(false);
   }, 20000);
 });

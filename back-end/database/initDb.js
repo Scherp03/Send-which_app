@@ -2,11 +2,11 @@ import User from './schemas/user.js';
 import UserType from './schemas/userType.js';
 import Ingredient from './schemas/ingredient.js';
 import Sandwich from './schemas/sandwich.js';
+import Order from './schemas/order.js';
 import axios from 'axios';
 import { Permissions, Roles } from '../../shared/userTypeDefinitions.js';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
-import Order from './schemas/order.js';
 dotenv.config();
 
 export const initDb = async () => {
