@@ -74,3 +74,29 @@ export const getSlots = async (req, res, next) => {
     next(err);
   }
 };
+export const getSlot = async (req, res, next) => {
+  res.get('Access-Control-Allow-Origin', 'http://localhost:9000');
+  try {
+    const { id } = req.params;
+    const slot = await Slot.findById(id);
+    if (!slot) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Slot not found' });
+    }
+    return res.status(200).json({
+      success: true,
+      time:
+        slot.time.getHours() +
+        ':' +
+        (slot.time.getMinutes() < 10 ? '0' : '') +
+        slot.time.getMinutes(),
+    });
+  } catch (err) {
+    console.log(err.message);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};

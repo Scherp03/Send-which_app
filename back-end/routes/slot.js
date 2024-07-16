@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { populateSlots, getSlots } from '../controllers/slot.js';
+import { populateSlots, getSlots, getSlot } from '../controllers/slot.js';
 
 const router = express.Router();
 
@@ -157,5 +157,7 @@ router.post('/', populateSlots);
  *                   example: "Internal server error"
  */
 router.get('/', getSlots);
+
+router.get('/:id', getSlot);
 
 export default router;

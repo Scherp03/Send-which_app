@@ -220,7 +220,7 @@ export const getIngredient = async (req, res, next) => {
     if (foundIngredient) {
       return res
         .status(200)
-        .json({ success: true, ingredient: foundIngredient });
+        .json({ success: true, ingredient: foundIngredient, name: foundIngredient.name });
     } else {
       return res
         .status(404)
