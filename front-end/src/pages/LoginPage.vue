@@ -8,23 +8,57 @@
             <div class="text-grey-8">Sign in below to access your account</div>
           </q-card-section>
           <q-card-section>
-            <q-input dense outlined v-model="username" label="Username"></q-input>
-            <q-input dense outlined class="q-mt-md" v-model="password" type="password" label="Password"></q-input>
+            <q-input
+              dense
+              outlined
+              v-model="username"
+              label="Username"
+            ></q-input>
+            <q-input
+              dense
+              outlined
+              class="q-mt-md"
+              v-model="password"
+              type="password"
+              label="Password"
+            ></q-input>
           </q-card-section>
           <q-card-section>
-            <q-btn style="border-radius: 8px;" color="dark" rounded size="md" label="Sign in" no-caps class="full-width" @click="onsubmit"></q-btn>
+            <q-btn
+              style="border-radius: 8px"
+              color="dark"
+              rounded
+              size="md"
+              label="Sign in"
+              no-caps
+              class="full-width"
+              @click="onsubmit"
+            ></q-btn>
           </q-card-section>
           <q-card-section class="text-center q-pt-none">
-            <div class="text-grey-8">Don't have an account yet?
-              <a href="#/register" class="text-dark text-weight-bold" style="text-decoration: none">Sign
-                up.</a></div>
+            <div class="text-grey-8">
+              Don't have an account yet?
+              <a
+                href="#/register"
+                class="text-dark text-weight-bold"
+                style="text-decoration: none"
+                >Sign up.</a
+              >
+            </div>
           </q-card-section>
           <q-card-section class="text-center q-pt-none">
             <div class="text-grey-8 q-mb-md">or sign in with</div>
-            <q-btn class="social-btn q-mb-sm" color="white" text-color="black" rounded size="md" no-caps  @click="signInWithGoogle">
+            <q-btn
+              class="social-btn q-mb-sm"
+              color="white"
+              text-color="black"
+              rounded
+              size="md"
+              no-caps
+              @click="signInWithGoogle"
+            >
               <i class="fab fa-google"></i> Google
             </q-btn>
-          
           </q-card-section>
         </q-card>
       </q-page>
@@ -37,16 +71,15 @@ import { ref } from 'vue';
 import axios from 'axios';
 import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
-import  {jwtDecode}  from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 const username = ref('');
 const password = ref('');
 const $q = useQuasar();
 const router = useRouter();
 
-
 const onsubmit = async () => {
-   if (!username.value || !password.value) {
+  if (!username.value || !password.value) {
     $q.notify({
       type: 'negative',
       message: 'Username and password are required.',
@@ -58,30 +91,26 @@ const onsubmit = async () => {
       username: username.value,
       password: password.value,
     };
-   
-   
-    
-     const response = await fetch(`http://localhost:3000/api/v1/auth/login`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
-        const status = await response.json();
+
+    const response = await fetch(`http://localhost:3000/api/v1/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    const status = await response.json();
     if (status.success) {
-  
       $q.notify({
         type: 'positive',
         message: status.message,
       });
       localStorage.setItem('token', status.token);
       localStorage.setItem('id', status.id);
-      
-    
+
       const token = localStorage.getItem('token');
-      const decodedPayload = jwtDecode(token); 
-      
+      const decodedPayload = jwtDecode(token);
+
       localStorage.setItem('userType', decodedPayload.role);
 
       if (localStorage.getItem('userType') === 'Admin') {
@@ -94,7 +123,7 @@ const onsubmit = async () => {
         type: 'negative',
         message: status.message,
       });
-      return
+      return;
     }
   } catch (error) {
     $q.notify({
@@ -106,29 +135,34 @@ const onsubmit = async () => {
 };
 
 const signInWithGoogle = async () => {
-  const response =await axios.post('http://localhost:3000/api/v1/requestgoogle');
+  const response = await axios.post(
+    'http://localhost:3000/api/v1/requestgoogle'
+  );
 
-  const popup = window.open(response.data.url, '_blank', 'width=500,height=600');
-  
+  const popup = window.open(
+    response.data.url,
+    '_blank',
+    'width=500,height=600'
+  );
+
   window.addEventListener('message', (event) => {
-    console.log(event)
+    console.log(event);
     if (event.origin !== 'http://127.0.0.1:3000') {
       // Ensure the message is coming from your server
       return;
     }
 
     const { success, message, id, token } = event.data;
-    
+
     if (success) {
-      
       setTimeout(() => {
         $q.notify({
-        progress: true,
-        type: 'positive',
-        message: message,
-      });
-      },5000)
-      
+          progress: true,
+          type: 'positive',
+          message: message,
+        });
+      }, 5000);
+
       localStorage.setItem('token', token);
       localStorage.setItem('id', id);
       router.push('/auth'); // Or the appropriate route based on your app logic
@@ -140,15 +174,14 @@ const signInWithGoogle = async () => {
     }
   });
 };
-
-
 </script>
 
 <style>
 .my_card {
   width: 25rem;
   border-radius: 8px;
-  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
 /* Social button hover effects */
@@ -160,5 +193,4 @@ const signInWithGoogle = async () => {
   background-color: #db4437;
   color: white;
 }
-
 </style>
