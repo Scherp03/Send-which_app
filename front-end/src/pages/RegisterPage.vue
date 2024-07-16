@@ -177,13 +177,16 @@ export default {
           password: password.value,
         };
         console.log(data);
-        const response = await fetch(`http://localhost:3000/api/v1/users`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
+        const response = await fetch(
+          `${process.env.VUE_APP_BASE_URL}/api/v1/users`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          }
+        );
         const status = await response.json();
         if (status.success) {
           $q.notify({
@@ -208,7 +211,7 @@ export default {
 
     const signUpWithGoogle = async () => {
       const response = await axios.post(
-        'http://localhost:3000/api/v1/requestgoogle'
+        `${process.env.VUE_APP_BASE_URL}/api/v1/requestgoogle`
       );
       const popup = window.open(
         response.data.url,
@@ -218,7 +221,7 @@ export default {
 
       window.addEventListener('message', (event) => {
         console.log(event);
-        if (event.origin !== 'http://127.0.0.1:3000') {
+        if (event.origin !== `${process.env.VUE_APP_BASE_URL}`) {
           // Ensure the message is coming from your server
           return;
         }
@@ -295,7 +298,7 @@ export default {
 //           password: this.password,
 //         };
 //         console.log(data);
-//         const response = await fetch(`http://localhost:3000/api/v1/users`, {
+//         const response = await fetch(`${process.env.VUE_APP_BASE_URL}/api/v1/users`, {
 //           method: 'POST',
 //           headers: {
 //             'Content-Type': 'application/json',
@@ -326,7 +329,7 @@ export default {
 
 //     async signUpWithGoogle() {
 //       const response = await axios.post(
-//         'http://localhost:3000/api/v1/requestgoogle'
+//         `${process.env.VUE_APP_BASE_URL}/api/v1/requestgoogle`
 //       );
 
 //       const popup = window.open(
@@ -337,7 +340,7 @@ export default {
 
 //       window.addEventListener('message', (event) => {
 //         console.log(event);
-//         if (event.origin !== 'http://127.0.0.1:3000') {
+//         if (event.origin !== `${process.env.VUE_APP_BASE_URL}`) {
 //           // Ensure the message is coming from your server
 //           return;
 //         }

@@ -39,7 +39,7 @@
                 :class="{ changed: firstName !== originalValues.firstName }"
               />
             </div>
-            <div class="q-column" style="width:50px"></div>
+            <div class="q-column" style="width: 50px"></div>
             <!-- Right Column -->
             <div class="q-column">
               <q-input
@@ -109,19 +109,23 @@ const originalValues = reactive({
   username: '',
   email: '',
   firstName: '',
-  lastName: ''
+  lastName: '',
 });
 
 // Fetch user data from API
-const fetchUserDataUrl = id => `http://localhost:3000/api/v1/users/${id}`;
+const fetchUserDataUrl = (id) =>
+  `${process.env.VUE_APP_BASE_URL}/api/v1/users/${id}`;
 
 const fetchUserData = async () => {
   try {
-    const response = await axios.get(fetchUserDataUrl(localStorage.getItem('id')), {
-      headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('token'),
-      },
-    });
+    const response = await axios.get(
+      fetchUserDataUrl(localStorage.getItem('id')),
+      {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
+      }
+    );
     // Populate form fields with fetched data
     username.value = response.data.username;
     email.value = response.data.email;
@@ -173,19 +177,23 @@ const submitForm = async () => {
   console.log('Updating user data:', updatedData);
 
   try {
-    const response = await axios.patch(fetchUserDataUrl(localStorage.getItem('id')), updatedData, {
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem('token')}`
+    const response = await axios.patch(
+      fetchUserDataUrl(localStorage.getItem('id')),
+      updatedData,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
       }
-    });
+    );
 
     if (response.status === 200) {
       $q.notify({
         type: 'positive',
         message: 'Account settings updated successfully!',
       });
-      
+
       // Fetch user data again to update original values
       await fetchUserData();
 
@@ -195,7 +203,9 @@ const submitForm = async () => {
       // Optional: Redirect to another page after saving
       router.push('/login');
     } else {
-      throw new Error(response.data.message || 'Error updating account settings');
+      throw new Error(
+        response.data.message || 'Error updating account settings'
+      );
     }
   } catch (error) {
     $q.notify({

@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <q-card class="q-pa-md" style="max-width: 600px; margin: auto;">
+    <q-card class="q-pa-md" style="max-width: 600px; margin: auto">
       <q-card-section>
         <div class="text-h6">Contact Us</div>
       </q-card-section>
@@ -12,7 +12,7 @@
             label="Name"
             filled
             required
-            :rules="[val => !!val || 'Name is required']"
+            :rules="[(val) => !!val || 'Name is required']"
             class="q-mb-md"
           />
           <q-input
@@ -21,7 +21,10 @@
             type="email"
             filled
             required
-            :rules="[val => !!val || 'Email is required', val => /.+@.+\..+/.test(val) || 'Email must be valid']"
+            :rules="[
+              (val) => !!val || 'Email is required',
+              (val) => /.+@.+\..+/.test(val) || 'Email must be valid',
+            ]"
             class="q-mb-md"
           />
           <q-input
@@ -29,7 +32,7 @@
             label="Subject"
             filled
             required
-            :rules="[val => !!val || 'Subject is required']"
+            :rules="[(val) => !!val || 'Subject is required']"
             class="q-mb-md"
           />
           <q-input
@@ -38,7 +41,7 @@
             type="textarea"
             filled
             required
-            :rules="[val => !!val || 'Message is required']"
+            :rules="[(val) => !!val || 'Message is required']"
             class="q-mb-md"
             autogrow
           />
@@ -76,7 +79,7 @@ export default {
       }
 
       try {
-        await axios.post('http://localhost:3000/api/contact', {
+        await axios.post(`${process.env.VUE_APP_BASE_URL}/api/contact`, {
           name: name.value,
           email: email.value,
           subject: subject.value,

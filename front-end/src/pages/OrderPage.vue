@@ -11,7 +11,13 @@
         <q-scroll-area
           :thumb-style="thumbStyle"
           :bar-style="barStyle"
-          style="height: 350px; background-color: whitesmoke; border-radius: 2px; border: 2px solid #73ad21; border-color: black;"
+          style="
+            height: 350px;
+            background-color: whitesmoke;
+            border-radius: 2px;
+            border: 2px solid #73ad21;
+            border-color: black;
+          "
         >
           <div v-if="loading" class="loading-message">Loading...</div>
           <div v-else>
@@ -38,7 +44,7 @@
                 class="custom-radio"
               />
             </div>
-           
+
             <div class="q-mt-md text-h6">Select Ingredients</div>
             <div
               v-for="ingredient in ingredients"
@@ -68,36 +74,37 @@
 
       <q-step :name="2" prefix="2" title="Select a time slot">
         <!-- <time-slot-selector style="height: 250px" /> -->
-         <q-scroll-area
+        <q-scroll-area
           :thumb-style="thumbStyle"
           :bar-style="barStyle"
-          style="height: 350px; background-color: whitesmoke; border-radius: 2px; border: 2px solid #73ad21; border-color: black;"
+          style="
+            height: 350px;
+            background-color: whitesmoke;
+            border-radius: 2px;
+            border: 2px solid #73ad21;
+            border-color: black;
+          "
         >
-         <div
-              v-for="slot in slots"
-              :key="slot._id"
-              class="checkbox-container"
-            >
-              <q-radio
-                v-model="savedSlot"
-                :val="slot._id"
-                :label= "`${slot.hours} : ${slot.minutes}` "
-                color="green"
-                style="
-                  border-radius: 2px;
-                  border-bottom: 1px solid #73ad21;
-                  border-color: black;
-                  width: 100%;
-                  height: 50px;
-                "
-                checked-icon="radio_button_checked"
-                unchecked-icon="radio_button_unchecked"
-                class="custom-radio"
-              />
-            </div>
-            </q-scroll-area>
+          <div v-for="slot in slots" :key="slot._id" class="checkbox-container">
+            <q-radio
+              v-model="savedSlot"
+              :val="slot._id"
+              :label="`${slot.hours} : ${slot.minutes}`"
+              color="green"
+              style="
+                border-radius: 2px;
+                border-bottom: 1px solid #73ad21;
+                border-color: black;
+                width: 100%;
+                height: 50px;
+              "
+              checked-icon="radio_button_checked"
+              unchecked-icon="radio_button_unchecked"
+              class="custom-radio"
+            />
+          </div>
+        </q-scroll-area>
       </q-step>
-      
 
       <q-step :name="3" prefix="3" title="Pay Order">
         Pay your order with PayPal
@@ -105,13 +112,62 @@
 
       <template v-slot:navigation>
         <q-stepper-navigation>
-          <q-btn class="q-ml-sm" v-if="step == 3" color="green" bg-color="white" label="Pay" @click="placeOrder" />
-          <q-btn v-if="step == 1" :disable="disableContinue" @click="$refs.stepper.next()" color="deep-orange" label="Continue" />
-           <q-btn v-if="step == 2" :disable="disableContinueSandwich" @click="$refs.stepper.next()" color="deep-orange" label="Continue" />
-          <q-btn class="q-ml-sm" v-if="step == 1" color="red" bg-color="white" label="Cancel" @click="cancelOrder" />
-          <q-btn v-if="step == 1" flat  bg-color="green" color="green" @click="saveSandwich" label="Save Sandwich" class="q-ml-sm" />
-          <q-btn v-if="step == 2" flat  bg-color="green" color="green" @click="saveSlot" label="Select TimeSlot" class="q-ml-sm" />
-          <q-btn v-if="step > 1" flat color="deep-orange" @click="$refs.stepper.previous()" label="Back" class="q-ml-sm" />
+          <q-btn
+            class="q-ml-sm"
+            v-if="step == 3"
+            color="green"
+            bg-color="white"
+            label="Pay"
+            @click="placeOrder"
+          />
+          <q-btn
+            v-if="step == 1"
+            :disable="disableContinue"
+            @click="$refs.stepper.next()"
+            color="deep-orange"
+            label="Continue"
+          />
+          <q-btn
+            v-if="step == 2"
+            :disable="disableContinueSandwich"
+            @click="$refs.stepper.next()"
+            color="deep-orange"
+            label="Continue"
+          />
+          <q-btn
+            class="q-ml-sm"
+            v-if="step == 1"
+            color="red"
+            bg-color="white"
+            label="Cancel"
+            @click="cancelOrder"
+          />
+          <q-btn
+            v-if="step == 1"
+            flat
+            bg-color="green"
+            color="green"
+            @click="saveSandwich"
+            label="Save Sandwich"
+            class="q-ml-sm"
+          />
+          <q-btn
+            v-if="step == 2"
+            flat
+            bg-color="green"
+            color="green"
+            @click="saveSlot"
+            label="Select TimeSlot"
+            class="q-ml-sm"
+          />
+          <q-btn
+            v-if="step > 1"
+            flat
+            color="deep-orange"
+            @click="$refs.stepper.previous()"
+            label="Back"
+            class="q-ml-sm"
+          />
         </q-stepper-navigation>
       </template>
     </q-stepper>
@@ -133,7 +189,13 @@ export default {
     const ingredients = ref([]);
     const slots = ref([]);
     const savedSlot = ref(null);
-    const breadTypes = ['White Bread', 'Whole Grain', 'Sourdough', 'Rye Bread', 'Multigrain'];
+    const breadTypes = [
+      'White Bread',
+      'Whole Grain',
+      'Sourdough',
+      'Rye Bread',
+      'Multigrain',
+    ];
     const selectedBread = ref(null);
     const loading = ref(true);
     const sandwichSaved = ref(false); // Flag to track if sandwich has been saved
@@ -142,7 +204,9 @@ export default {
 
     const fetchIngredients = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/v1/ingredients');
+        const response = await axios.get(
+          `${process.env.VUE_APP_BASE_URL}/api/v1/ingredients`
+        );
         ingredients.value = response.data.ingredients;
       } catch (error) {
         console.error('Error fetching ingredients:', error);
@@ -152,7 +216,9 @@ export default {
     };
     const fetchSlots = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/v1/slots');
+        const response = await axios.get(
+          `${process.env.VUE_APP_BASE_URL}/api/v1/slots`
+        );
         slots.value = response.data.slots;
       } catch (error) {
         console.error('Error fetching slots:', error);
@@ -160,15 +226,15 @@ export default {
         loading.value = false;
       }
     };
-    
-    const selectTimeSlot = async(slot) =>{
-      try{
-        savedSlot.value = slot
-        console.log(savedSlot.value)
-      }catch(error){
-        console.log(error)
+
+    const selectTimeSlot = async (slot) => {
+      try {
+        savedSlot.value = slot;
+        console.log(savedSlot.value);
+      } catch (error) {
+        console.log(error);
       }
-    }
+    };
     onMounted(async () => {
       await fetchIngredients();
       await fetchSlots();
@@ -191,23 +257,34 @@ export default {
     };
 
     const disableContinue = computed(() => {
-      return selectedBread.value === null || selection.value.length === 0 || !sandwichSaved.value;
+      return (
+        selectedBread.value === null ||
+        selection.value.length === 0 ||
+        !sandwichSaved.value
+      );
     });
-     const disableContinueSandwich = computed(() => {
+    const disableContinueSandwich = computed(() => {
       return savedSlot.value === null || !timeSlotSaved.value;
     });
 
     const placeOrder = async () => {
       showOverlay.value = true; // Show overlay when payment starts
       try {
-        const totPrice={
-          totalprice:localStorage.getItem('price')
-        }
-        const response = await axios.post('http://localhost:3000/api/v1/paypal/pay',totPrice);
-        const popup = window.open(response.data.url, '_blank', 'width=500,height=600');
+        const totPrice = {
+          totalprice: localStorage.getItem('price'),
+        };
+        const response = await axios.post(
+          `${process.env.VUE_APP_BASE_URL}/api/v1/paypal/pay`,
+          totPrice
+        );
+        const popup = window.open(
+          response.data.url,
+          '_blank',
+          'width=500,height=600'
+        );
 
         window.addEventListener('message', (event) => {
-          if (event.origin !== 'http://127.0.0.1:3000') {
+          if (event.origin !== `${process.env.VUE_APP_BASE_URL}`) {
             // Ensure the message is coming from your server
             return;
           }
@@ -242,63 +319,64 @@ export default {
       }
     };
 
-   const sendSandwich = async () => {
-     try {
-       const sandwichData = {
-         breadType: selectedBread.value,
-         ingredientsID: selection.value, // Sending selected ingredient IDs
-       };
+    const sendSandwich = async () => {
+      try {
+        const sandwichData = {
+          breadType: selectedBread.value,
+          ingredientsID: selection.value, // Sending selected ingredient IDs
+        };
 
-     
-      const response = await axios.post('http://localhost:3000/api/v1/sandwich', sandwichData);
-       localStorage.setItem('price', response.data.sandwichPrice);
-       localStorage.setItem('sandwichID', response.data.sandwichID);
-    
+        const response = await axios.post(
+          `${process.env.VUE_APP_BASE_URL}/api/v1/sandwich`,
+          sandwichData
+        );
+        localStorage.setItem('price', response.data.sandwichPrice);
+        localStorage.setItem('sandwichID', response.data.sandwichID);
 
-       // Set sandwichSaved to true after successfully saving sandwich data
-       sandwichSaved.value = true;
-     } catch (error) {
-       $q.notify({
-         type: 'negative',
-         message: 'Failed to send order data',
-       });
-       console.error('Error sending order data:', error);
-       throw error;
-     }
-   };
+        // Set sandwichSaved to true after successfully saving sandwich data
+        sandwichSaved.value = true;
+      } catch (error) {
+        $q.notify({
+          type: 'negative',
+          message: 'Failed to send order data',
+        });
+        console.error('Error sending order data:', error);
+        throw error;
+      }
+    };
 
-     const sendSlot = async () => {
-     try {
-       const slotData = {
-        userID: localStorage.getItem('id'),
-        slotID: savedSlot.value,
-        content: localStorage.getItem('sandwichID'),
-        total: localStorage.getItem('price'),
-        status: "toDo",
-       };
-      
+    const sendSlot = async () => {
+      try {
+        const slotData = {
+          userID: localStorage.getItem('id'),
+          slotID: savedSlot.value,
+          content: localStorage.getItem('sandwichID'),
+          total: localStorage.getItem('price'),
+          status: 'toDo',
+        };
 
-        const response = await axios.post('http://localhost:3000/api/v1/order', slotData);
-       
-       if(response.data.success){
-         $q.notify({
-         type: 'positive',
-         message: 'Selected slot with success',
-       });
-       }
+        const response = await axios.post(
+          `${process.env.VUE_APP_BASE_URL}/api/v1/order`,
+          slotData
+        );
 
+        if (response.data.success) {
+          $q.notify({
+            type: 'positive',
+            message: 'Selected slot with success',
+          });
+        }
 
-         timeSlotSaved.value = true;
-       
-     } catch (error) {
-       $q.notify({
-         type: 'negative',
-         message: 'Failed to select timeslot',
-       });
-       console.error('Error selecting slot:', error);
-       throw error;
-     }
-   };
+        timeSlotSaved.value = true;
+      } catch (error) {
+        $q.notify({
+          type: 'negative',
+          message: 'Failed to select timeslot',
+        });
+        console.error('Error selecting slot:', error);
+        throw error;
+      }
+    };
     const saveSandwich = async () => {
       try {
         await sendSandwich();
@@ -308,12 +386,12 @@ export default {
     };
 
     const saveSlot = async () => {
-       try {
+      try {
         await sendSlot();
       } catch (error) {
         console.error('Error saving sandwich:', error);
       }
-    }
+    };
     const cancelOrder = () => {
       selection.value = [];
       selectedBread.value = null;
@@ -322,10 +400,12 @@ export default {
 
     // Computed property to get details of selected ingredients
     const selectedIngredients = computed(() => {
-      return ingredients.value.filter(ingredient => selection.value.includes(ingredient._id));
+      return ingredients.value.filter((ingredient) =>
+        selection.value.includes(ingredient._id)
+      );
     });
     const selectedTimeSlot = computed(() => {
-      return slots.value.filter(slot => selection.value.includes(slot._id));
+      return slots.value.filter((slot) => selection.value.includes(slot._id));
     });
 
     return {
@@ -348,7 +428,7 @@ export default {
       selectedTimeSlot,
       showOverlay,
       slots,
-      savedSlot
+      savedSlot,
     };
   },
   // components: {

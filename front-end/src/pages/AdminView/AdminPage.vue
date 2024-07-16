@@ -200,7 +200,7 @@ export default {
       try {
         const promises = ingredients.value.map((ingredient) =>
           axios.patch(
-            'http://localhost:3000/api/v1/ingredients/add',
+            `${process.env.VUE_APP_BASE_URL}/api/v1/ingredients/add`,
             ingredient
           )
         );
@@ -221,7 +221,9 @@ export default {
 
     const fetchOrders = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/v1/order');
+        const response = await axios.get(
+          `${process.env.VUE_APP_BASE_URL}/api/v1/order`
+        );
         if (response.data.success) {
           orders.value = response.data.orders;
           const slotID = orders.value.map((order) => order.slotID); // mapped ID
@@ -230,7 +232,7 @@ export default {
           for (let i = 0; i < slotID.length; i++) {
             try {
               const response = await axios.get(
-                `http://localhost:3000/api/v1/slots/${slotID[i]}`
+                `${process.env.VUE_APP_BASE_URL}/api/v1/slots/${slotID[i]}`
               );
               slot.value.push(response.data.time);
             } catch (slotError) {
@@ -245,13 +247,13 @@ export default {
             let variable = [];
             try {
               const response = await axios.get(
-                `http://localhost:3000/api/v1/sandwich/${sandwichID[i]}`
+                `${process.env.VUE_APP_BASE_URL}/api/v1/sandwich/${sandwichID[i]}`
               );
               const ingredientsID = response.data.sandwichIngredientsId;
               breadType.value.push(response.data.sandwichBreadType);
               for (let j = 0; j < ingredientsID.length; j++) {
                 const response2 = await axios.get(
-                  `http://localhost:3000/api/v1/ingredients/${ingredientsID[j]}`
+                  `${process.env.VUE_APP_BASE_URL}/api/v1/ingredients/${ingredientsID[j]}`
                 );
                 variable.push(response2.data.ingredient.name);
                 // console.log(response2.data.ingredient.name);

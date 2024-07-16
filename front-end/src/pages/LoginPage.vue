@@ -92,13 +92,16 @@ const onsubmit = async () => {
       password: password.value,
     };
 
-    const response = await fetch(`http://localhost:3000/api/v1/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
+    const response = await fetch(
+      `${process.env.VUE_APP_BASE_URL}/api/v1/auth/login`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      }
+    );
     const status = await response.json();
     if (status.success) {
       $q.notify({
@@ -136,7 +139,7 @@ const onsubmit = async () => {
 
 const signInWithGoogle = async () => {
   const response = await axios.post(
-    'http://localhost:3000/api/v1/requestgoogle'
+    `${process.env.VUE_APP_BASE_URL}/api/v1/requestgoogle`
   );
 
   const popup = window.open(
@@ -147,7 +150,7 @@ const signInWithGoogle = async () => {
 
   window.addEventListener('message', (event) => {
     console.log(event);
-    if (event.origin !== 'http://127.0.0.1:3000') {
+    if (event.origin !== `${process.env.VUE_APP_BASE_URL}`) {
       // Ensure the message is coming from your server
       return;
     }

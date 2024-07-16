@@ -25,13 +25,11 @@
             border-color: black;
           "
         >
-         <div v-if="loadingBreads" class="loading-message">Loading bread types...</div>
+          <div v-if="loadingBreads" class="loading-message">
+            Loading bread types...
+          </div>
           <div v-else>
-            <div
-              v-for="bread in breads"
-              :key="bread"
-              class="ingredient-item"
-            >
+            <div v-for="bread in breads" :key="bread" class="ingredient-item">
               {{ bread }} - €2.00
             </div>
           </div>
@@ -60,17 +58,19 @@ export default {
     const ingredients = ref([]);
     const loading = ref(true);
     const breads = ref([
-      "Whole Wheat",
-      "Rye",
-      "Sourdough",
-      "Multigrain",
-      "Baguette",
-      "Ciabatta"
+      'Whole Wheat',
+      'Rye',
+      'Sourdough',
+      'Multigrain',
+      'Baguette',
+      'Ciabatta',
     ]);
 
     const fetchIngredients = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/v1/ingredients');
+        const response = await axios.get(
+          `${process.env.VUE_APP_BASE_URL}/api/v1/ingredients`
+        );
         ingredients.value = response.data.ingredients;
       } catch (error) {
         console.error('Error fetching ingredients:', error);

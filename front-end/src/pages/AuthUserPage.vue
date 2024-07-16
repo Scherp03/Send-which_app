@@ -11,11 +11,18 @@
           key="Enter message"
           style="font-weight: bolder; color: white; font-size: 300%"
         >
-          WELCOME TO SEND-WHICH APP 
-          <span class="first-name">{{ firstName.charAt(0).toUpperCase() + firstName.slice(1) }}</span>
+          WELCOME TO SEND-WHICH APP
+          <span class="first-name">{{
+            firstName.charAt(0).toUpperCase() + firstName.slice(1)
+          }}</span>
         </h1>
         <div class="arrow-container" @click="scrollToContent">
-          <q-icon name="arrow_downward" size="55px" class="pulse-arrow" color="white" />
+          <q-icon
+            name="arrow_downward"
+            size="55px"
+            class="pulse-arrow"
+            color="white"
+          />
         </div>
       </div>
     </transition-group>
@@ -23,10 +30,12 @@
     <div ref="scrollContent" class="scroll-content hide-scrollbar">
       <h2>About Send-Which App</h2>
       <p>
-        The Send-Which App is designed to provide an intuitive and efficient way to send and manage your packages. 
-        With user-friendly features, real-time tracking, and seamless integration with multiple delivery services, 
-        we ensure your packages are always on the right path. Our app is committed to enhancing your shipping experience 
-        by offering reliable, fast, and secure service.
+        The Send-Which App is designed to provide an intuitive and efficient way
+        to send and manage your packages. With user-friendly features, real-time
+        tracking, and seamless integration with multiple delivery services, we
+        ensure your packages are always on the right path. Our app is committed
+        to enhancing your shipping experience by offering reliable, fast, and
+        secure service.
       </p>
     </div>
   </q-page>
@@ -41,7 +50,8 @@ const firstName = ref('');
 const scrollContent = ref(null);
 const $q = useQuasar();
 
-const fetchDateUrl = id => `http://localhost:3000/api/v1/users/${id}`;
+const fetchDateUrl = (id) =>
+  `${process.env.VUE_APP_BASE_URL}/api/v1/users/${id}`;
 
 const scrollToContent = () => {
   scrollContent.value.scrollIntoView({ behavior: 'smooth' });
@@ -56,7 +66,6 @@ onMounted(async () => {
     });
     firstName.value = response.data.firstName;
   } catch (error) {
-    
     console.error('Error fetching user data:', error);
   }
 });
@@ -125,8 +134,8 @@ onUnmounted(() => {
 
 /* Hiding the scrollbar for other browsers */
 .hide-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 /* Styling for the first name */
