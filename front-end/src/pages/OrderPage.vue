@@ -38,7 +38,7 @@
                 class="custom-radio"
               />
             </div>
-            
+           
             <div class="q-mt-md text-h6">Select Ingredients</div>
             <div
               v-for="ingredient in ingredients"
@@ -67,7 +67,29 @@
       </q-step>
 
       <q-step :name="2" prefix="2" title="Select a time slot">
-        <time-slot-selector style="height: 250px" />
+        <!-- <time-slot-selector style="height: 250px" /> -->
+         <div
+              v-for="(slot,index) in slots"
+              :key="index"
+              class="checkbox-container"
+            >
+              <q-radio
+                v-model="savedSlot"
+                :val="slot"
+                :label= "`${slot.hours} : ${slot.minutes}` "
+                color="green"
+                style="
+                  border-radius: 2px;
+                  border-bottom: 1px solid #73ad21;
+                  border-color: black;
+                  width: 100%;
+                  height: 50px;
+                "
+                checked-icon="radio_button_checked"
+                unchecked-icon="radio_button_unchecked"
+                class="custom-radio"
+              />
+            </div>
       </q-step>
 
       <q-step :name="3" prefix="3" title="Pay Order">
@@ -80,6 +102,7 @@
           <q-btn v-if="step < 3" :disable="disableContinue" @click="$refs.stepper.next()" color="deep-orange" label="Continue" />
           <q-btn class="q-ml-sm" v-if="step == 1" color="red" bg-color="white" label="Cancel" @click="cancelOrder" />
           <q-btn v-if="step == 1" flat  bg-color="green" color="green" @click="saveSandwich" label="Save Sandwich" class="q-ml-sm" />
+          <q-btn v-if="step == 2" flat  bg-color="green" color="green" @click="saveSlot" label="Select TimeSlot" class="q-ml-sm" />
           <q-btn v-if="step > 1" flat color="deep-orange" @click="$refs.stepper.previous()" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
       </template>
@@ -88,7 +111,7 @@
 </template>
 <script>
 import { ref, computed, onMounted } from 'vue';
-import TimeSlotSelector from '../pages/TimeSlotSelectorPage.vue';
+//import TimeSlotSelector from '../pages/TimeSlotSelectorPage.vue';
 import axios from 'axios';
 import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
@@ -100,6 +123,8 @@ export default {
     const step = ref(1);
     const selection = ref([]);
     const ingredients = ref([]);
+    const slots = ref([]);
+    const savedSlot = ref(null);
     const breadTypes = ['White Bread', 'Whole Grain', 'Sourdough', 'Rye Bread', 'Multigrain'];
     const selectedBread = ref(null);
     const loading = ref(true);
@@ -116,9 +141,28 @@ export default {
         loading.value = false;
       }
     };
-
+    const fetchSlots = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/v1/slots');
+        slots.value = response.data.slots;
+      } catch (error) {
+        console.error('Error fetching ingredients:', error);
+      } finally {
+        loading.value = false;
+      }
+    };
+    
+    const selectTimeSlot = async(slot) =>{
+      try{
+        savedSlot.value = slot
+        console.log(savedSlot.value)
+      }catch(error){
+        console.log(error)
+      }
+    }
     onMounted(async () => {
       await fetchIngredients();
+      await fetchSlots();
     });
 
     const thumbStyle = {
@@ -194,7 +238,10 @@ export default {
        console.log('Selected Ingredient IDs:', selection.value);
        console.log('Sandwich Data:', sandwichData);
 
-       await axios.post('http://localhost:3000/api/v1/sandwich', sandwichData);
+      const response = await axios.post('http://localhost:3000/api/v1/sandwich', sandwichData);
+       localStorage.setItem('price', response.data.sandwichPrice);
+       localStorage.setItem('sandwichId', response.data.sandwichId);
+
 
        // Set sandwichSaved to true after successfully saving sandwich data
        sandwichSaved.value = true;
@@ -208,6 +255,30 @@ export default {
      }
    };
 
+     const sendSlot = async () => {
+     try {
+       const slotData = {
+         userID: localStorage.getItem('id'),
+         
+       };
+        console.log(savedSlot.value);
+
+      const response = await axios.post('http://localhost:3000/api/v1/sandwich', sandwichData);
+       localStorage.setItem('price', response.data.sandwichPrice);
+       localStorage.setItem('sandwichId', response.data.sandwichId);
+
+
+       // Set sandwichSaved to true after successfully saving sandwich data
+       sandwichSaved.value = true;
+     } catch (error) {
+       $q.notify({
+         type: 'negative',
+         message: 'Failed to send order data',
+       });
+       console.error('Error sending order data:', error);
+       throw error;
+     }
+   };
     const saveSandwich = async () => {
       try {
         await sendOrderData();
@@ -216,6 +287,13 @@ export default {
       }
     };
 
+    const saveSlot = async () => {
+       try {
+        await sendSlot();
+      } catch (error) {
+        console.error('Error saving sandwich:', error);
+      }
+    }
     const cancelOrder = () => {
       selection.value = [];
       selectedBread.value = null;
@@ -237,16 +315,19 @@ export default {
       placeOrder,
       cancelOrder,
       saveSandwich,
+      selectTimeSlot,
       ingredients,
       breadTypes,
       loading,
       selectedIngredients,
       showOverlay,
+      slots,
+      savedSlot
     };
   },
-  components: {
-    TimeSlotSelector,
-  },
+  // components: {
+  //   TimeSlotSelector,
+  // },
 };
 </script>
 <style scoped>

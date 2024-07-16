@@ -190,10 +190,10 @@ export default {
         const response = await axios.get('http://localhost:3000/api/v1/order');
         if (response.data.success) {
           orders.value = response.data.orders;
-          const sandwich = await axios.get('http://localhost:3000/api/v1/sandwich');
-          if(sandwich.data.success){
+          // const sandwich = await axios.get('http://localhost:3000/api/v1/sandwich');
+          // if(sandwich.data.success){
             
-          }
+          // }
         }
       } catch (error) {
         $q.notify({

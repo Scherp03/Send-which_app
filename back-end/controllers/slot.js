@@ -60,7 +60,8 @@ export const getSlots = async (req, res, next) => {
       success: true,
       slots: slots.map((slot) => ({
         _id: slot._id,
-        time: slot.time.toDateString(),
+        hours: slot.time.getHours(),
+        minutes: (slot.time.getMinutes() < 10 ? '0' : '') + slot.time.getMinutes(),
         maxSandwiches: slot.maxSandwiches,
         duration: slot.duration,
       })),
