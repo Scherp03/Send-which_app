@@ -86,6 +86,7 @@ export const getSandwich = async (req, res, next) => {
       sandwichId: sandwich._id,
       sandwichIngredientsId: sandwich.ingredientsID,
       sandwichPrice: sandwich.price,
+      sandwichBreadType: sandwich.breadType,
     });
   } catch (err) {
     console.log(err.message);

@@ -109,6 +109,10 @@ router.post('/', createSandwich);
  *                 sandwichPrice:
  *                   type: Number
  *                   example: "3"
+ *                 sandwichBreaType:
+ *                   type: String
+ *                   example: "Integral"
+ *
  *       '404':
  *         description: "Not Found: The sandwich was not found in the database."
  *         content:
