@@ -40,8 +40,9 @@ export const createOrder = async (req, res, next) => {
         message: ` Order not created, something went wrong`,
       });
     }
-    return res.status(200).json({
+    return res.status(201).json({
       success: true,
+      message: "Order created successfully",
       userID: Order.userID,
     });
   } catch (err) {
@@ -67,7 +68,7 @@ export const viewOrder = async (req, res, next) => {
     if (!order) {
       return res
         .status(404)
-        .json({ success: false, message: `Orders with ID ${id} not found` });
+        .json({ success: false, message: `Order with ID ${id} not found` });
     }
 
     return res.status(200).json({
@@ -170,12 +171,12 @@ export const changeStatus = async (req, res, next) => {
     if (!order) {
       return res
         .status(404)
-        .json({ success: false, message: 'Order not found' });
+        .json({ success: false, message: `Order with ID ${id} not found` });
     }
 
     if (order.status === 'completed') {
       return res
-        .status(401)
+        .status(400)
         .json({ success: false, message: 'Order already completed' });
     }
 

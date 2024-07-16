@@ -62,7 +62,7 @@ const router = express.Router();
  *                 description: "The date when the order was placed."
  *                 example: "2024-01-01T11:30:00"
  *     responses:
- *       '200':
+ *       '201':
  *         description: "OK: The order has been successfully created."
  *         content:
  *           application/json:
@@ -75,6 +75,9 @@ const router = express.Router();
  *                 userID:
  *                   type: string
  *                   example: "60c72b2f9b1e8c001f8e4b8d"
+ *                  message:
+ *                   type: string
+ *                   example: "Order created successfully"
  *       '400':
  *         description: "Bad Request: Missing required parameters or invalid data."
  *         content:
@@ -88,8 +91,8 @@ const router = express.Router();
  *                 message:
  *                   type: string
  *                   example: "Missing some parameters"
- *       '401':
- *         description: "Unauthorized: User ID not found."
+ *       '404':
+ *         description: "Not found: User ID not found."
  *         content:
  *           application/json:
  *             schema:
@@ -189,7 +192,7 @@ router.post('/', createOrder);
  *                   example: false
  *                 message:
  *                   type: string
- *                   example: "Order not found"
+ *                   example: "Order with ID {id} not found"
  *       '500':
  *         description: "Internal Server Error: An unexpected condition prevented the request from being fulfilled."
  */
@@ -250,7 +253,7 @@ router.get('/:id', viewOrder);
  *                   example: false
  *                 message:
  *                   type: string
- *                   example: "No orders found"
+ *                   example: "No order found"
  *       '500':
  *         description: "Internal Server Error: An unexpected condition prevented the request from being fulfilled."
  */
@@ -385,8 +388,8 @@ router.get('/status/:status', viewStatus);
  *                 message:
  *                   type: string
  *                   example: "Order ID is required"
- *       '401':
- *         description: "Unauthorized: The order status is already 'completed'."
+ *       '400':
+ *         description: "UBad Request: The order status is already 'completed'."
  *         content:
  *           application/json:
  *             schema:

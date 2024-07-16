@@ -50,3 +50,23 @@ describe('GET api/v1/slots', () => {
     }
   }, 20000);
 });
+
+//Fetch data of a slot given its ID
+describe('GET api/v1/slots/:id', () => {
+  test('It should respond with 200 and a message', async () => {
+    const slot = await Slot.findOne();
+    const expectedtime= slot.time.getHours() +
+    ':' +
+    (slot.time.getMinutes() < 10 ? '0' : '') +
+    slot.time.getMinutes()
+    const response = await request(app).get(`/api/v1/slots/${slot._id}`);
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        success:true,
+        time:
+        expectedtime
+      }),
+    );
+  }, 20000);
+});

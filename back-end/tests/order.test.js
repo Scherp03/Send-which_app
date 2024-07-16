@@ -36,7 +36,7 @@ afterAll(async () => {
 //Create new Order
 
 describe('POST /api/v1/order', () => {
-  test('Should respond with 200 status code and a message', async () => {
+  test('Should respond with 201 status code and a message', async () => {
     const testUser = new User({
       password: 'password',
       userType: 'User',
@@ -58,8 +58,9 @@ describe('POST /api/v1/order', () => {
     order.date.setUTCHours(order.date.getUTCHours() + 1);
 
     const response = await request(app).post('/api/v1/order/').send(order);
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(201);
     expect(response.body.success).toBe(true);
+    expect(response.body.message).toBe("Order created successfully")
     expect(response.body.userID.toString()).toEqual(user._id.toString());
 
     await User.deleteOne({ _id: user._id });
@@ -161,6 +162,7 @@ describe('POST /api/v1/order', () => {
 
     expect(response1.statusCode).toBe(400);
     expect(response1.body.success).toBe(false);
+    expect(response1.body.message).toBe("Missing some parameters");
   }, 20000);
 
   test('should fail to create a new order if UserID does not exist', async () => {
@@ -176,6 +178,7 @@ describe('POST /api/v1/order', () => {
 
     expect(response1.statusCode).toBe(404);
     expect(response1.body.success).toBe(false);
+    expect(response1.body.message).toBe(" UserID  not found, something went wrong");
   }, 20000);
 });
 
@@ -188,12 +191,13 @@ describe('GET /api/v1/order/:id', () => {
     const response = await request(app).get(`/api/v1/order/${orderid}`);
     expect(response.statusCode).toBe(404);
     expect(response.body.success).toBe(false);
+    expect(response.body.message).toBe(`Order with ID ${orderid} not found`);
   }, 20000);
 });
 
 //Fetch data of a given status
 describe('GET /api/v1/order/status/:status', () => {
-  test('should respond with a 200 status code and a message', async () => {
+  test('should respond with a 404 status code and a message', async () => {
     // test if the status does not exist
     const status = "it doesn't exist";
     const order = await Order.find({ status: status });
@@ -218,5 +222,7 @@ describe('PATCH /api/v1/order/:id', () => {
     const response = await request(app).patch(`/api/v1/order/${orderid}`);
     expect(response.statusCode).toBe(404);
     expect(response.body.success).toBe(false);
+    expect(response.body.message).toBe(`Order with ID ${orderid} not found`);
+    
   }, 20000);
 });
