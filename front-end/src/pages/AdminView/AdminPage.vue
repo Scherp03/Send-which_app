@@ -173,7 +173,7 @@ export default {
 
     const submitIngredients = async () => {
       try {
-        const promises = ingredients.value.map(ingredient => axios.post('http://localhost:3000/api/v1/ingredients/add', ingredient));
+        const promises = ingredients.value.map(ingredient => axios.patch('http://localhost:3000/api/v1/ingredients/add', ingredient));
         await Promise.all(promises);
         $q.notify({
           type: 'positive',
