@@ -2,10 +2,11 @@ import User from './schemas/user.js';
 import UserType from './schemas/userType.js';
 import Ingredient from './schemas/ingredient.js';
 import Sandwich from './schemas/sandwich.js';
-import Slot from './schemas/slot.js';
 import axios from 'axios';
 import { Permissions, Roles } from '../../shared/userTypeDefinitions.js';
 import bcrypt from 'bcryptjs';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const initDb = async () => {
   // create crypted password
@@ -84,7 +85,7 @@ export const initDb = async () => {
   ];
 
   // istantiate slots
-  const response = await axios.post('http://127.0.0.1:3000/api/v1/slots', {
+  await axios.post(`${process.env.BASE_URL}/api/v1/slots`, {
     openingTime: '2024-01-01T11:30:00',
     closingTime: '2024-01-01T14:15:00',
     slotDuration: '2024-01-01T00:15:00', // slow duration is 15 m
