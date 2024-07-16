@@ -60,7 +60,7 @@ describe('POST /api/v1/order', () => {
     const response = await request(app).post('/api/v1/order/').send(order);
     expect(response.statusCode).toBe(201);
     expect(response.body.success).toBe(true);
-    expect(response.body.message).toBe("Order created successfully")
+    expect(response.body.message).toBe('Order created successfully');
     expect(response.body.userID.toString()).toEqual(user._id.toString());
 
     await User.deleteOne({ _id: user._id });
@@ -162,7 +162,7 @@ describe('POST /api/v1/order', () => {
 
     expect(response1.statusCode).toBe(400);
     expect(response1.body.success).toBe(false);
-    expect(response1.body.message).toBe("Missing some parameters");
+    expect(response1.body.message).toBe('Missing some parameters');
   }, 20000);
 
   test('should fail to create a new order if UserID does not exist', async () => {
@@ -178,7 +178,9 @@ describe('POST /api/v1/order', () => {
 
     expect(response1.statusCode).toBe(404);
     expect(response1.body.success).toBe(false);
-    expect(response1.body.message).toBe(" UserID  not found, something went wrong");
+    expect(response1.body.message).toBe(
+      ' UserID  not found, something went wrong',
+    );
   }, 20000);
 });
 
@@ -223,6 +225,5 @@ describe('PATCH /api/v1/order/:id', () => {
     expect(response.statusCode).toBe(404);
     expect(response.body.success).toBe(false);
     expect(response.body.message).toBe(`Order with ID ${orderid} not found`);
-    
   }, 20000);
 });

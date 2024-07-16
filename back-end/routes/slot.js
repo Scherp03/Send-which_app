@@ -221,7 +221,7 @@ router.get('/', getSlots);
  *                 message:
  *                   type: string
  *                   example: "Internal server error"
- */
+ */
 
 router.get('/:id', getSlot);
 

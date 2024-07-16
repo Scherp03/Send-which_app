@@ -42,7 +42,7 @@ export const createOrder = async (req, res, next) => {
     }
     return res.status(201).json({
       success: true,
-      message: "Order created successfully",
+      message: 'Order created successfully',
       userID: Order.userID,
     });
   } catch (err) {

@@ -75,7 +75,7 @@ const router = express.Router();
  *                 userID:
  *                   type: string
  *                   example: "60c72b2f9b1e8c001f8e4b8d"
- *                  message:
+ *                 message:
  *                   type: string
  *                   example: "Order created successfully"
  *       '400':
@@ -120,6 +120,7 @@ const router = express.Router();
  *       '500':
  *         description: "Internal Server Error: An unexpected condition prevented the request from being fulfilled."
  */
+
 router.post('/', createOrder);
 /**
  * @openapi
@@ -388,8 +389,8 @@ router.get('/status/:status', viewStatus);
  *                 message:
  *                   type: string
  *                   example: "Order ID is required"
- *       '400':
- *         description: "UBad Request: The order status is already 'completed'."
+ *       '409':
+ *         description: "Conflict: The order is already in the desired status."
  *         content:
  *           application/json:
  *             schema:
