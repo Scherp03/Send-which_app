@@ -28,7 +28,7 @@ export const createOrder = async (req, res, next) => {
 
     const User = await UserModel.findOne({ _id: newOrder.userID });
     if (!User) {
-      return res.status(401).json({
+      return res.status(404).json({
         success: false,
         message: ` UserID  not found, something went wrong`,
       });
@@ -67,7 +67,7 @@ export const viewOrder = async (req, res, next) => {
     if (!order) {
       return res
         .status(404)
-        .json({ success: false, message: 'Order not found' });
+        .json({ success: false, message: `Orders with ID ${id} not found` });
     }
 
     return res.status(200).json({

@@ -174,14 +174,14 @@ describe('POST /api/v1/order', () => {
       date: new Date(),
     });
 
-    expect(response1.statusCode).toBe(401);
+    expect(response1.statusCode).toBe(404);
     expect(response1.body.success).toBe(false);
   }, 20000);
 });
 
 // get a single order by id
 describe('GET /api/v1/order/:id', () => {
-  test('should respond with a 200 status code and a message', async () => {
+  test('should respond with a 404 status code and a message', async () => {
     // test if id does not exist
     const orderid = new mongoose.Types.ObjectId();
 
