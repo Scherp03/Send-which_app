@@ -88,8 +88,8 @@ const router = express.Router();
  *                 message:
  *                   type: string
  *                   example: "Missing some parameters"
- *       '401':
- *         description: "Unauthorized: User ID not found."
+ *       '404':
+ *         description: "Not found: User ID not found."
  *         content:
  *           application/json:
  *             schema:

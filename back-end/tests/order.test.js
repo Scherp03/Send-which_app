@@ -174,7 +174,7 @@ describe('POST /api/v1/order', () => {
       date: new Date(),
     });
 
-    expect(response1.statusCode).toBe(401);
+    expect(response1.statusCode).toBe(404);
     expect(response1.body.success).toBe(false);
   }, 20000);
 });

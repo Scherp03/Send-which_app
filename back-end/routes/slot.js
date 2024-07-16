@@ -117,10 +117,14 @@ router.post('/', populateSlots);
  *                       _id:
  *                         type: string
  *                         example: "60b8d295f1b2c342c8f0d2e4"
- *                       time:
+ *                       hours:
  *                         type: number
- *                         description: "The date at wich the slot starts ."
- *                         example: 2024-01-01T11:30:00.000+00:00
+ *                         description: "The hour at wich the slot starts ."
+ *                         example: 12
+ *                       minutes:
+ *                         type: number
+ *                         description: "The minutes at wich the slot starts ."
+ *                         example: 15
  *                       maxSandwiches:
  *                         type: number
  *                         description: "The maximum number of sandwiches for the slot."
