@@ -69,13 +69,13 @@
       <q-step :name="2" prefix="2" title="Select a time slot">
         <!-- <time-slot-selector style="height: 250px" /> -->
          <div
-              v-for="(slot,index) in slots"
-              :key="index"
+              v-for="slot in slots"
+              :key="slot._id"
               class="checkbox-container"
             >
               <q-radio
                 v-model="savedSlot"
-                :val="slot"
+                :val="slot._id"
                 :label= "`${slot.hours} : ${slot.minutes}` "
                 color="green"
                 style="
@@ -146,7 +146,7 @@ export default {
         const response = await axios.get('http://localhost:3000/api/v1/slots');
         slots.value = response.data.slots;
       } catch (error) {
-        console.error('Error fetching ingredients:', error);
+        console.error('Error fetching slots:', error);
       } finally {
         loading.value = false;
       }
@@ -227,21 +227,19 @@ export default {
       }
     };
 
-   const sendOrderData = async () => {
+   const sendSandwich = async () => {
      try {
        const sandwichData = {
          breadType: selectedBread.value,
          ingredientsID: selection.value, // Sending selected ingredient IDs
        };
 
-       console.log('Selected Bread:', selectedBread.value);
-       console.log('Selected Ingredient IDs:', selection.value);
-       console.log('Sandwich Data:', sandwichData);
-
+     
       const response = await axios.post('http://localhost:3000/api/v1/sandwich', sandwichData);
        localStorage.setItem('price', response.data.sandwichPrice);
-       localStorage.setItem('sandwichId', response.data.sandwichId);
-
+       localStorage.setItem('sandwichID', response.data.sandwichID);
+      console.log(localStorage.getItem('sandwichID'))
+      console.log(response.data.sandwichID)
 
        // Set sandwichSaved to true after successfully saving sandwich data
        sandwichSaved.value = true;
@@ -258,30 +256,39 @@ export default {
      const sendSlot = async () => {
      try {
        const slotData = {
-         userID: localStorage.getItem('id'),
-         
+        userID: localStorage.getItem('id'),
+        slotID: savedSlot.value,
+        content: localStorage.getItem('sandwichID'),
+        total: localStorage.getItem('price'),
+        status: "toDo",
        };
         console.log(savedSlot.value);
+        console.log(slotData);
 
-      const response = await axios.post('http://localhost:3000/api/v1/sandwich', sandwichData);
-       localStorage.setItem('price', response.data.sandwichPrice);
-       localStorage.setItem('sandwichId', response.data.sandwichId);
+        const response = await axios.post('http://localhost:3000/api/v1/order', slotData);
+       
+       if(response.data.success){
+         $q.notify({
+         type: 'positive',
+         message: 'Selected slot with success',
+       });
+       }
 
 
-       // Set sandwichSaved to true after successfully saving sandwich data
-       sandwichSaved.value = true;
+       
+       
      } catch (error) {
        $q.notify({
          type: 'negative',
-         message: 'Failed to send order data',
+         message: 'Failed to select timeslot',
        });
-       console.error('Error sending order data:', error);
+       console.error('Error selecting slot:', error);
        throw error;
      }
    };
     const saveSandwich = async () => {
       try {
-        await sendOrderData();
+        await sendSandwich();
       } catch (error) {
         console.error('Error saving sandwich:', error);
       }
@@ -304,6 +311,9 @@ export default {
     const selectedIngredients = computed(() => {
       return ingredients.value.filter(ingredient => selection.value.includes(ingredient._id));
     });
+    const selectedTimeSlot = computed(() => {
+      return slots.value.filter(slot => selection.value.includes(slot._id));
+    });
 
     return {
       step,
@@ -315,11 +325,13 @@ export default {
       placeOrder,
       cancelOrder,
       saveSandwich,
+      saveSlot,
       selectTimeSlot,
       ingredients,
       breadTypes,
       loading,
       selectedIngredients,
+      selectedTimeSlot,
       showOverlay,
       slots,
       savedSlot
