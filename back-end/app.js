@@ -22,6 +22,7 @@ app.use(
     origin: [
       `${process.env.CLIENT_BASE_URL}`,
       'https://send-which-app.onrender.com',
+      `${process.env.BASE_URL}`,
     ],
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: [
