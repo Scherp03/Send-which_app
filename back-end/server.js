@@ -16,7 +16,7 @@ if (!process.env.DB_URI) {
 
 /* MongoDB credentials */
 const dbUri = process.env.DB_URI;
-const uri = "mongodb://localhost:27017/myapp"
+// const uri = "mongodb://localhost:27017/myapp"
 const clientOptions = {
   serverApi: { version: '1', strict: true, deprecationErrors: true },
 };
@@ -28,7 +28,7 @@ app.listen(port, async () => {
   console.log('Wait for database connection...');
   try {
     /* Database connection */
-    const db = await mongoose.connect(uri, clientOptions);
+    const db = await mongoose.connect(dbUri, clientOptions);
     console.log('Connected to mongoDB successfully!');
 
     if (process.argv.includes('--init-db')) {

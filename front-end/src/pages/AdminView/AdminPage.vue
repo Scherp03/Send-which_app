@@ -74,9 +74,14 @@
                           v-ripple
                         >
                           <q-item-section>
-                            {{ ingredient.name }} - €{{ ingredient.price }}<br />
-                            <span>{{ ingredient.description }}</span><br />
-                            <span v-if="ingredient.tags && ingredient.tags.length">Tags: {{ ingredient.tags.join(', ') }}</span><br />
+                            {{ ingredient.name }} - €{{ ingredient.price
+                            }}<br />
+                            <span>{{ ingredient.description }}</span
+                            ><br />
+                            <span
+                              v-if="ingredient.tags && ingredient.tags.length"
+                              >Tags: {{ ingredient.tags.join(', ') }}</span
+                            ><br />
                             <span>Quantity: {{ ingredient.quantity }}</span>
                           </q-item-section>
                           <q-item-section side>
@@ -117,9 +122,20 @@
                         >
                           <q-item-section>
                             <div><strong>Slot:</strong> {{ slot[index] }}</div>
-                            <div><strong>Content:</strong> {{ sandwichcontent[index] }}</div>
-                            <div><strong>Total:</strong> €{{ order.total }}</div>
-                            <div><strong>Status:</strong> {{ order.status }}</div>
+                            <div>
+                              <strong>Bread Type:</strong>
+                              {{ breadType[index] }}
+                            </div>
+                            <div>
+                              <strong>Ingredients:</strong>
+                              {{ sandwichcontent[index] }}
+                            </div>
+                            <div>
+                              <strong>Total:</strong> €{{ order.total }}
+                            </div>
+                            <div>
+                              <strong>Status:</strong> {{ order.status }}
+                            </div>
                             <div><strong>Date:</strong> {{ order.date }}</div>
                           </q-item-section>
                         </q-item>
@@ -136,7 +152,6 @@
   </q-page>
 </template>
 
-
 <script>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
@@ -145,20 +160,30 @@ import { useQuasar } from 'quasar';
 export default {
   setup() {
     const $q = useQuasar();
-    const newIngredient = ref({ name: '', price: '', description: '', tags: ['sandwich-app'], quantity: 100 });
+    const newIngredient = ref({
+      name: '',
+      price: '',
+      description: '',
+      tags: ['sandwich-app'],
+      quantity: 100,
+    });
     const tagInput = ref('');
     const ingredients = ref([]);
     const orders = ref([]);
     const slot = ref([]);
-    //const content = ref([]);
+    const breadType = ref([]);
     const sandwichcontent = ref([]);
-    
-    
 
     const addIngredient = () => {
       if (newIngredient.value.name && newIngredient.value.price) {
         ingredients.value.push({ ...newIngredient.value });
-        newIngredient.value = { name: '', price: '', description: '', tags: ['sandwich-app'], quantity: 100 };
+        newIngredient.value = {
+          name: '',
+          price: '',
+          description: '',
+          tags: ['sandwich-app'],
+          quantity: 100,
+        };
       } else {
         $q.notify({
           type: 'warning',
@@ -173,7 +198,12 @@ export default {
 
     const submitIngredients = async () => {
       try {
-        const promises = ingredients.value.map(ingredient => axios.patch('http://localhost:3000/api/v1/ingredients/add', ingredient));
+        const promises = ingredients.value.map((ingredient) =>
+          axios.patch(
+            'http://localhost:3000/api/v1/ingredients/add',
+            ingredient
+          )
+        );
         await Promise.all(promises);
         $q.notify({
           type: 'positive',
@@ -189,48 +219,60 @@ export default {
       }
     };
 
-   const fetchOrders = async () => {
-  try {
-    const response = await axios.get('http://localhost:3000/api/v1/order');
-    if (response.data.success) {
-      orders.value = response.data.orders;
-      const slotID = orders.value.map((order) => order.slotID); // mapped ID
-      const sandwichID = orders.value.map((order) => order.content) //mapped content
-      
-      for (let i = 0; i < slotID.length; i++) {
-        try {
-          const response = await axios.get(`http://localhost:3000/api/v1/slots/${slotID[i]}`);
-          slot.value.push(response.data.time)
-        } catch (slotError) {
-          console.error(`Error fetching slot with ID ${slotID[i]}:`, slotError);
-        }
-      }
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/v1/order');
+        if (response.data.success) {
+          orders.value = response.data.orders;
+          const slotID = orders.value.map((order) => order.slotID); // mapped ID
+          const sandwichID = orders.value.map((order) => order.content); //mapped content
 
-      for (let i = 0; i < slotID.length; i++) {
-        let variable =['no ingredients']
-        try {
-          const response = await axios.get(`http://localhost:3000/api/v1/sandwich/${sandwichID[i]}`)
-          const ingredientsID =  response.data.sandwichIngredientsId
-          for ( let j = 0; j < ingredientsID.length; j++){
-            const response2 = await axios.get(`http://localhost:3000/api/v1/ingredients/${ingredientsID[j]}`)
-            variable = response2.data.ingredient.name
-            console.log(response2.data.ingredient.name)
+          for (let i = 0; i < slotID.length; i++) {
+            try {
+              const response = await axios.get(
+                `http://localhost:3000/api/v1/slots/${slotID[i]}`
+              );
+              slot.value.push(response.data.time);
+            } catch (slotError) {
+              console.error(
+                `Error fetching slot with ID ${slotID[i]}:`,
+                slotError
+              );
+            }
           }
-          sandwichcontent.value.push(variable)
-          console.log(sandwichcontent)
-         
-        } catch (slotError) {
-          console.error(`Error fetching slot with ID ${slotID[i]}:`, slotError);
+
+          for (let i = 0; i < sandwichID.length; i++) {
+            let variable = [];
+            try {
+              const response = await axios.get(
+                `http://localhost:3000/api/v1/sandwich/${sandwichID[i]}`
+              );
+              const ingredientsID = response.data.sandwichIngredientsId;
+              breadType.value.push(response.data.sandwichBreadType);
+              for (let j = 0; j < ingredientsID.length; j++) {
+                const response2 = await axios.get(
+                  `http://localhost:3000/api/v1/ingredients/${ingredientsID[j]}`
+                );
+                variable.push(response2.data.ingredient.name);
+                // console.log(response2.data.ingredient.name);
+              }
+              sandwichcontent.value.push(variable);
+            } catch (slotError) {
+              console.error(
+                `Error fetching slot with ID ${slotID[i]}:`,
+                slotError
+              );
+            }
+          }
+          console.log(sandwichcontent);
         }
+      } catch (error) {
+        $q.notify({
+          type: 'negative',
+          message: 'Error fetching orders',
+        });
       }
-    }
-  } catch (error) {
-    $q.notify({
-      type: 'negative',
-      message: 'Error fetching orders',
-    });
-  }
-};
+    };
 
     const addTag = () => {
       if (tagInput.value) {
@@ -253,6 +295,7 @@ export default {
       ingredients,
       orders,
       slot,
+      breadType,
       sandwichcontent,
       addIngredient,
       removeIngredient,
@@ -263,7 +306,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 .row {
