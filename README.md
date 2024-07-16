@@ -19,7 +19,7 @@ The frontend interacts with the backend API's hosted at https://send-which-app.o
 ## Frontend
 
 The frontend application is deployed on Netlify. Any changes to the 'main' branch will trigger an automatic deployment.
-Try out the application at ..........
+Try out the application at https://send-which-app.netlify.app
 
 # API Documentation
 
