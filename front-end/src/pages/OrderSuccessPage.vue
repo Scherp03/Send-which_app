@@ -27,7 +27,7 @@ export default {
       // Show a notification that logout was successful
       $q.notify({
         type: 'positive',
-        message: 'Order received, see you soon.',
+        message: ' see you soon.',
       });
 
       // Redirect to home page

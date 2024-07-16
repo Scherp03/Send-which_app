@@ -59,10 +59,9 @@ export const capturePayment = async (req, res) => {
 
 export const cancelOrder = async (req, res) => {
   const responseData = {
-    success: true,
+    success: false,
     message: 'Order has been cancelled!',
   };
-  console.log(responseData);
   const script = `
         <script>
           window.opener.postMessage(${JSON.stringify(responseData)}, '*');
