@@ -64,6 +64,13 @@ npm install --include=dev
 npm run dev
 ```
 
+VIDEO DEMO:
+
+
+https://github.com/user-attachments/assets/1faaa981-ac63-404c-ae3d-b8874e8c2715
+
+
+
 ## Technologies Used
 
 - **Backend**: [Node.js](https://nodejs.org/), [Express](https://expressjs.com/)
